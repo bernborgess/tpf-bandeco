@@ -28,8 +28,8 @@ add_executable(${PROJECT_NAME}
         Source/Components/DrawComponents/DrawSpriteComponent.h
         Source/Components/DrawComponents/DrawPolygonComponent.cpp
         Source/Components/DrawComponents/DrawPolygonComponent.h
-        Source/Actors/Mario.cpp
-        Source/Actors/Mario.h
+        Source/Actors/Player.cpp
+        Source/Actors/Player.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
         Source/Components/ColliderComponents/AABBColliderComponent.h
         Source/Components/DrawComponents/DrawAnimatedComponent.cpp

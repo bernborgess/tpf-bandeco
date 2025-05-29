@@ -1,15 +1,10 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
 
 #pragma once
 #include <SDL2/SDL.h>
+
 #include <string>
 #include <vector>
+
 #include "Math.h"
 
 enum TileType {
@@ -27,12 +22,12 @@ enum TileType {
     KoopaBottom,
     PipeTopRight,
     Mushroom,
-    MarioTile = 16
+    MarioTile = 16,
+    LuigiTile = 17
 };
 
-class Game
-{
-public:
+class Game {
+   public:
     static const int LEVEL_WIDTH = 215;
     static const int LEVEL_HEIGHT = 15;
     static const int TILE_SIZE = 32;
@@ -58,7 +53,9 @@ public:
     // Collider functions
     void AddCollider(class AABBColliderComponent* collider);
     void RemoveCollider(class AABBColliderComponent* collider);
-    std::vector<class AABBColliderComponent*>& GetColliders() { return mColliders; }
+    std::vector<class AABBColliderComponent*>& GetColliders() {
+        return mColliders;
+    }
 
     Vector2& GetCameraPos() { return mCameraPos; };
     void SetCameraPos(const Vector2& position) { mCameraPos = position; };
@@ -67,14 +64,15 @@ public:
     int GetWindowWidth() const { return mWindowWidth; }
     int GetWindowHeight() const { return mWindowHeight; }
 
-    int **GetLevelData() const { return mLevelData; }
+    int** GetLevelData() const { return mLevelData; }
 
     SDL_Texture* LoadTexture(const std::string& texturePath);
 
     // Game-specific
-    const class Mario* GetMario() { return mMario; }
+    const class Player* GetMario() { return mMario; }
+    const class Player* GetLuigi() { return mLuigi; }
 
-private:
+   private:
     void ProcessInput();
     void UpdateGame();
     void UpdateCamera();
@@ -83,9 +81,10 @@ private:
     // Game-specific
 
     // Load the level from a CSV file as a 2D array
-    int **LoadLevel(const std::string& fileName, int width, int height);
+    int** LoadLevel(const std::string& fileName, int width, int height);
 
-    static void applyTexture(std::string * texture_path, const char * str, bool * unset_texture);
+    static void applyTexture(std::string* texture_path, const char* str,
+                             bool* unset_texture);
 
     void BuildLevel(int** levelData, int width, int height);
 
@@ -117,8 +116,9 @@ private:
     Vector2 mCameraPos;
 
     // Game-specific
-    class Mario *mMario;
+    class Player* mMario;
+    class Player* mLuigi;
 
     // Level data
-    int **mLevelData;
+    int** mLevelData;
 };

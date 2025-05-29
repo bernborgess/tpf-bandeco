@@ -1,39 +1,35 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
+
+#include "Game.h"
+
+#include <SDL_image.h>
 
 #include <algorithm>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <map>
 #include <vector>
-#include <SDL_image.h>
-#include "CSV.h"
-#include "Random.h"
-#include "Game.h"
+
 #include "Actors/Actor.h"
-#include "Actors/Mario.h"
 #include "Actors/Block.h"
 #include "Actors/Goomba.h"
+#include "Actors/Player.h"
 #include "Actors/Spawner.h"
-#include "Components/DrawComponents/DrawComponent.h"
+#include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
+#include "Components/DrawComponents/DrawComponent.h"
+#include "Random.h"
 
 Game::Game(int windowWidth, int windowHeight)
-    : mWindow(nullptr)
-      , mRenderer(nullptr)
-      , mWindowWidth(windowWidth)
-      , mWindowHeight(windowHeight)
-      , mTicksCount(0)
-      , mIsRunning(true)
-      , mUpdatingActors(false)
-      , mMario(nullptr)
-      , mLevelData(nullptr) {
-}
+    : mWindow(nullptr),
+      mRenderer(nullptr),
+      mWindowWidth(windowWidth),
+      mWindowHeight(windowHeight),
+      mTicksCount(0),
+      mIsRunning(true),
+      mUpdatingActors(false),
+      mMario(nullptr),
+      mLuigi(nullptr),
+      mLevelData(nullptr) {}
 
 bool Game::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -41,13 +37,15 @@ bool Game::Initialize() {
         return false;
     }
 
-    mWindow = SDL_CreateWindow("TP3: Super Mario Bros", 0, 0, mWindowWidth, mWindowHeight, 0);
+    mWindow = SDL_CreateWindow("TP3: Super Mario Bros", 0, 0, mWindowWidth,
+                               mWindowHeight, 0);
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
     }
 
-    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    mRenderer = SDL_CreateRenderer(
+        mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!mRenderer) {
         SDL_Log("Failed to create renderer: %s", SDL_GetError());
         return false;
@@ -64,17 +62,23 @@ bool Game::Initialize() {
 }
 
 void Game::InitializeActors() {
-    const auto levelData = LoadLevel("../Assets/Levels/Level1-1/level1-1.csv", Game::LEVEL_WIDTH, Game::LEVEL_HEIGHT);
+    const auto levelData = LoadLevel("../Assets/Levels/Level1-1/level1-1.csv",
+                                     Game::LEVEL_WIDTH, Game::LEVEL_HEIGHT);
     BuildLevel(levelData, Game::LEVEL_WIDTH, Game::LEVEL_HEIGHT);
 
-    // TODO 7.1 (~1 linha): Utilize a função LoadLevel para carregar o primeiro nível (Level1.txt) do jogo.
-    //  Note que a classe Game tem constantes LEVEL_WIDTH e LEVEL_HEIGHT que definem a largura e altura
+    // TODO 7.1 (~1 linha): Utilize a função LoadLevel para carregar o primeiro
+    // nível (Level1.txt) do jogo.
+    //  Note que a classe Game tem constantes LEVEL_WIDTH e LEVEL_HEIGHT que
+    //  definem a largura e altura
 
-    // TODO 7.2 (~4 linhas): Verifique se a matriz de tiles foi carregada corretamente. Se não, retorne.
-    //  Se foi, chame a função BuildLevel passando a matriz de tiles, a largura e altura do nível.
+    // TODO 7.2 (~4 linhas): Verifique se a matriz de tiles foi carregada
+    // corretamente. Se não, retorne.
+    //  Se foi, chame a função BuildLevel passando a matriz de tiles, a largura
+    //  e altura do nível.
 }
 
-void Game::applyTexture(std::string *texture_path, const char *str, bool *unset_texture) {
+void Game::applyTexture(std::string *texture_path, const char *str,
+                        bool *unset_texture) {
     if (*unset_texture) {
         texture_path->append(str);
         *unset_texture = false;
@@ -82,32 +86,52 @@ void Game::applyTexture(std::string *texture_path, const char *str, bool *unset_
 }
 
 void Game::BuildLevel(int **levelData, int width, int height) {
-    // TODO 6: Implemente o método BuildLevel para percorrer a matriz de tiles carregada no item anterior e instanciar
-    //  game objects para o mario, os canos e os blocos. O Mario deve ser instanciado na posição
-    //  correspondente ao tile 16. Os blocos devem ser instanciados na posição correspondente aos tiles
-    //  0, 1, 2, 4, 6, 8, 9 e 12. Utilize a função SetPosition para definir a posição de cada game object.
+    // TODO 6: Implemente o método BuildLevel para percorrer a matriz de tiles
+    // carregada no item anterior e instanciar
+    //  game objects para o mario, os canos e os blocos. O Player deve ser
+    //  instanciado na posição correspondente ao tile 16. Os blocos devem ser
+    //  instanciados na posição correspondente aos tiles 0, 1, 2, 4, 6, 8, 9
+    //  e 12. Utilize a função SetPosition para definir a posição de cada game
+    //  object.
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             std::string texturePath = "../Assets/Sprites/Blocks/Block";
             bool unsetTexture = true;
             switch (levelData[i][j]) {
-                case CobbleStoneBlock: applyTexture(&texturePath, "A.png", &unsetTexture);
-                case QuestionBlock: applyTexture(&texturePath, "C.png", &unsetTexture);
-                case PipeTopLeft: applyTexture(&texturePath, "F.png", &unsetTexture);
-                case BrickBlock: applyTexture(&texturePath, "B.png", &unsetTexture);
-                case PipeBottomRight: applyTexture(&texturePath, "I.png", &unsetTexture);
-                case StoneBlock: applyTexture(&texturePath, "D.png", &unsetTexture);
-                case PipeBottomLeft: applyTexture(&texturePath, "H.png", &unsetTexture);
+                case CobbleStoneBlock:
+                    applyTexture(&texturePath, "A.png", &unsetTexture);
+                case QuestionBlock:
+                    applyTexture(&texturePath, "C.png", &unsetTexture);
+                case PipeTopLeft:
+                    applyTexture(&texturePath, "F.png", &unsetTexture);
+                case BrickBlock:
+                    applyTexture(&texturePath, "B.png", &unsetTexture);
+                case PipeBottomRight:
+                    applyTexture(&texturePath, "I.png", &unsetTexture);
+                case StoneBlock:
+                    applyTexture(&texturePath, "D.png", &unsetTexture);
+                case PipeBottomLeft:
+                    applyTexture(&texturePath, "H.png", &unsetTexture);
                 case PipeTopRight: {
                     applyTexture(&texturePath, "G.png", &unsetTexture);
                     Vector2 pos = Vector2(j * TILE_SIZE, i * TILE_SIZE);
-                    auto blk = new Block(this, texturePath, (TileType)levelData[i][j], pos);
+                    auto blk = new Block(this, texturePath,
+                                         (TileType)levelData[i][j], pos);
                     break;
                 }
                 case MarioTile: {
                     if (!mMario) {
-                        mMario = new Mario(this);
-                        mMario->SetPosition(Vector2(j * TILE_SIZE, i * TILE_SIZE));
+                        mMario = new Player(this);
+                        mMario->SetPosition(
+                            Vector2(j * TILE_SIZE, i * TILE_SIZE));
+                    }
+                    break;
+                }
+                case LuigiTile: {
+                    if (!mLuigi) {
+                        mLuigi = new Player(this);
+                        mLuigi->SetPosition(
+                            Vector2(j * TILE_SIZE, i * TILE_SIZE));
                     }
                     break;
                 }
@@ -120,15 +144,16 @@ void Game::BuildLevel(int **levelData, int width, int height) {
         }
     }
 
-
     // --------------
     // TODO - PARTE 5
     // --------------
 
-    // TODO 1: Modifique o método BuildLevel para instanciar spawners na posição correspondente ao tile 10.
-    //  Assim como os outros objetos, posicione os spawners no mundo conforme as coordenadas i e j na matriz
-    //  de tiles. Note que a classe game tem uma constante `SPAWN_DISTANCE = 600` que você pode usar para
-    //  configurar a distância de gatilho do spawner.
+    // TODO 1: Modifique o método BuildLevel para instanciar spawners na posição
+    // correspondente ao tile 10.
+    //  Assim como os outros objetos, posicione os spawners no mundo conforme as
+    //  coordenadas i e j na matriz de tiles. Note que a classe game tem uma
+    //  constante `SPAWN_DISTANCE = 600` que você pode usar para configurar a
+    //  distância de gatilho do spawner.
 }
 
 int **Game::LoadLevel(const std::string &fileName, int width, int height) {
@@ -174,7 +199,7 @@ void Game::ProcessInput() {
 
     const Uint8 *state = SDL_GetKeyboardState(nullptr);
 
-    for (auto actor: mActors) {
+    for (auto actor : mActors) {
         actor->ProcessInput(state);
     }
 }
@@ -198,30 +223,30 @@ void Game::UpdateGame() {
 
 void Game::UpdateCamera() {
     float w = mMario->GetPosition().x - float(mWindowWidth) / 2.0f;
-    if (mCameraPos.x > w)return;
+    if (mCameraPos.x > w) return;
     mCameraPos.x = Math::Clamp(w, 0.0f, float(LEVEL_WIDTH * TILE_SIZE));
 }
 
 void Game::UpdateActors(float deltaTime) {
     mUpdatingActors = true;
-    for (auto actor: mActors) {
+    for (auto actor : mActors) {
         actor->Update(deltaTime);
     }
     mUpdatingActors = false;
 
-    for (auto pending: mPendingActors) {
+    for (auto pending : mPendingActors) {
         mActors.emplace_back(pending);
     }
     mPendingActors.clear();
 
     std::vector<Actor *> deadActors;
-    for (auto actor: mActors) {
+    for (auto actor : mActors) {
         if (actor->GetState() == ActorState::Destroy) {
             deadActors.emplace_back(actor);
         }
     }
 
-    for (auto actor: deadActors) {
+    for (auto actor : deadActors) {
         delete actor;
     }
 }
@@ -253,9 +278,10 @@ void Game::RemoveActor(Actor *actor) {
 void Game::AddDrawable(class DrawComponent *drawable) {
     mDrawables.emplace_back(drawable);
 
-    std::sort(mDrawables.begin(), mDrawables.end(), [](DrawComponent *a, DrawComponent *b) {
-        return a->GetDrawOrder() < b->GetDrawOrder();
-    });
+    std::sort(mDrawables.begin(), mDrawables.end(),
+              [](DrawComponent *a, DrawComponent *b) {
+                  return a->GetDrawOrder() < b->GetDrawOrder();
+              });
 }
 
 void Game::RemoveDrawable(class DrawComponent *drawable) {
@@ -279,7 +305,7 @@ void Game::GenerateOutput() {
     // Clear back buffer
     SDL_RenderClear(mRenderer);
 
-    for (auto drawable: mDrawables) {
+    for (auto drawable : mDrawables) {
         if (drawable->IsVisible()) {
             drawable->Draw(mRenderer);
         }
@@ -294,16 +320,20 @@ SDL_Texture *Game::LoadTexture(const std::string &texturePath) {
     // TODO - PARTE 1
     // --------------
 
-    // TODO 4.1 (~4 linhas): Utilize a função `IMG_Load` para carregar a imagem passada como parâmetro
-    //  `texturePath`. Esse função retorna um ponteiro para `SDL_Surface*`. Retorne `nullptr` se a
-    //  imagem não foi carregada com sucesso.
+    // TODO 4.1 (~4 linhas): Utilize a função `IMG_Load` para carregar a imagem
+    // passada como parâmetro
+    //  `texturePath`. Esse função retorna um ponteiro para `SDL_Surface*`.
+    //  Retorne `nullptr` se a imagem não foi carregada com sucesso.
     SDL_Surface *img = IMG_Load(texturePath.c_str());
     if (!img) return nullptr;
 
-    // TODO 4.2 (~6 linhas): Utilize a função `SDL_CreateTextureFromSurface` para criar uma textura a partir
-    //  da imagem carregada anteriormente. Essa função retorna um ponteiro para `SDL_Texture*`. Logo após criar
-    //  a textura, utilize a função `SDL_FreeSurface` para liberar a imagem carregada. Se a textura foi carregada
-    //  com sucesso, retorne o ponteiro para a textura. Caso contrário, retorne `nullptr`.
+    // TODO 4.2 (~6 linhas): Utilize a função `SDL_CreateTextureFromSurface`
+    // para criar uma textura a partir
+    //  da imagem carregada anteriormente. Essa função retorna um ponteiro para
+    //  `SDL_Texture*`. Logo após criar a textura, utilize a função
+    //  `SDL_FreeSurface` para liberar a imagem carregada. Se a textura foi
+    //  carregada com sucesso, retorne o ponteiro para a textura. Caso
+    //  contrário, retorne `nullptr`.
     SDL_Texture *texture = SDL_CreateTextureFromSurface(mRenderer, img);
     SDL_FreeSurface(img);
     return texture;
@@ -318,8 +348,7 @@ void Game::Shutdown() {
     // Delete level data
     if (mLevelData != nullptr) {
         for (int i = 0; i < LEVEL_HEIGHT; ++i) {
-            if (mLevelData[i] != nullptr)
-                delete[] mLevelData[i];
+            if (mLevelData[i] != nullptr) delete[] mLevelData[i];
         }
     }
     delete[] mLevelData;
