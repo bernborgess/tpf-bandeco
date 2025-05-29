@@ -12,7 +12,6 @@ find_package(SDL2_image REQUIRED)
 add_executable(${PROJECT_NAME}
         Source/Main.cpp
         Source/Math.cpp
-        Source/Random.cpp
         Source/Actors/Actor.cpp
         Source/Components/Component.cpp
         Source/Game.cpp

@@ -17,7 +17,6 @@
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 #include "Components/DrawComponents/DrawComponent.h"
-#include "Random.h"
 
 Game::Game(int windowWidth, int windowHeight)
     : mWindow(nullptr),
@@ -50,8 +49,6 @@ bool Game::Initialize() {
         SDL_Log("Failed to create renderer: %s", SDL_GetError());
         return false;
     }
-
-    Random::Init();
 
     mTicksCount = SDL_GetTicks();
 
