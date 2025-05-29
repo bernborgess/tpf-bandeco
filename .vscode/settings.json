@@ -1,0 +1,9 @@
+{
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "editor.formatOnSave": true,
+    "C_Cpp.clang_format_fallbackStyle": "Google",
+    "C_Cpp.errorSquiggles": "enabled",
+    "cSpell.words": [
+        "bandeco"
+    ],
+}
