@@ -10,7 +10,8 @@
 #include "../Components/RigidBodyComponent.h"
 #include "../Game.h"
 
-Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
+Player::Player(Game *game, PlayerType playerType, const float forwardSpeed,
+               const float jumpSpeed)
     : Actor(game),
       mForwardSpeed(forwardSpeed),
       mJumpSpeed(jumpSpeed),
@@ -18,7 +19,8 @@ Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
       mIsDead(false),
       mRigidBodyComponent(nullptr),
       mDrawComponent(nullptr),
-      mColliderComponent(nullptr) {
+      mColliderComponent(nullptr),
+      mPlayerType(playerType) {
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 5.0);
 
     mColliderComponent =
@@ -39,11 +41,11 @@ Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
 }
 
 void Player::OnProcessInput(const uint8_t *keyState) {
-    if (keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) {
+    if (keyState[GetRightCode()]) {
         mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2(1, 0));
         mRotation = 0;
         mIsRunning = true;
-    } else if (keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) {
+    } else if (keyState[GetLeftCode()]) {
         mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2(-1, 0));
         mRotation = Math::Pi;
         mIsRunning = true;
@@ -51,9 +53,7 @@ void Player::OnProcessInput(const uint8_t *keyState) {
         mIsRunning = false;
     }
 
-    if ((keyState[SDL_SCANCODE_SPACE] || keyState[SDL_SCANCODE_W] ||
-         keyState[SDL_SCANCODE_UP]) &&
-        mIsOnGround) {
+    if (keyState[GetUpCode()] && mIsOnGround) {
         mRigidBodyComponent->ApplyForce(mJumpSpeed * Vector2::UnitY);
         mIsOnGround = false;
     }
@@ -133,4 +133,24 @@ void Player::OnVerticalCollision(const float minOverlap,
                                                    mColliderComponent);
         }
     }
+}
+
+SDL_Scancode Player::GetDownCode() {
+    if (mPlayerType == PlayerMario) return SDL_SCANCODE_DOWN;
+    return SDL_SCANCODE_S;  // Luigi
+}
+
+SDL_Scancode Player::GetLeftCode() {
+    if (mPlayerType == PlayerMario) return SDL_SCANCODE_LEFT;
+    return SDL_SCANCODE_A;  // Luigi
+}
+
+SDL_Scancode Player::GetRightCode() {
+    if (mPlayerType == PlayerMario) return SDL_SCANCODE_RIGHT;
+    return SDL_SCANCODE_D;  // Luigi
+}
+
+SDL_Scancode Player::GetUpCode() {
+    if (mPlayerType == PlayerMario) return SDL_SCANCODE_UP;
+    return SDL_SCANCODE_W;  // Luigi
 }

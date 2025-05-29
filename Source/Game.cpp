@@ -129,7 +129,7 @@ void Game::BuildLevel(int **levelData, int width, int height) {
                 }
                 case LuigiTile: {
                     if (!mLuigi) {
-                        mLuigi = new Player(this);
+                        mLuigi = new Player(this, PlayerLuigi);
                         mLuigi->SetPosition(
                             Vector2(j * TILE_SIZE, i * TILE_SIZE));
                     }
@@ -191,9 +191,20 @@ void Game::ProcessInput() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
-            case SDL_QUIT:
+            case SDL_QUIT: {
                 Quit();
                 break;
+            }
+            case SDL_KEYDOWN: {
+                switch (event.key.keysym.scancode) {
+                    case SDL_SCANCODE_ESCAPE: {
+                        Quit();
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
         }
     }
 
