@@ -1,6 +1,4 @@
-//
-// Created by Lucas N. Ferreira on 03/08/23.
-//
+
 
 #include "Player.h"
 
@@ -42,28 +40,27 @@ Player::Player(Game *game, PlayerType playerType, const float forwardSpeed,
 
 void Player::OnProcessInput(const uint8_t *keyState) {
     if (keyState[GetRightCode()]) {
-        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2(1, 0));
+        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2::UnitX);
         mRotation = 0;
         mIsRunning = true;
     } else if (keyState[GetLeftCode()]) {
-        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2(-1, 0));
+        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2::NegUnitX);
         mRotation = Math::Pi;
         mIsRunning = true;
     } else {
         mIsRunning = false;
     }
 
-    if (keyState[GetUpCode()] && mIsOnGround) {
-        mRigidBodyComponent->ApplyForce(mJumpSpeed * Vector2::UnitY);
-        mIsOnGround = false;
+    if (keyState[GetUpCode()]) {
+        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2::NegUnitY);
+    }
+
+    if (keyState[GetDownCode()]) {
+        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2::UnitY);
     }
 }
 
 void Player::OnUpdate(float deltaTime) {
-    if (mRigidBodyComponent && mRigidBodyComponent->GetVelocity().y != 0) {
-        mIsOnGround = false;
-    }
-
     float cameraX = mGame->GetCameraPos().x;
     if (mPosition.x < cameraX) {
         mPosition.x = cameraX;
@@ -79,12 +76,12 @@ void Player::OnUpdate(float deltaTime) {
 void Player::ManageAnimations() {
     if (mIsDead) return mDrawComponent->SetAnimation("dead");
 
-    if (mIsOnGround && mIsRunning) return mDrawComponent->SetAnimation("run");
+    if (mIsRunning) return mDrawComponent->SetAnimation("run");
     //  -5.1.2: Se estiver vivo, no chão e não estiver correndo, altere a
     //  animação para `idle`
-    if (mIsOnGround) return mDrawComponent->SetAnimation("idle");
-    //  -5.1.3: Se estiver vivo e não estiver no chão, altere a animação para
-    //  `jump`
+    return mDrawComponent->SetAnimation("idle");
+    //  -5.1.3: Se estiver vivo e não estiver no chão, altere a animação
+    //  para `jump`
     mDrawComponent->SetAnimation("jump");
 }
 
@@ -93,8 +90,8 @@ void Player::Kill() {
     // TODO - PARTE 5
     // --------------
 
-    // TODO 8 (~4 linhas): altere a animação para "dead" e o valor da variável
-    // `mIsDead` para verdadeiro.
+    // TODO 8 (~4 linhas): altere a animação para "dead" e o valor da
+    // variável `mIsDead` para verdadeiro.
     //  Além disso, desabilite os componentes `mRigidBodyComponent` e
     //  `mColliderComponent`
     mDrawComponent->SetAnimation("dead");
@@ -109,10 +106,10 @@ void Player::OnHorizontalCollision(const float minOverlap,
     // TODO - PARTE 5
     // --------------
 
-    // TODO 9 (~2-4 linhas): Verifique se a colisão ocorreu horizontalmente com
-    // um objeto do tipo
-    //  `CollisionSide::Enemy`. Se sim, mate o jogador com o método `Kill()` do
-    //  jogador.
+    // TODO 9 (~2-4 linhas): Verifique se a colisão ocorreu horizontalmente
+    // com um objeto do tipo
+    //  `CollisionSide::Enemy`. Se sim, mate o jogador com o método `Kill()`
+    //  do jogador.
     if (other->GetLayer() == ColliderLayer::Enemy) {
         Kill();
     }

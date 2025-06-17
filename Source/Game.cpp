@@ -83,13 +83,6 @@ void Game::applyTexture(std::string *texture_path, const char *str,
 }
 
 void Game::BuildLevel(int **levelData, int width, int height) {
-    // TODO 6: Implemente o método BuildLevel para percorrer a matriz de tiles
-    // carregada no item anterior e instanciar
-    //  game objects para o mario, os canos e os blocos. O Player deve ser
-    //  instanciado na posição correspondente ao tile 16. Os blocos devem ser
-    //  instanciados na posição correspondente aos tiles 0, 1, 2, 4, 6, 8, 9
-    //  e 12. Utilize a função SetPosition para definir a posição de cada game
-    //  object.
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             std::string texturePath = "../Assets/Sprites/Blocks/Block";
@@ -140,17 +133,6 @@ void Game::BuildLevel(int **levelData, int width, int height) {
             }
         }
     }
-
-    // --------------
-    // TODO - PARTE 5
-    // --------------
-
-    // TODO 1: Modifique o método BuildLevel para instanciar spawners na posição
-    // correspondente ao tile 10.
-    //  Assim como os outros objetos, posicione os spawners no mundo conforme as
-    //  coordenadas i e j na matriz de tiles. Note que a classe game tem uma
-    //  constante `SPAWN_DISTANCE = 600` que você pode usar para configurar a
-    //  distância de gatilho do spawner.
 }
 
 int **Game::LoadLevel(const std::string &fileName, int width, int height) {
@@ -308,7 +290,8 @@ void Game::RemoveCollider(AABBColliderComponent *collider) {
 
 void Game::GenerateOutput() {
     // Set draw color to black
-    SDL_SetRenderDrawColor(mRenderer, 107, 140, 255, 255);
+    // SDL_SetRenderDrawColor(mRenderer, 107, 140, 255, 255);
+    SDL_SetRenderDrawColor(mRenderer, 119, 136, 153, 255);
 
     // Clear back buffer
     SDL_RenderClear(mRenderer);
