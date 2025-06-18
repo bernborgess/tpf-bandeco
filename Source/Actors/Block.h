@@ -19,7 +19,6 @@ class Block : public Actor {
     }
 
     void OnUpdate(float deltaTime) override;
-    void OnBump();
     void OnVerticalCollision(const float minOverlap,
                              AABBColliderComponent* other) override;
 

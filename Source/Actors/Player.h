@@ -7,6 +7,9 @@
 
 class Player : public Actor {
    public:
+    static const int PLAYER_WIDTH = 28;
+    static const int PLAYER_HEIGHT = 32;
+
     explicit Player(Game* game, float forwardSpeed = 1500.0f,
                     float jumpSpeed = -750.0f);
 

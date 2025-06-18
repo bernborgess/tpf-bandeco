@@ -325,10 +325,14 @@ void Game::ProcessInput() {
                 HandleKeyPressActors(event.key.keysym.sym,
                                      event.key.repeat == 0);
 
-                // Check if the Return key has been pressed to pause/unpause the
+                // Check if the P key has been pressed to pause/unpause the
                 // game
-                if (event.key.keysym.sym == SDLK_RETURN) {
+                if (event.key.keysym.sym == SDLK_p) {
                     TogglePause();
+                }
+                // Quickly end the game
+                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE) {
+                    Quit();
                 }
                 break;
         }
@@ -488,14 +492,10 @@ void Game::UpdateCamera() {
     float horizontalCameraPos =
         mPlayer->GetPosition().x - (mWindowWidth / 2.0f);
 
-    if (horizontalCameraPos > mCameraPos.x) {
-        // Limit camera to the right side of the level
-        float maxCameraPos = (LEVEL_WIDTH * TILE_SIZE) - mWindowWidth;
-        horizontalCameraPos =
-            Math::Clamp(horizontalCameraPos, 0.0f, maxCameraPos);
+    float maxCameraPos = (LEVEL_WIDTH * TILE_SIZE) - mWindowWidth;
+    horizontalCameraPos = Math::Clamp(horizontalCameraPos, 0.0f, maxCameraPos);
 
-        mCameraPos.x = horizontalCameraPos;
-    }
+    mCameraPos.x = horizontalCameraPos;
 }
 
 void Game::UpdateActors(float deltaTime) {

@@ -18,9 +18,8 @@ Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
       mJumpSpeed(jumpSpeed),
       mPoleSlideTimer(0.0f) {
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 5.0f);
-    mColliderComponent =
-        new AABBColliderComponent(this, 0, 0, Game::TILE_SIZE - 4.0f,
-                                  Game::TILE_SIZE, ColliderLayer::Player);
+    mColliderComponent = new AABBColliderComponent(
+        this, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT, ColliderLayer::Player);
 
     mDrawComponent =
         new DrawAnimatedComponent(this, "../Assets/Sprites/Player/Player.png",
@@ -69,13 +68,13 @@ void Player::OnHandleKeyPress(const int key, const bool isPressed) {
 
 void Player::OnUpdate(float deltaTime) {
     // Limit Player's position to the camera view
-    mPosition.x = Math::Max(mPosition.x, mGame->GetCameraPos().x);
+    // mPosition.x = Math::Max(mPosition.x, mGame->GetCameraPos().x);
 
     // Kill player if he falls below the screen
-    if (mGame->GetGamePlayState() == Game::GamePlayState::Playing &&
-        mPosition.y > mGame->GetWindowHeight()) {
-        Kill();
-    }
+    // if (mGame->GetGamePlayState() == Game::GamePlayState::Playing &&
+    //     mPosition.y > mGame->GetWindowHeight()) {
+    //     Kill();
+    // }
 
     if (mIsOnPole) {
         // If Player is on the pole, update the pole slide timer
@@ -174,11 +173,5 @@ void Player::OnVerticalCollision(const float minOverlap,
             Vector2(mRigidBodyComponent->GetVelocity().x, mJumpSpeed / 2.5f));
 
         mGame->GetAudio()->PlaySound("Stomp.wav");
-    } else if (other->GetLayer() == ColliderLayer::Blocks) {
-        mGame->GetAudio()->PlaySound("Bump.wav");
-
-        // Cast actor to Block to call OnBump
-        auto *block = dynamic_cast<Block *>(other->GetOwner());
-        block->OnBump();
     }
 }

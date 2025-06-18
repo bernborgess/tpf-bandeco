@@ -20,16 +20,6 @@ Block::Block(Game* game, const std::string& texturePath, const bool isStatic)
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 0.0f, false);
 }
 
-void Block::OnBump() {
-    if (mPosition.y != mOriginalPosition.y) {
-        mPosition.Set(mOriginalPosition.x, mOriginalPosition.y);
-    }
-
-    // Disable collider
-    mColliderComponent->SetStatic(false);
-    mRigidBodyComponent->SetVelocity(Vector2::NegUnitY * BUMP_FORCE);
-}
-
 void Block::OnUpdate(float deltaTime) {
     // If the block is moving, check if it has reached its original position
     if (mRigidBodyComponent->GetVelocity().y > 0.0f &&
