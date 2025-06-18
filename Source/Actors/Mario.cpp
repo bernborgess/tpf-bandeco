@@ -39,6 +39,7 @@ Mario::Mario(Game *game, const float forwardSpeed, const float jumpSpeed)
 void Mario::OnProcessInput(const uint8_t *state) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
 
+    mIsRunning = false;
     if (state[SDL_SCANCODE_D]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitX * mForwardSpeed);
         mRotation = 0.0f;
@@ -51,30 +52,22 @@ void Mario::OnProcessInput(const uint8_t *state) {
         mIsRunning = true;
     }
 
-    if (!state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A]) {
-        mIsRunning = false;
+    if (state[SDL_SCANCODE_W]) {
+        mRigidBodyComponent->ApplyForce(Vector2::UnitY * -mForwardSpeed);
+        mIsRunning = true;
+    }
+
+    if (state[SDL_SCANCODE_S]) {
+        mRigidBodyComponent->ApplyForce(Vector2::UnitY * mForwardSpeed);
+        mIsRunning = true;
     }
 }
 
 void Mario::OnHandleKeyPress(const int key, const bool isPressed) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
-
-    // Jump
-    if (key == SDLK_SPACE && isPressed && mIsOnGround) {
-        mRigidBodyComponent->SetVelocity(
-            Vector2(mRigidBodyComponent->GetVelocity().x, mJumpSpeed));
-        mIsOnGround = false;
-
-        mGame->GetAudio()->PlaySound("Jump.wav");
-    }
 }
 
 void Mario::OnUpdate(float deltaTime) {
-    // Check if Mario is off the ground
-    if (mRigidBodyComponent && mRigidBodyComponent->GetVelocity().y != 0) {
-        mIsOnGround = false;
-    }
-
     // Limit Mario's position to the camera view
     mPosition.x = Math::Max(mPosition.x, mGame->GetCameraPos().x);
 
@@ -88,16 +81,10 @@ void Mario::OnUpdate(float deltaTime) {
         // If Mario is on the pole, update the pole slide timer
         mPoleSlideTimer -= deltaTime;
         if (mPoleSlideTimer <= 0.0f) {
-            mRigidBodyComponent->SetApplyGravity(true);
             mRigidBodyComponent->SetApplyFriction(false);
             mRigidBodyComponent->SetVelocity(Vector2::UnitX * 100.0f);
             mGame->SetGamePlayState(Game::GamePlayState::Leaving);
 
-            // --------------
-            // TODO - PARTE 4
-            // --------------
-
-            // TODO 1.: Toque o som "StageClear.wav"
             mGame->GetAudio()->PlaySound("StageClear.wav");
 
             mIsOnPole = false;
@@ -126,12 +113,10 @@ void Mario::ManageAnimations() {
         mDrawComponent->SetAnimation("Dead");
     } else if (mIsOnPole) {
         mDrawComponent->SetAnimation("win");
-    } else if (mIsOnGround && mIsRunning) {
+    } else if (mIsRunning) {
         mDrawComponent->SetAnimation("run");
-    } else if (mIsOnGround && !mIsRunning) {
+    } else {
         mDrawComponent->SetAnimation("idle");
-    } else if (!mIsOnGround) {
-        mDrawComponent->SetAnimation("jump");
     }
 }
 
@@ -157,7 +142,6 @@ void Mario::Win(AABBColliderComponent *poleCollider) {
     // Set mario velocity to go down
     mRigidBodyComponent->SetVelocity(Vector2::UnitY *
                                      100.0f);  // 100 pixels per second
-    mRigidBodyComponent->SetApplyGravity(false);
 
     // Disable collider
     poleCollider->SetEnabled(false);
@@ -191,12 +175,10 @@ void Mario::OnVerticalCollision(const float minOverlap,
 
         mGame->GetAudio()->PlaySound("Stomp.wav");
     } else if (other->GetLayer() == ColliderLayer::Blocks) {
-        if (!mIsOnGround) {
-            mGame->GetAudio()->PlaySound("Bump.wav");
+        mGame->GetAudio()->PlaySound("Bump.wav");
 
-            // Cast actor to Block to call OnBump
-            auto *block = dynamic_cast<Block *>(other->GetOwner());
-            block->OnBump();
-        }
+        // Cast actor to Block to call OnBump
+        auto *block = dynamic_cast<Block *>(other->GetOwner());
+        block->OnBump();
     }
 }

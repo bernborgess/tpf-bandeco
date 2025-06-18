@@ -58,9 +58,6 @@ class Actor {
     }
 
     // Game specific
-    void SetOnGround() { mIsOnGround = true; };
-    void SetOffGround() { mIsOnGround = false; };
-    bool IsOnGround() const { return mIsOnGround; };
     bool IsVisibleOnCamera() const;
 
     // Any actor-specific collision code (overridable)
@@ -88,9 +85,6 @@ class Actor {
 
     // Components
     std::vector<class Component*> mComponents;
-
-    // Game specific
-    bool mIsOnGround;
 
    private:
     friend class Component;

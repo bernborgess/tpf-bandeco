@@ -12,14 +12,11 @@
 
 const float MAX_SPEED_X = 750.0f;
 const float MAX_SPEED_Y = 750.0f;
-const float GRAVITY = 2000.0f;
 
 RigidBodyComponent::RigidBodyComponent(class Actor* owner, float mass,
-                                       float friction, bool applyGravity,
-                                       int updateOrder)
+                                       float friction, int updateOrder)
     : Component(owner, updateOrder),
       mMass(mass),
-      mApplyGravity(applyGravity),
       mApplyFriction(true),
       mFrictionCoefficient(friction),
       mVelocity(Vector2::Zero),
@@ -30,14 +27,12 @@ void RigidBodyComponent::ApplyForce(const Vector2& force) {
 }
 
 void RigidBodyComponent::Update(float deltaTime) {
-    // Apply gravity acceleration
-    if (mApplyGravity) {
-        ApplyForce(Vector2::UnitY * GRAVITY);
-    }
-
     // Apply friction
     if (mApplyFriction && Math::Abs(mVelocity.x) > 0.05f) {
         ApplyForce(Vector2::UnitX * -mFrictionCoefficient * mVelocity.x);
+    }
+    if (mApplyFriction && Math::Abs(mVelocity.y) > 0.05f) {
+        ApplyForce(Vector2::UnitY * -mFrictionCoefficient * mVelocity.y);
     }
 
     // Euler Integration

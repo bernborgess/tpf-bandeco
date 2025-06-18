@@ -28,7 +28,6 @@ void Block::OnBump() {
     // Disable collider
     mColliderComponent->SetStatic(false);
     mRigidBodyComponent->SetVelocity(Vector2::NegUnitY * BUMP_FORCE);
-    mRigidBodyComponent->SetApplyGravity(true);
 }
 
 void Block::OnUpdate(float deltaTime) {
@@ -37,7 +36,6 @@ void Block::OnUpdate(float deltaTime) {
         mPosition.y >= mOriginalPosition.y) {
         mPosition.Set(mOriginalPosition.x, mOriginalPosition.y);
         mRigidBodyComponent->SetVelocity(Vector2::Zero);
-        mRigidBodyComponent->SetApplyGravity(false);
         mColliderComponent->SetStatic(true);
     }
 }
@@ -50,7 +48,6 @@ void Block::OnVerticalCollision(const float minOverlap,
         goomba->BumpKill();
 
         mRigidBodyComponent->SetVelocity(Vector2::NegUnitY * BUMP_FORCE);
-        mRigidBodyComponent->SetApplyGravity(true);
         mOriginalPosition.Set(mPosition.x, mPosition.y);
     }
 }

@@ -139,8 +139,4 @@ void AABBColliderComponent::ResolveVerticalCollisions(
     RigidBodyComponent* rigidBody, const float minYOverlap) {
     mOwner->SetPosition(mOwner->GetPosition() - Vector2(0.0f, minYOverlap));
     rigidBody->SetVelocity(Vector2(rigidBody->GetVelocity().x, 0.f));
-
-    if (minYOverlap > .0f) {
-        mOwner->SetOnGround();
-    }
 }
