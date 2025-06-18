@@ -2,14 +2,14 @@
 // Created by Lucas N. Ferreira on 03/08/23.
 //
 
-#include "Mario.h"
+#include "Player.h"
 
 #include "../Components/DrawComponents/DrawAnimatedComponent.h"
 #include "../Components/DrawComponents/DrawPolygonComponent.h"
 #include "../Game.h"
 #include "Block.h"
 
-Mario::Mario(Game *game, const float forwardSpeed, const float jumpSpeed)
+Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
     : Actor(game),
       mIsRunning(false),
       mIsOnPole(false),
@@ -23,8 +23,8 @@ Mario::Mario(Game *game, const float forwardSpeed, const float jumpSpeed)
                                   Game::TILE_SIZE, ColliderLayer::Player);
 
     mDrawComponent =
-        new DrawAnimatedComponent(this, "../Assets/Sprites/Mario/Mario.png",
-                                  "../Assets/Sprites/Mario/Mario.json");
+        new DrawAnimatedComponent(this, "../Assets/Sprites/Player/Player.png",
+                                  "../Assets/Sprites/Player/Player.json");
 
     mDrawComponent->AddAnimation("Dead", {0});
     mDrawComponent->AddAnimation("idle", {1});
@@ -36,7 +36,7 @@ Mario::Mario(Game *game, const float forwardSpeed, const float jumpSpeed)
     mDrawComponent->SetAnimFPS(10.0f);
 }
 
-void Mario::OnProcessInput(const uint8_t *state) {
+void Player::OnProcessInput(const uint8_t *state) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
 
     mIsRunning = false;
@@ -63,22 +63,22 @@ void Mario::OnProcessInput(const uint8_t *state) {
     }
 }
 
-void Mario::OnHandleKeyPress(const int key, const bool isPressed) {
+void Player::OnHandleKeyPress(const int key, const bool isPressed) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
 }
 
-void Mario::OnUpdate(float deltaTime) {
-    // Limit Mario's position to the camera view
+void Player::OnUpdate(float deltaTime) {
+    // Limit Player's position to the camera view
     mPosition.x = Math::Max(mPosition.x, mGame->GetCameraPos().x);
 
-    // Kill mario if he falls below the screen
+    // Kill player if he falls below the screen
     if (mGame->GetGamePlayState() == Game::GamePlayState::Playing &&
         mPosition.y > mGame->GetWindowHeight()) {
         Kill();
     }
 
     if (mIsOnPole) {
-        // If Mario is on the pole, update the pole slide timer
+        // If Player is on the pole, update the pole slide timer
         mPoleSlideTimer -= deltaTime;
         if (mPoleSlideTimer <= 0.0f) {
             mRigidBodyComponent->SetApplyFriction(false);
@@ -92,13 +92,13 @@ void Mario::OnUpdate(float deltaTime) {
         }
     }
 
-    // If Mario is leaving the level, kill him if he enters the castle
+    // If Player is leaving the level, kill him if he enters the castle
     const float castleDoorPos =
         Game::LEVEL_WIDTH * Game::TILE_SIZE - 10 * Game::TILE_SIZE;
 
     if (mGame->GetGamePlayState() == Game::GamePlayState::Leaving &&
         mPosition.x >= castleDoorPos) {
-        // Stop Mario and set the game scene to Level 2
+        // Stop Player and set the game scene to Level 2
         mState = ActorState::Destroy;
         mGame->SetGameScene(Game::GameScene::Level2, 3.5f);
 
@@ -108,7 +108,7 @@ void Mario::OnUpdate(float deltaTime) {
     ManageAnimations();
 }
 
-void Mario::ManageAnimations() {
+void Player::ManageAnimations() {
     if (mIsDying) {
         mDrawComponent->SetAnimation("Dead");
     } else if (mIsOnPole) {
@@ -120,7 +120,7 @@ void Mario::ManageAnimations() {
     }
 }
 
-void Mario::Kill() {
+void Player::Kill() {
     mIsDying = true;
     mGame->SetGamePlayState(Game::GamePlayState::GameOver);
     mDrawComponent->SetAnimation("Dead");
@@ -135,18 +135,18 @@ void Mario::Kill() {
     mGame->ResetGameScene(3.5f);  // Reset the game scene after 3 seconds
 }
 
-void Mario::Win(AABBColliderComponent *poleCollider) {
+void Player::Win(AABBColliderComponent *poleCollider) {
     mDrawComponent->SetAnimation("win");
     mGame->SetGamePlayState(Game::GamePlayState::LevelComplete);
 
-    // Set mario velocity to go down
+    // Set player velocity to go down
     mRigidBodyComponent->SetVelocity(Vector2::UnitY *
                                      100.0f);  // 100 pixels per second
 
     // Disable collider
     poleCollider->SetEnabled(false);
 
-    // Adjust mario x position to grab the pole
+    // Adjust player x position to grab the pole
     mPosition.Set(
         poleCollider->GetOwner()->GetPosition().x + Game::TILE_SIZE / 4.0f,
         mPosition.y);
@@ -156,8 +156,8 @@ void Mario::Win(AABBColliderComponent *poleCollider) {
     mPoleSlideTimer = POLE_SLIDE_TIME;  // Start the pole slide timer
 }
 
-void Mario::OnHorizontalCollision(const float minOverlap,
-                                  AABBColliderComponent *other) {
+void Player::OnHorizontalCollision(const float minOverlap,
+                                   AABBColliderComponent *other) {
     if (other->GetLayer() == ColliderLayer::Enemy) {
         Kill();
     } else if (other->GetLayer() == ColliderLayer::Pole) {
@@ -166,8 +166,8 @@ void Mario::OnHorizontalCollision(const float minOverlap,
     }
 }
 
-void Mario::OnVerticalCollision(const float minOverlap,
-                                AABBColliderComponent *other) {
+void Player::OnVerticalCollision(const float minOverlap,
+                                 AABBColliderComponent *other) {
     if (other->GetLayer() == ColliderLayer::Enemy) {
         other->GetOwner()->Kill();
         mRigidBodyComponent->SetVelocity(

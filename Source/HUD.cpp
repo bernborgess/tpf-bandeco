@@ -3,10 +3,12 @@
 //
 
 #include "HUD.h"
-#include "Game.h"
-#include "UIElements/UIText.h"
+
 #include <iomanip>
 #include <sstream>
+
+#include "Game.h"
+#include "UIElements/UIText.h"
 
 HUD::HUD(class Game *game, const std::string &fontName)
     : UIScreen(game, fontName) {
@@ -17,7 +19,7 @@ HUD::HUD(class Game *game, const std::string &fontName)
     mTimeText = AddText("400", right - 7 * cw + wh, 3 * cw + wh);
     AddText("World", right - 16 * cw, 5 * cw + wh);
     mLevelName = AddText("1-1", right - 15 * cw + wh, 3 * cw + wh);
-    AddText("Mario", left + 2 * cw, 5 * cw + wh);
+    AddText("Player", left + 2 * cw, 5 * cw + wh);
     AddText("000000", left + 2 * cw + wh, 6 * cw + wh);
 }
 

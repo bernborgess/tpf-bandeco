@@ -12,7 +12,7 @@
 
 #include "Actors/Actor.h"
 #include "Actors/Block.h"
-#include "Actors/Mario.h"
+#include "Actors/Player.h"
 #include "Actors/Spawner.h"
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
@@ -31,7 +31,7 @@ Game::Game(int windowWidth, int windowHeight)
       mIsRunning(true),
       mWindowWidth(windowWidth),
       mWindowHeight(windowHeight),
-      mMario(nullptr),
+      mPlayer(nullptr),
       mHUD(nullptr),
       mBackgroundColor(0, 0, 0),
       mModColor(255, 255, 255),
@@ -239,10 +239,10 @@ void Game::BuildLevel(int **levelData, int width, int height) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             int tile = levelData[y][x];
 
-            if (tile == 16)  // Mario
+            if (tile == 16)  // Player
             {
-                mMario = new Mario(this);
-                mMario->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                mPlayer = new Player(this);
+                mPlayer->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
             } else if (tile == 10)  // Spawner
             {
                 Spawner *spawner = new Spawner(this, SPAWN_DISTANCE);
@@ -347,18 +347,18 @@ void Game::ProcessInputActors() {
 
         const Uint8 *state = SDL_GetKeyboardState(nullptr);
 
-        bool isMarioOnCamera = false;
+        bool isPlayerOnCamera = false;
         for (auto actor : actorsOnCamera) {
             actor->ProcessInput(state);
 
-            if (actor == mMario) {
-                isMarioOnCamera = true;
+            if (actor == mPlayer) {
+                isPlayerOnCamera = true;
             }
         }
 
-        // If Mario is not on camera, process input for him
-        if (!isMarioOnCamera && mMario) {
-            mMario->ProcessInput(state);
+        // If Player is not on camera, process input for him
+        if (!isPlayerOnCamera && mPlayer) {
+            mPlayer->ProcessInput(state);
         }
     }
 }
@@ -370,18 +370,18 @@ void Game::HandleKeyPressActors(const int key, const bool isPressed) {
             mCameraPos, mWindowWidth, mWindowHeight);
 
         // Handle key press for actors
-        bool isMarioOnCamera = false;
+        bool isPlayerOnCamera = false;
         for (auto actor : actorsOnCamera) {
             actor->HandleKeyPress(key, isPressed);
 
-            if (actor == mMario) {
-                isMarioOnCamera = true;
+            if (actor == mPlayer) {
+                isPlayerOnCamera = true;
             }
         }
 
-        // If Mario is not on camera, handle key press for him
-        if (!isMarioOnCamera && mMario) {
-            mMario->HandleKeyPress(key, isPressed);
+        // If Player is not on camera, handle key press for him
+        if (!isPlayerOnCamera && mPlayer) {
+            mPlayer->HandleKeyPress(key, isPressed);
         }
     }
 }
@@ -477,15 +477,16 @@ void Game::UpdateLevelTime(float deltaTime) {
         mGameTimeLimit -= 1;
         mHUD->SetTime(mGameTimeLimit);
         if (mGameTimeLimit <= 0) {
-            mMario->Kill();
+            mPlayer->Kill();
         }
     }
 }
 
 void Game::UpdateCamera() {
-    if (!mMario) return;
+    if (!mPlayer) return;
 
-    float horizontalCameraPos = mMario->GetPosition().x - (mWindowWidth / 2.0f);
+    float horizontalCameraPos =
+        mPlayer->GetPosition().x - (mWindowWidth / 2.0f);
 
     if (horizontalCameraPos > mCameraPos.x) {
         // Limit camera to the right side of the level
@@ -502,24 +503,24 @@ void Game::UpdateActors(float deltaTime) {
     std::vector<Actor *> actorsOnCamera =
         mSpatialHashing->QueryOnCamera(mCameraPos, mWindowWidth, mWindowHeight);
 
-    bool isMarioOnCamera = false;
+    bool isPlayerOnCamera = false;
     for (auto actor : actorsOnCamera) {
         actor->Update(deltaTime);
-        if (actor == mMario) {
-            isMarioOnCamera = true;
+        if (actor == mPlayer) {
+            isPlayerOnCamera = true;
         }
     }
 
-    // If Mario is not on camera, reset camera position
-    if (!isMarioOnCamera && mMario) {
-        mMario->Update(deltaTime);
+    // If Player is not on camera, reset camera position
+    if (!isPlayerOnCamera && mPlayer) {
+        mPlayer->Update(deltaTime);
     }
 
     for (auto actor : actorsOnCamera) {
         if (actor->GetState() == ActorState::Destroy) {
             delete actor;
-            if (actor == mMario) {
-                mMario = nullptr;
+            if (actor == mPlayer) {
+                mPlayer = nullptr;
             }
         }
     }
