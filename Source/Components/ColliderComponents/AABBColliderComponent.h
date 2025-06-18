@@ -3,42 +3,50 @@
 //
 
 #pragma once
-#include "../Component.h"
-#include "../../Math.h"
-#include "../RigidBodyComponent.h"
-#include <vector>
+#include <map>
 #include <set>
+#include <vector>
 
-enum class ColliderLayer
-{
-    Player,
-    Enemy,
-    Blocks
-};
+#include "../../Math.h"
+#include "../Component.h"
+#include "../RigidBodyComponent.h"
 
-class AABBColliderComponent : public Component
-{
-public:
+enum class ColliderLayer { Player, Enemy, Blocks, Pole };
+
+class AABBColliderComponent : public Component {
+   public:
+    // Collider ignore map
+    const std::map<ColliderLayer, const std::set<ColliderLayer>>
+        ColliderIgnoreMap = {{ColliderLayer::Player, {}},
+                             {ColliderLayer::Enemy, {}},
+                             {ColliderLayer::Blocks, {ColliderLayer::Blocks}},
+                             {ColliderLayer::Pole, {}}};
 
     AABBColliderComponent(class Actor* owner, int dx, int dy, int w, int h,
-                                ColliderLayer layer, bool isStatic = false, int updateOrder = 10);
+                          ColliderLayer layer, bool isStatic = false,
+                          int updateOrder = 10);
     ~AABBColliderComponent() override;
 
     bool Intersect(const AABBColliderComponent& b) const;
 
-    float DetectHorizontalCollision(RigidBodyComponent *rigidBody);
-    float DetectVerticalCollision(RigidBodyComponent *rigidBody);
+    float DetectHorizontalCollision(RigidBodyComponent* rigidBody);
+    float DetectVerticalCollision(RigidBodyComponent* rigidBody);
+
+    void SetStatic(bool isStatic) { mIsStatic = isStatic; }
 
     Vector2 GetMin() const;
     Vector2 GetMax() const;
+    Vector2 GetCenter() const;
     ColliderLayer GetLayer() const { return mLayer; }
 
-private:
+   private:
     float GetMinVerticalOverlap(AABBColliderComponent* b) const;
     float GetMinHorizontalOverlap(AABBColliderComponent* b) const;
 
-    void ResolveHorizontalCollisions(RigidBodyComponent *rigidBody, const float minXOverlap);
-    void ResolveVerticalCollisions(RigidBodyComponent *rigidBody, const float minYOverlap);
+    void ResolveHorizontalCollisions(RigidBodyComponent* rigidBody,
+                                     const float minOverlap);
+    void ResolveVerticalCollisions(RigidBodyComponent* rigidBody,
+                                   const float minOverlap);
 
     Vector2 mOffset;
     int mWidth;

@@ -4,153 +4,174 @@
 
 #include "Player.h"
 
-#include "../Components/ColliderComponents/AABBColliderComponent.h"
 #include "../Components/DrawComponents/DrawAnimatedComponent.h"
 #include "../Components/DrawComponents/DrawPolygonComponent.h"
-#include "../Components/RigidBodyComponent.h"
 #include "../Game.h"
+#include "Block.h"
 
-Player::Player(Game *game, PlayerType playerType, const float forwardSpeed,
-               const float jumpSpeed)
+Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
     : Actor(game),
+      mIsRunning(false),
+      mIsOnPole(false),
+      mIsDying(false),
       mForwardSpeed(forwardSpeed),
       mJumpSpeed(jumpSpeed),
-      mIsRunning(false),
-      mIsDead(false),
-      mRigidBodyComponent(nullptr),
-      mDrawComponent(nullptr),
-      mColliderComponent(nullptr),
-      mPlayerType(playerType) {
-    mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 5.0);
-
-    mColliderComponent =
-        new AABBColliderComponent(this, 0, 0, Game::TILE_SIZE - 4.0f,
-                                  Game::TILE_SIZE, ColliderLayer::Player);
+      mPoleSlideTimer(0.0f) {
+    mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 5.0f);
+    mColliderComponent = new AABBColliderComponent(
+        this, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT, ColliderLayer::Player);
 
     mDrawComponent =
-        new DrawAnimatedComponent(this, "../Assets/Sprites/Mario/texture.png",
-                                  "../Assets/Sprites/Mario/texture.json");
+        new DrawAnimatedComponent(this, "../Assets/Sprites/Player/Player.png",
+                                  "../Assets/Sprites/Player/Player.json");
 
-    mDrawComponent->AddAnimation("dead", {0});
+    mDrawComponent->AddAnimation("Dead", {0});
     mDrawComponent->AddAnimation("idle", {1});
     mDrawComponent->AddAnimation("jump", {2});
     mDrawComponent->AddAnimation("run", {3, 4, 5});
+    mDrawComponent->AddAnimation("win", {7});
 
     mDrawComponent->SetAnimation("idle");
     mDrawComponent->SetAnimFPS(10.0f);
 }
 
-void Player::OnProcessInput(const uint8_t *keyState) {
-    if (keyState[GetRightCode()]) {
-        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2(1, 0));
-        mRotation = 0;
+void Player::OnProcessInput(const uint8_t *state) {
+    if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
+
+    mIsRunning = false;
+    if (state[SDL_SCANCODE_D]) {
+        mRigidBodyComponent->ApplyForce(Vector2::UnitX * mForwardSpeed);
+        mRotation = 0.0f;
         mIsRunning = true;
-    } else if (keyState[GetLeftCode()]) {
-        mRigidBodyComponent->ApplyForce(mForwardSpeed * Vector2(-1, 0));
-        mRotation = Math::Pi;
-        mIsRunning = true;
-    } else {
-        mIsRunning = false;
     }
 
-    if (keyState[GetUpCode()] && mIsOnGround) {
-        mRigidBodyComponent->ApplyForce(mJumpSpeed * Vector2::UnitY);
-        mIsOnGround = false;
+    if (state[SDL_SCANCODE_A]) {
+        mRigidBodyComponent->ApplyForce(Vector2::UnitX * -mForwardSpeed);
+        mRotation = Math::Pi;
+        mIsRunning = true;
+    }
+
+    if (state[SDL_SCANCODE_W]) {
+        mRigidBodyComponent->ApplyForce(Vector2::UnitY * -mForwardSpeed);
+        mIsRunning = true;
+    }
+
+    if (state[SDL_SCANCODE_S]) {
+        mRigidBodyComponent->ApplyForce(Vector2::UnitY * mForwardSpeed);
+        mIsRunning = true;
     }
 }
 
+void Player::OnHandleKeyPress(const int key, const bool isPressed) {
+    if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
+}
+
 void Player::OnUpdate(float deltaTime) {
-    if (mRigidBodyComponent && mRigidBodyComponent->GetVelocity().y != 0) {
-        mIsOnGround = false;
+    // Limit Player's position to the camera view
+    // mPosition.x = Math::Max(mPosition.x, mGame->GetCameraPos().x);
+
+    // Kill player if he falls below the screen
+    // if (mGame->GetGamePlayState() == Game::GamePlayState::Playing &&
+    //     mPosition.y > mGame->GetWindowHeight()) {
+    //     Kill();
+    // }
+
+    if (mIsOnPole) {
+        // If Player is on the pole, update the pole slide timer
+        mPoleSlideTimer -= deltaTime;
+        if (mPoleSlideTimer <= 0.0f) {
+            mRigidBodyComponent->SetApplyFriction(false);
+            mRigidBodyComponent->SetVelocity(Vector2::UnitX * 100.0f);
+            mGame->SetGamePlayState(Game::GamePlayState::Leaving);
+
+            mGame->GetAudio()->PlaySound("StageClear.wav");
+
+            mIsOnPole = false;
+            mIsRunning = true;
+        }
     }
 
-    float cameraX = mGame->GetCameraPos().x;
-    if (mPosition.x < cameraX) {
-        mPosition.x = cameraX;
-    }
+    // If Player is leaving the level, kill him if he enters the castle
+    const float castleDoorPos =
+        Game::LEVEL_WIDTH * Game::TILE_SIZE - 10 * Game::TILE_SIZE;
 
-    if (mPosition.y > Game::LEVEL_HEIGHT * Game::TILE_SIZE) {
-        Kill();
+    if (mGame->GetGamePlayState() == Game::GamePlayState::Leaving &&
+        mPosition.x >= castleDoorPos) {
+        // Stop Player and set the game scene to Level 2
+        mState = ActorState::Destroy;
+        mGame->SetGameScene(Game::GameScene::Level2, 3.5f);
+
+        return;
     }
 
     ManageAnimations();
 }
 
 void Player::ManageAnimations() {
-    if (mIsDead) return mDrawComponent->SetAnimation("dead");
-
-    if (mIsOnGround && mIsRunning) return mDrawComponent->SetAnimation("run");
-    //  -5.1.2: Se estiver vivo, no chão e não estiver correndo, altere a
-    //  animação para `idle`
-    if (mIsOnGround) return mDrawComponent->SetAnimation("idle");
-    //  -5.1.3: Se estiver vivo e não estiver no chão, altere a animação para
-    //  `jump`
-    mDrawComponent->SetAnimation("jump");
+    if (mIsDying) {
+        mDrawComponent->SetAnimation("Dead");
+    } else if (mIsOnPole) {
+        mDrawComponent->SetAnimation("win");
+    } else if (mIsRunning) {
+        mDrawComponent->SetAnimation("run");
+    } else {
+        mDrawComponent->SetAnimation("idle");
+    }
 }
 
 void Player::Kill() {
-    // --------------
-    // TODO - PARTE 5
-    // --------------
+    mIsDying = true;
+    mGame->SetGamePlayState(Game::GamePlayState::GameOver);
+    mDrawComponent->SetAnimation("Dead");
 
-    // TODO 8 (~4 linhas): altere a animação para "dead" e o valor da variável
-    // `mIsDead` para verdadeiro.
-    //  Além disso, desabilite os componentes `mRigidBodyComponent` e
-    //  `mColliderComponent`
-    mDrawComponent->SetAnimation("dead");
-    mIsDead = true;
+    // Disable collider and rigid body
     mRigidBodyComponent->SetEnabled(false);
     mColliderComponent->SetEnabled(false);
+
+    mGame->GetAudio()->StopAllSounds();
+    mGame->GetAudio()->PlaySound("Dead.wav");
+
+    mGame->ResetGameScene(3.5f);  // Reset the game scene after 3 seconds
+}
+
+void Player::Win(AABBColliderComponent *poleCollider) {
+    mDrawComponent->SetAnimation("win");
+    mGame->SetGamePlayState(Game::GamePlayState::LevelComplete);
+
+    // Set player velocity to go down
+    mRigidBodyComponent->SetVelocity(Vector2::UnitY *
+                                     100.0f);  // 100 pixels per second
+
+    // Disable collider
+    poleCollider->SetEnabled(false);
+
+    // Adjust player x position to grab the pole
+    mPosition.Set(
+        poleCollider->GetOwner()->GetPosition().x + Game::TILE_SIZE / 4.0f,
+        mPosition.y);
+
+    mGame->GetAudio()->StopAllSounds();
+
+    mPoleSlideTimer = POLE_SLIDE_TIME;  // Start the pole slide timer
 }
 
 void Player::OnHorizontalCollision(const float minOverlap,
                                    AABBColliderComponent *other) {
-    // --------------
-    // TODO - PARTE 5
-    // --------------
-
-    // TODO 9 (~2-4 linhas): Verifique se a colisão ocorreu horizontalmente com
-    // um objeto do tipo
-    //  `CollisionSide::Enemy`. Se sim, mate o jogador com o método `Kill()` do
-    //  jogador.
     if (other->GetLayer() == ColliderLayer::Enemy) {
         Kill();
+    } else if (other->GetLayer() == ColliderLayer::Pole) {
+        mIsOnPole = true;
+        Win(other);
     }
 }
 
 void Player::OnVerticalCollision(const float minOverlap,
                                  AABBColliderComponent *other) {
-    switch (other->GetLayer()) {
-        case ColliderLayer::Enemy: {
-            other->GetOwner()->Kill();
-            auto vel = mRigidBodyComponent->GetVelocity();
-            mRigidBodyComponent->SetVelocity(Vector2(vel.x, mJumpSpeed / 2));
-            return;
-        }
-        case ColliderLayer::Blocks: {
-            if (minOverlap > 0) return;
-            other->GetOwner()->OnVerticalCollision(minOverlap,
-                                                   mColliderComponent);
-        }
+    if (other->GetLayer() == ColliderLayer::Enemy) {
+        other->GetOwner()->Kill();
+        mRigidBodyComponent->SetVelocity(
+            Vector2(mRigidBodyComponent->GetVelocity().x, mJumpSpeed / 2.5f));
+
+        mGame->GetAudio()->PlaySound("Stomp.wav");
     }
-}
-
-SDL_Scancode Player::GetDownCode() {
-    if (mPlayerType == PlayerMario) return SDL_SCANCODE_DOWN;
-    return SDL_SCANCODE_S;  // Luigi
-}
-
-SDL_Scancode Player::GetLeftCode() {
-    if (mPlayerType == PlayerMario) return SDL_SCANCODE_LEFT;
-    return SDL_SCANCODE_A;  // Luigi
-}
-
-SDL_Scancode Player::GetRightCode() {
-    if (mPlayerType == PlayerMario) return SDL_SCANCODE_RIGHT;
-    return SDL_SCANCODE_D;  // Luigi
-}
-
-SDL_Scancode Player::GetUpCode() {
-    if (mPlayerType == PlayerMario) return SDL_SCANCODE_UP;
-    return SDL_SCANCODE_W;  // Luigi
 }

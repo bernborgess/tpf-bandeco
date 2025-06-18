@@ -1,17 +1,21 @@
+//
+// Created by Lucas N. Ferreira on 30/09/23.
+//
+
 #include "Spawner.h"
 
 #include "../Game.h"
 #include "Goomba.h"
 #include "Player.h"
 
-Spawner::Spawner(Game *game, float spawnDistance)
+Spawner::Spawner(Game* game, float spawnDistance)
     : Actor(game), mSpawnDistance(spawnDistance) {}
 
 void Spawner::OnUpdate(float deltaTime) {
-    auto marioX = mGame->GetMario()->GetPosition().x;
-    if (mPosition.x - marioX < mSpawnDistance) {
-        auto goomba = new Goomba(mGame);
-        goomba->SetPosition(mPosition);
-        SetState(ActorState::Destroy);
+    if (abs(GetGame()->GetPlayer()->GetPosition().x - GetPosition().x) <
+        mSpawnDistance) {
+        auto goomba = new Goomba(GetGame());
+        goomba->SetPosition(GetPosition());
+        mState = ActorState::Destroy;
     }
 }

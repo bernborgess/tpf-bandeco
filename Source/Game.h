@@ -1,37 +1,32 @@
 
 #pragma once
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
-#include <string>
+#include <unordered_map>
 #include <vector>
 
+#include "AudioSystem.h"
 #include "Math.h"
-
-enum TileType {
-    CobbleStoneBlock,
-    QuestionBlock,
-    PipeTopLeft,
-    Coin,
-    BrickBlock,
-    SpentBlock,
-    PipeBottomRight,
-    KoopaTop,
-    StoneBlock,
-    PipeBottomLeft,
-    GoombaTile,
-    KoopaBottom,
-    PipeTopRight,
-    Mushroom,
-    MarioTile = 16,
-    LuigiTile = 17
-};
 
 class Game {
    public:
     static const int LEVEL_WIDTH = 215;
     static const int LEVEL_HEIGHT = 15;
-    static const int TILE_SIZE = 32;
+    static const int TILE_SIZE = 40;
     static const int SPAWN_DISTANCE = 700;
+    static const int TRANSITION_TIME = 1;
+
+    enum class GameScene { MainMenu, Level1, Level2 };
+
+    enum class SceneManagerState { None, Entering, Active, Exiting };
+
+    enum class GamePlayState {
+        Playing,
+        Paused,
+        GameOver,
+        LevelComplete,
+        Leaving
+    };
 
     Game(int windowWidth, int windowHeight);
 
@@ -41,36 +36,58 @@ class Game {
     void Quit() { mIsRunning = false; }
 
     // Actor functions
-    void InitializeActors();
     void UpdateActors(float deltaTime);
-    void AddActor(class Actor* actor);
-    void RemoveActor(class Actor* actor);
+    void AddActor(class Actor *actor);
+    void RemoveActor(class Actor *actor);
+    void ProcessInputActors();
+    void HandleKeyPressActors(const int key, const bool isPressed);
 
-    // Draw functions
-    void AddDrawable(class DrawComponent* drawable);
-    void RemoveDrawable(class DrawComponent* drawable);
+    // Level functions
+    void LoadMainMenu();
+    void LoadLevel(const std::string &levelName, const int levelWidth,
+                   const int levelHeight);
 
-    // Collider functions
-    void AddCollider(class AABBColliderComponent* collider);
-    void RemoveCollider(class AABBColliderComponent* collider);
-    std::vector<class AABBColliderComponent*>& GetColliders() {
-        return mColliders;
-    }
+    std::vector<Actor *> GetNearbyActors(const Vector2 &position,
+                                         const int range = 1);
+    std::vector<class AABBColliderComponent *> GetNearbyColliders(
+        const Vector2 &position, const int range = 2);
 
-    Vector2& GetCameraPos() { return mCameraPos; };
-    void SetCameraPos(const Vector2& position) { mCameraPos = position; };
+    void Reinsert(Actor *actor);
+
+    // Camera functions
+    Vector2 &GetCameraPos() { return mCameraPos; };
+    void SetCameraPos(const Vector2 &position) { mCameraPos = position; };
+
+    // Audio functions
+    class AudioSystem *GetAudio() { return mAudio; }
+
+    // UI functions
+    void PushUI(class UIScreen *screen) { mUIStack.emplace_back(screen); }
+    const std::vector<class UIScreen *> &GetUIStack() { return mUIStack; }
 
     // Window functions
     int GetWindowWidth() const { return mWindowWidth; }
     int GetWindowHeight() const { return mWindowHeight; }
+    SDL_Renderer *GetRenderer() { return mRenderer; }
 
-    int** GetLevelData() const { return mLevelData; }
+    // Loading functions
+    class UIFont *LoadFont(const std::string &fileName);
+    SDL_Texture *LoadTexture(const std::string &texturePath);
 
-    SDL_Texture* LoadTexture(const std::string& texturePath);
+    void SetGameScene(GameScene scene, float transitionTime = .0f);
+    void ResetGameScene(float transitionTime = .0f);
+    void UnloadScene();
+
+    void SetBackgroundImage(const std::string &imagePath,
+                            const Vector2 &position = Vector2::Zero,
+                            const Vector2 &size = Vector2::Zero);
+    void TogglePause();
 
     // Game-specific
-    const class Player* GetMario() { return mMario; }
-    const class Player* GetLuigi() { return mLuigi; }
+    const class Player *GetPlayer() { return mPlayer; }
+
+    void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
+    GamePlayState GetGamePlayState() const { return mGamePlayState; }
 
    private:
     void ProcessInput();
@@ -78,29 +95,30 @@ class Game {
     void UpdateCamera();
     void GenerateOutput();
 
-    // Game-specific
+    // Scene Manager
+    void UpdateSceneManager(float deltaTime);
+    void ChangeScene();
+    SceneManagerState mSceneManagerState;
+    float mSceneManagerTimer;
+
+    // HUD functions
+    void UpdateLevelTime(float deltaTime);
 
     // Load the level from a CSV file as a 2D array
-    int** LoadLevel(const std::string& fileName, int width, int height);
+    int **ReadLevelData(const std::string &fileName, int width, int height);
+    void BuildLevel(int **levelData, int width, int height);
 
-    static void applyTexture(std::string* texture_path, const char* str,
-                             bool* unset_texture);
+    // Spatial Hashing for collision detection
+    class SpatialHashing *mSpatialHashing;
 
-    void BuildLevel(int** levelData, int width, int height);
-
-    // All the actors in the game
-    std::vector<class Actor*> mActors;
-    std::vector<class Actor*> mPendingActors;
-
-    // All the draw components
-    std::vector<class DrawComponent*> mDrawables;
-
-    // All the collision components
-    std::vector<class AABBColliderComponent*> mColliders;
+    // All the UI elements
+    std::vector<class UIScreen *> mUIStack;
+    std::unordered_map<std::string, class UIFont *> mFonts;
 
     // SDL stuff
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
+    SDL_Window *mWindow;
+    SDL_Renderer *mRenderer;
+    AudioSystem *mAudio;
 
     // Window properties
     int mWindowWidth;
@@ -109,16 +127,28 @@ class Game {
     // Track elapsed time since game start
     Uint32 mTicksCount;
 
-    // Track if we're updating actors right now
+    // Track actors state
     bool mIsRunning;
-    bool mUpdatingActors;
+    GamePlayState mGamePlayState;
 
+    // Track level state
+    GameScene mGameScene;
+    GameScene mNextScene;
+
+    // Background and camera
+    Vector3 mBackgroundColor;
+    Vector3 mModColor;
     Vector2 mCameraPos;
 
     // Game-specific
-    class Player* mMario;
-    class Player* mLuigi;
+    class Player *mPlayer;
+    class HUD *mHUD;
+    SoundHandle mMusicHandle;
 
-    // Level data
-    int** mLevelData;
+    float mGameTimer;
+    int mGameTimeLimit;
+
+    SDL_Texture *mBackgroundTexture;
+    Vector2 mBackgroundSize;
+    Vector2 mBackgroundPosition;
 };

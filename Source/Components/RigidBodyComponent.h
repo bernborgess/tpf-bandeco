@@ -3,15 +3,14 @@
 //
 
 #pragma once
-#include "Component.h"
 #include "../Math.h"
+#include "Component.h"
 
-class RigidBodyComponent : public Component
-{
-public:
+class RigidBodyComponent : public Component {
+   public:
     // Lower update order to update first
-    RigidBodyComponent(class Actor* owner, float mass = 1.0f, float friction = 0.0f,
-                        bool applyGravity = true, int updateOrder = 10);
+    RigidBodyComponent(class Actor* owner, float mass = 1.0f,
+                       float friction = 0.0f, int updateOrder = 10);
 
     void Update(float deltaTime) override;
 
@@ -19,14 +18,18 @@ public:
     void SetVelocity(const Vector2& velocity) { mVelocity = velocity; }
 
     const Vector2& GetAcceleration() const { return mAcceleration; }
-    void SetAcceleration(const Vector2& acceleration) { mAcceleration = acceleration; }
+    void SetAcceleration(const Vector2& acceleration) {
+        mAcceleration = acceleration;
+    }
 
-    void SetApplyGravity(const bool applyGravity) { mApplyGravity = applyGravity; }
+    void SetApplyFriction(const bool applyFriction) {
+        mApplyFriction = applyFriction;
+    }
 
-    void ApplyForce(const Vector2 &force);
+    void ApplyForce(const Vector2& force);
 
-private:
-    bool mApplyGravity;
+   private:
+    bool mApplyFriction;
 
     // Physical properties
     float mFrictionCoefficient;

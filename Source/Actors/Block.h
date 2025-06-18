@@ -4,24 +4,29 @@
 
 #pragma once
 
+#include <string>
+
 #include "Actor.h"
-#include "../Game.h"
-#include "../Math.h"
-#include<string>
 
-const float HIT_TIMER = 0.4;
-const float HIT_HEIGHT = 170.0;
+class Block : public Actor {
+   public:
+    explicit Block(Game* game, const std::string& texturePath,
+                   const bool isStatic = true);
 
-class Block : public Actor
-{
-public:
+    void SetPosition(const Vector2& position) {
+        Actor::SetPosition(position);
+        mOriginalPosition.Set(position.x, position.y);
+    }
 
-    explicit Block(Game* game, const std::string &texturePath, TileType blockType, Vector2 originalPosition);
-    void OnVerticalCollision(const float minOverlap, AABBColliderComponent* other) override;
     void OnUpdate(float deltaTime) override;
-    TileType mBlockType;
-private:
-    bool mIsHit;
-    float mHitTimer;
+    void OnVerticalCollision(const float minOverlap,
+                             AABBColliderComponent* other) override;
+
+   private:
+    const int BUMP_FORCE = 200;
+
     Vector2 mOriginalPosition;
+
+    class AABBColliderComponent* mColliderComponent;
+    class RigidBodyComponent* mRigidBodyComponent;
 };
