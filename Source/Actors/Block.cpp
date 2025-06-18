@@ -3,58 +3,54 @@
 //
 
 #include "Block.h"
-#include "../Game.h"
-#include "../Components/DrawComponents/DrawSpriteComponent.h"
-#include "../Components/DrawComponents/DrawPolygonComponent.h"
+
+#include "../Actors/Goomba.h"
 #include "../Components/ColliderComponents/AABBColliderComponent.h"
+#include "../Components/DrawComponents/DrawPolygonComponent.h"
+#include "../Components/DrawComponents/DrawSpriteComponent.h"
+#include "../Game.h"
 
-Block::Block(Game *game, const std::string &texturePath,
-    TileType blockType, Vector2 originalPosition) :
-      Actor(game)
-    , mBlockType(blockType)
-    , mIsHit(false)
-    , mHitTimer(0)
-    , mOriginalPosition(originalPosition)
-    {
-    
-    mPosition = mOriginalPosition;
-
-    new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE, Game::TILE_SIZE);
-
-    // --------------
-    // TODO - PARTE 3
-    // --------------
-
-    // TODO 6 (1 linha): Crie o `AABBColliderComponent` com dimensões `(0,0,GAME::TILE_SIZE, GAME::TILE_SIZE)`
-    //  e tipo de colisão `ColliderLayer::Blocks`. Marque o collider como estático.
-    new AABBColliderComponent(this, 0, 0, Game::TILE_SIZE, Game::TILE_SIZE, ColliderLayer::Blocks, true);
+Block::Block(Game* game, const std::string& texturePath, const bool isStatic)
+    : Actor(game) {
+    new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE, Game::TILE_SIZE,
+                            10);
+    mColliderComponent =
+        new AABBColliderComponent(this, 0, 0, Game::TILE_SIZE, Game::TILE_SIZE,
+                                  ColliderLayer::Blocks, isStatic);
+    mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 0.0f, false);
 }
 
+void Block::OnBump() {
+    if (mPosition.y != mOriginalPosition.y) {
+        mPosition.Set(mOriginalPosition.x, mOriginalPosition.y);
+    }
 
-void Block::OnVerticalCollision(const float minOverlap, AABBColliderComponent *other) {
-    if(minOverlap>0) return;
-    if(mBlockType != TileType::BrickBlock) return;
-    
-    // TODO: Animate the UP and DOWN
-    SDL_Log("Tijolo got hit!");
-    mIsHit = true;
-    mHitTimer = HIT_TIMER;
+    // Disable collider
+    mColliderComponent->SetStatic(false);
+    mRigidBodyComponent->SetVelocity(Vector2::NegUnitY * BUMP_FORCE);
+    mRigidBodyComponent->SetApplyGravity(true);
 }
 
 void Block::OnUpdate(float deltaTime) {
-    if(!mIsHit) return;
-
-    mHitTimer -= deltaTime;
-    if(mHitTimer <= 0) {
-        SDL_Log("Hit over");
-        mPosition = mOriginalPosition;
-        mIsHit = false;
+    // If the block is moving, check if it has reached its original position
+    if (mRigidBodyComponent->GetVelocity().y > 0.0f &&
+        mPosition.y >= mOriginalPosition.y) {
+        mPosition.Set(mOriginalPosition.x, mOriginalPosition.y);
+        mRigidBodyComponent->SetVelocity(Vector2::Zero);
+        mRigidBodyComponent->SetApplyGravity(false);
+        mColliderComponent->SetStatic(true);
     }
+}
 
-    // Parabola: y = (-HIT_HEIGHT)t(t-HIT_TIMER)
-    auto hitHeight = HIT_HEIGHT * mHitTimer * (mHitTimer - HIT_TIMER);
-    mPosition.y = mOriginalPosition.y + hitHeight;
+void Block::OnVerticalCollision(const float minOverlap,
+                                AABBColliderComponent* other) {
+    // If collide against enemy, apply bump force
+    if (other->GetLayer() == ColliderLayer::Enemy) {
+        Goomba* goomba = static_cast<Goomba*>(other->GetOwner());
+        goomba->BumpKill();
 
-
-
+        mRigidBodyComponent->SetVelocity(Vector2::NegUnitY * BUMP_FORCE);
+        mRigidBodyComponent->SetApplyGravity(true);
+        mOriginalPosition.Set(mPosition.x, mPosition.y);
+    }
 }

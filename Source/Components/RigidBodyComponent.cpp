@@ -10,8 +10,8 @@
 #include "../Game.h"
 #include "ColliderComponents/AABBColliderComponent.h"
 
-const float MAX_SPEED_X = 1000.0f;
-const float MAX_SPEED_Y = 1000.0f;
+const float MAX_SPEED_X = 750.0f;
+const float MAX_SPEED_Y = 750.0f;
 const float GRAVITY = 2000.0f;
 
 RigidBodyComponent::RigidBodyComponent(class Actor* owner, float mass,
@@ -19,6 +19,8 @@ RigidBodyComponent::RigidBodyComponent(class Actor* owner, float mass,
                                        int updateOrder)
     : Component(owner, updateOrder),
       mMass(mass),
+      mApplyGravity(applyGravity),
+      mApplyFriction(true),
       mFrictionCoefficient(friction),
       mVelocity(Vector2::Zero),
       mAcceleration(Vector2::Zero) {}
@@ -28,13 +30,14 @@ void RigidBodyComponent::ApplyForce(const Vector2& force) {
 }
 
 void RigidBodyComponent::Update(float deltaTime) {
-    // Apply friction
-    if (Math::Abs(mVelocity.x) > 0.05f) {
-        ApplyForce(Vector2::UnitX * -mFrictionCoefficient * mVelocity.x);
+    // Apply gravity acceleration
+    if (mApplyGravity) {
+        ApplyForce(Vector2::UnitY * GRAVITY);
     }
+
     // Apply friction
-    if (Math::Abs(mVelocity.y) > 0.05f) {
-        ApplyForce(Vector2::UnitY * -mFrictionCoefficient * mVelocity.y);
+    if (mApplyFriction && Math::Abs(mVelocity.x) > 0.05f) {
+        ApplyForce(Vector2::UnitX * -mFrictionCoefficient * mVelocity.x);
     }
 
     // Euler Integration
@@ -49,20 +52,24 @@ void RigidBodyComponent::Update(float deltaTime) {
 
     auto collider = mOwner->GetComponent<AABBColliderComponent>();
 
-    mOwner->SetPosition(
-        Vector2(mOwner->GetPosition().x + mVelocity.x * deltaTime,
-                mOwner->GetPosition().y));
+    if (mVelocity.x != 0.0f) {
+        mOwner->SetPosition(
+            Vector2(mOwner->GetPosition().x + mVelocity.x * deltaTime,
+                    mOwner->GetPosition().y));
 
-    if (collider) {
-        collider->DetectHorizontalCollision(this);
+        if (collider) {
+            collider->DetectHorizontalCollision(this);
+        }
     }
 
-    mOwner->SetPosition(
-        Vector2(mOwner->GetPosition().x,
-                mOwner->GetPosition().y + mVelocity.y * deltaTime));
+    if (mVelocity.y != 0.0f) {
+        mOwner->SetPosition(
+            Vector2(mOwner->GetPosition().x,
+                    mOwner->GetPosition().y + mVelocity.y * deltaTime));
 
-    if (collider) {
-        collider->DetectVerticalCollision(this);
+        if (collider) {
+            collider->DetectVerticalCollision(this);
+        }
     }
 
     mAcceleration.Set(0.f, 0.f);

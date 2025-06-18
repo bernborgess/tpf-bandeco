@@ -23,9 +23,19 @@ class RigidBodyComponent : public Component {
         mAcceleration = acceleration;
     }
 
+    void SetApplyGravity(const bool applyGravity) {
+        mApplyGravity = applyGravity;
+    }
+    void SetApplyFriction(const bool applyFriction) {
+        mApplyFriction = applyFriction;
+    }
+
     void ApplyForce(const Vector2& force);
 
    private:
+    bool mApplyGravity;
+    bool mApplyFriction;
+
     // Physical properties
     float mFrictionCoefficient;
     float mMass;

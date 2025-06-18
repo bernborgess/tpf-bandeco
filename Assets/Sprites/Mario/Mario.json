@@ -229,7 +229,7 @@
   "meta": {
     "app": "http://free-tex-packer.com",
     "version": "0.6.7",
-    "image": "texture.png",
+    "image": "Mario.png",
     "format": "RGBA8888",
     "size": {
       "w": 96,
