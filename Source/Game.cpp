@@ -222,27 +222,28 @@ void Game::LoadLevel(const std::string &levelName, const int levelWidth,
 void Game::BuildLevel(int **levelData, int width, int height) {
     // Const map to convert tile ID to block type
     const std::map<int, const std::string> tileMap = {
-        {0, "../Assets/Sprites/Blocks/BlockA.png"},
-        {1, "../Assets/Sprites/Blocks/BlockC.png"},
-        {2, "../Assets/Sprites/Blocks/BlockF.png"},
-        {4, "../Assets/Sprites/Blocks/BlockB.png"},
-        {6, "../Assets/Sprites/Blocks/BlockI.png"},
-        {8, "../Assets/Sprites/Blocks/BlockD.png"},
-        {9, "../Assets/Sprites/Blocks/BlockH.png"},
-        {12, "../Assets/Sprites/Blocks/BlockG.png"}};
+        {1, "../Assets/Prototype/Wall.png"},
+        {2, "../Assets/Prototype/FoodBread.png"},
+        {3, "../Assets/Prototype/FoodLettuce.png"},
+        {4, "../Assets/Prototype/FoodMeat.png"},
+        {5, "../Assets/Prototype/FoodTomato.png"},
+        {6, "../Assets/Prototype/Table.png"},
+        {7, "../Assets/Prototype/TableCut.png"},
+        {8, "../Assets/Prototype/Trash.png"},
+        {9, "../Assets/Prototype/Sink.png"},
+        {10, "../Assets/Prototype/Deliver.png"},
+        {11, "../Assets/Prototype/PlayerB.png"},
+        {12, "../Assets/Prototype/PlayerD.png"},
+    };
 
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             int tile = levelData[y][x];
 
-            if (tile == 16)  // Player
+            if (tile == 11)  // PlayerB
             {
                 mPlayer = new Player(this);
                 mPlayer->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-            } else if (tile == 10)  // Spawner
-            {
-                Spawner *spawner = new Spawner(this, SPAWN_DISTANCE);
-                spawner->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
             } else  // Blocks
             {
                 auto it = tileMap.find(tile);

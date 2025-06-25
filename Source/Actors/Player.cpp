@@ -22,8 +22,8 @@ Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
         this, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT, ColliderLayer::Player);
 
     mDrawComponent =
-        new DrawAnimatedComponent(this, "../Assets/Sprites/Player/Player.png",
-                                  "../Assets/Sprites/Player/Player.json");
+        new DrawAnimatedComponent(this, "../Assets/Sprites/PlayerB/Player.png",
+                                  "../Assets/Sprites/PlayerB/Player.json");
 
     mDrawComponent->AddAnimation("Dead", {0});
     mDrawComponent->AddAnimation("idle", {1});
