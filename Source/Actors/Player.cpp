@@ -130,11 +130,18 @@ void Player::HandlePickUp() {
         }
         // I know it's a table
         Table *table = (Table *)block;
-        if (!table->GetItemOnTop()) {
+        Item *item = table->GetItemOnTop();
+        if (!item) {
             // Put the item on the empty table
             table->SetItemOnTop(mHandItem);
-            mHandItem->SetPosition(table->GetPosition());
+            mHandItem->SetPosition(table->GetPosition() + Vector2(16, 16));
             mHandItem = nullptr;
+        } else {
+            // Remove item from if hand is empty
+            if (mHandItem == nullptr) {
+                mHandItem = item;
+                table->SetItemOnTop(nullptr);
+            }
         }
     }
 }
