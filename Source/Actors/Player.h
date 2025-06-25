@@ -29,9 +29,6 @@ class Player : public Actor {
                              AABBColliderComponent* other) override;
 
    private:
-    static const int POLE_SLIDE_TIME =
-        1;  // Time in seconds to slide down the pole
-
     void ManageAnimations();
 
     PlayerType mPlayerType;

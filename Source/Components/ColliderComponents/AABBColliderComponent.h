@@ -11,7 +11,7 @@
 #include "../Component.h"
 #include "../RigidBodyComponent.h"
 
-enum class ColliderLayer { Player, Enemy, Blocks, Pole };
+enum class ColliderLayer { Player, Enemy, Blocks };
 
 class AABBColliderComponent : public Component {
    public:
@@ -19,8 +19,7 @@ class AABBColliderComponent : public Component {
     const std::map<ColliderLayer, const std::set<ColliderLayer>>
         ColliderIgnoreMap = {{ColliderLayer::Player, {}},
                              {ColliderLayer::Enemy, {}},
-                             {ColliderLayer::Blocks, {ColliderLayer::Blocks}},
-                             {ColliderLayer::Pole, {}}};
+                             {ColliderLayer::Blocks, {ColliderLayer::Blocks}}};
 
     AABBColliderComponent(class Actor* owner, int dx, int dy, int w, int h,
                           ColliderLayer layer, bool isStatic = false,

@@ -123,6 +123,8 @@ SDL_Scancode Player::GetDownCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_DOWN;
     }
+    SDL_Log("Invalid player %s", mPlayerType);
+    return SDL_SCANCODE_0;
 }
 
 SDL_Scancode Player::GetLeftCode() {
@@ -132,6 +134,8 @@ SDL_Scancode Player::GetLeftCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_LEFT;
     }
+    SDL_Log("Invalid player %s", mPlayerType);
+    return SDL_SCANCODE_0;
 }
 
 SDL_Scancode Player::GetRightCode() {
@@ -141,6 +145,8 @@ SDL_Scancode Player::GetRightCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RIGHT;
     }
+    SDL_Log("Invalid player %s", mPlayerType);
+    return SDL_SCANCODE_0;
 }
 
 SDL_Scancode Player::GetUpCode() {
@@ -150,6 +156,8 @@ SDL_Scancode Player::GetUpCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_UP;
     }
+    SDL_Log("Invalid player %s", mPlayerType);
+    return SDL_SCANCODE_0;
 }
 
 SDL_Scancode Player::GetPickUpCode() {
@@ -159,6 +167,8 @@ SDL_Scancode Player::GetPickUpCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RSHIFT;
     }
+    SDL_Log("Invalid player %s", mPlayerType);
+    return SDL_SCANCODE_0;
 }
 
 SDL_Scancode Player::GetChopCode() {
@@ -168,6 +178,8 @@ SDL_Scancode Player::GetChopCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RCTRL;
     }
+    SDL_Log("Invalid player %s", mPlayerType);
+    return SDL_SCANCODE_0;
 }
 
 SDL_Scancode Player::GetDashCode() {
@@ -177,4 +189,6 @@ SDL_Scancode Player::GetDashCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RALT;
     }
+    SDL_Log("Invalid player %s", mPlayerType);
+    return SDL_SCANCODE_0;
 }
