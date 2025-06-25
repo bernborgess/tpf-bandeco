@@ -13,7 +13,6 @@ class Game {
     static const int LEVEL_WIDTH = 25;
     static const int LEVEL_HEIGHT = 14;
     static const int TILE_SIZE = 64;
-    static const int SPAWN_DISTANCE = 700;
     static const int TRANSITION_TIME = 1;
 
     enum class GameScene { MainMenu, Level1, Level2 };

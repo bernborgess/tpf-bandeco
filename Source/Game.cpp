@@ -13,7 +13,6 @@
 #include "Actors/Actor.h"
 #include "Actors/Block.h"
 #include "Actors/Player.h"
-#include "Actors/Spawner.h"
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 #include "Components/DrawComponents/DrawComponent.h"
@@ -154,9 +153,9 @@ void Game::ChangeScene() {
         SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
                                mBackgroundColor.y, mBackgroundColor.z, 255);
 
-        // Set background color
-        SetBackgroundImage("../Assets/Sprites/Background.png",
-                           Vector2(TILE_SIZE, 0), Vector2(6784, 448));
+        // TODO: Set background image
+        // SetBackgroundImage("../Assets/Sprites/Background.png",
+        //                    Vector2(TILE_SIZE, 0), Vector2(6784, 448));
 
         // Draw Flag
         auto flag = new Actor(this);
@@ -190,14 +189,12 @@ void Game::LoadMainMenu() {
     const Vector2 titleSize = Vector2(178.0f, 88.0f) * 2.0f;
     const Vector2 titlePos =
         Vector2(mWindowWidth / 2.0f - titleSize.x / 2.0f, 50.0f);
-    mainMenu->AddImage("../Assets/Sprites/Logo.png", titlePos, titleSize);
+    // TODO: Main menu
+    // mainMenu->AddImage("../Assets/Sprites/Logo.png", titlePos, titleSize);
 
     mainMenu->AddText("1985 NINTENDO", Vector2(300, 225), Vector2(200, 18));
 
     mainMenu->AddText("TOP - 000000", Vector2(230, 380), Vector2(180, 18));
-
-    mainMenu->AddImage("../Assets/Sprites/Bush.png", Vector2(350, 370),
-                       1.2 * Vector2(255, 86));
 
     auto button1 = mainMenu->AddButton(
         "Level 1", Vector2(mWindowWidth / 2.0f - 100.0f, 270.0f),

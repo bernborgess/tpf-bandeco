@@ -4,7 +4,6 @@
 
 #include "Block.h"
 
-#include "../Actors/Goomba.h"
 #include "../Components/ColliderComponents/AABBColliderComponent.h"
 #include "../Components/DrawComponents/DrawPolygonComponent.h"
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
@@ -34,9 +33,6 @@ void Block::OnVerticalCollision(const float minOverlap,
                                 AABBColliderComponent* other) {
     // If collide against enemy, apply bump force
     if (other->GetLayer() == ColliderLayer::Enemy) {
-        Goomba* goomba = static_cast<Goomba*>(other->GetOwner());
-        goomba->BumpKill();
-
         mRigidBodyComponent->SetVelocity(Vector2::NegUnitY * BUMP_FORCE);
         mOriginalPosition.Set(mPosition.x, mPosition.y);
     }

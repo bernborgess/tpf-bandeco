@@ -17,12 +17,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Actor.cpp
         Source/Actors/Block.cpp
         Source/Actors/Block.h
-        Source/Actors/Goomba.cpp
-        Source/Actors/Goomba.h
         Source/Actors/Player.cpp
         Source/Actors/Player.h
-        Source/Actors/Spawner.cpp
-        Source/Actors/Spawner.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
