@@ -146,7 +146,8 @@ void Game::ChangeScene() {
         mHUD->SetTime(400);
         mHUD->SetLevelName("1-1");
 
-        mMusicHandle = mAudio->PlaySound("MusicMain.ogg", true);
+        // TODO: Add level music
+        // mMusicHandle = mAudio->PlaySound("MusicMain.ogg", true);
 
         // Set background color
         mBackgroundColor.Set(250.0f, 175.0f, 72.0f);
@@ -170,7 +171,8 @@ void Game::ChangeScene() {
         mHUD->SetTime(400);
         mHUD->SetLevelName("1-2");
 
-        mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
+        // TODO: Add level music
+        // mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
 
         // Set background color
         mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
