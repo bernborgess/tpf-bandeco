@@ -53,8 +53,11 @@ bool Game::Initialize() {
         return false;
     }
 
-    mWindow = SDL_CreateWindow("Pesadelo no Bandeco!", 0, 0, mWindowWidth,
-                               mWindowHeight, 0);
+    mWindow =
+        SDL_CreateWindow("Pesadelo no Bandeco!", SDL_WINDOWPOS_UNDEFINED,
+                         SDL_WINDOWPOS_UNDEFINED, mWindowWidth, mWindowHeight, 0
+                         // TODO: SDL_WINDOW_FULLSCREEN);
+        );
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
@@ -131,6 +134,8 @@ void Game::ChangeScene() {
     if (mNextScene == GameScene::MainMenu) {
         // Set background color
         mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+        SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                               mBackgroundColor.y, mBackgroundColor.z, 255);
 
         // Initialize main menu actors
         LoadMainMenu();
@@ -143,7 +148,9 @@ void Game::ChangeScene() {
         mMusicHandle = mAudio->PlaySound("MusicMain.ogg", true);
 
         // Set background color
-        mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+        mBackgroundColor.Set(250.0f, 175.0f, 72.0f);
+        SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                               mBackgroundColor.y, mBackgroundColor.z, 255);
 
         // Set background color
         SetBackgroundImage("../Assets/Sprites/Background.png",
@@ -153,14 +160,6 @@ void Game::ChangeScene() {
         auto flag = new Actor(this);
         flag->SetPosition(Vector2(
             LEVEL_WIDTH * TILE_SIZE - (16 * TILE_SIZE) - 16, 3 * TILE_SIZE));
-
-        // Add a flag sprite
-        new DrawSpriteComponent(flag, "../Assets/Sprites/Background_Flag.png",
-                                32.0f, 32.0f, 1);
-
-        // Add a flag pole taking the entire height
-        new AABBColliderComponent(flag, 30, 0, 4, TILE_SIZE * LEVEL_HEIGHT,
-                                  ColliderLayer::Pole, true);
 
         // Initialize actors
         LoadLevel("../Assets/Levels/level1-1.csv", LEVEL_WIDTH, LEVEL_HEIGHT);
@@ -174,9 +173,6 @@ void Game::ChangeScene() {
 
         // Set background color
         mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
-
-        // Set mod color
-        mModColor.Set(0.0f, 255.0f, 200.0f);
 
         // Initialize actors
         LoadLevel("../Assets/Levels/level1-2.csv", LEVEL_WIDTH, LEVEL_HEIGHT);
@@ -201,12 +197,12 @@ void Game::LoadMainMenu() {
                        1.2 * Vector2(255, 86));
 
     auto button1 = mainMenu->AddButton(
-        "1 Player", Vector2(mWindowWidth / 2.0f - 100.0f, 270.0f),
+        "Level 1", Vector2(mWindowWidth / 2.0f - 100.0f, 270.0f),
         Vector2(200.0f, 40.0f), [this]() { SetGameScene(GameScene::Level1); });
 
     auto button2 = mainMenu->AddButton(
-        "2 Players", Vector2(mWindowWidth / 2.0f - 100.0f, 320.0f),
-        Vector2(200.0f, 40.0f), nullptr);
+        "Level 2", Vector2(mWindowWidth / 2.0f - 100.0f, 320.0f),
+        Vector2(200.0f, 40.0f), [this]() { SetGameScene(GameScene::Level2); });
 }
 
 void Game::LoadLevel(const std::string &levelName, const int levelWidth,
@@ -495,7 +491,8 @@ void Game::UpdateCamera() {
     float maxCameraPos = (LEVEL_WIDTH * TILE_SIZE) - mWindowWidth;
     horizontalCameraPos = Math::Clamp(horizontalCameraPos, 0.0f, maxCameraPos);
 
-    mCameraPos.x = horizontalCameraPos;
+    // Not following player
+    // mCameraPos.x = horizontalCameraPos;
 }
 
 void Game::UpdateActors(float deltaTime) {

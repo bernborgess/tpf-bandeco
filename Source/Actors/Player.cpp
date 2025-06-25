@@ -67,42 +67,9 @@ void Player::OnHandleKeyPress(const int key, const bool isPressed) {
 }
 
 void Player::OnUpdate(float deltaTime) {
-    // Limit Player's position to the camera view
-    // mPosition.x = Math::Max(mPosition.x, mGame->GetCameraPos().x);
-
-    // Kill player if he falls below the screen
-    // if (mGame->GetGamePlayState() == Game::GamePlayState::Playing &&
-    //     mPosition.y > mGame->GetWindowHeight()) {
-    //     Kill();
-    // }
-
-    if (mIsOnPole) {
-        // If Player is on the pole, update the pole slide timer
-        mPoleSlideTimer -= deltaTime;
-        if (mPoleSlideTimer <= 0.0f) {
-            mRigidBodyComponent->SetApplyFriction(false);
-            mRigidBodyComponent->SetVelocity(Vector2::UnitX * 100.0f);
-            mGame->SetGamePlayState(Game::GamePlayState::Leaving);
-
-            mGame->GetAudio()->PlaySound("StageClear.wav");
-
-            mIsOnPole = false;
-            mIsRunning = true;
-        }
-    }
-
-    // If Player is leaving the level, kill him if he enters the castle
-    const float castleDoorPos =
-        Game::LEVEL_WIDTH * Game::TILE_SIZE - 10 * Game::TILE_SIZE;
-
-    if (mGame->GetGamePlayState() == Game::GamePlayState::Leaving &&
-        mPosition.x >= castleDoorPos) {
-        // Stop Player and set the game scene to Level 2
-        mState = ActorState::Destroy;
-        mGame->SetGameScene(Game::GameScene::Level2, 3.5f);
-
-        return;
-    }
+    // TODO: Check win and set the game scene to Level 2
+    // mState = ActorState::Destroy;
+    // mGame->SetGameScene(Game::GameScene::Level2, 3.5f);
 
     ManageAnimations();
 }
