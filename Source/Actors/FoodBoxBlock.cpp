@@ -1,5 +1,5 @@
 #include "FoodBoxBlock.h"
 
 FoodBoxBlock::FoodBoxBlock(Game* game, const std::string& texturePath,
-                           FoodType foodType)
+                           ItemType foodType)
     : Block(game, texturePath, true), mFoodType(foodType) {}

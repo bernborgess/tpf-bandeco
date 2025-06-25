@@ -3,12 +3,11 @@
 #include <string>
 
 #include "Block.h"
-
-enum class FoodType { Tomato };
+#include "Item.h"
 
 class FoodBoxBlock : public Block {
    public:
-    FoodBoxBlock(Game* game, const std::string& texturePath, FoodType foodType);
+    FoodBoxBlock(Game* game, const std::string& texturePath, ItemType foodType);
 
-    FoodType mFoodType;
+    ItemType mFoodType;
 };

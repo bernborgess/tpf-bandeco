@@ -13,12 +13,9 @@ Player::Player(Game *game, const PlayerType playerType,
                const float forwardSpeed, const float jumpSpeed)
     : Actor(game),
       mIsRunning(false),
-      mIsOnPole(false),
-      mIsDying(false),
       mPlayerType(playerType),
       mForwardSpeed(forwardSpeed),
-      mJumpSpeed(jumpSpeed),
-      mPoleSlideTimer(0.0f) {
+      mHandItem(nullptr) {
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 5.0f);
     mColliderComponent = new AABBColliderComponent(
         this, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT, ColliderLayer::Player);
@@ -48,22 +45,26 @@ void Player::OnProcessInput(const uint8_t *state) {
     if (state[GetRightCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitX * mForwardSpeed);
         mRotation = 0.0f;
+        mFaceDirection = FaceDirection::East;
         mIsRunning = true;
     }
 
     if (state[GetLeftCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitX * -mForwardSpeed);
         mRotation = Math::Pi;
+        mFaceDirection = FaceDirection::West;
         mIsRunning = true;
     }
 
     if (state[GetUpCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitY * -mForwardSpeed);
+        mFaceDirection = FaceDirection::North;
         mIsRunning = true;
     }
 
     if (state[GetDownCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitY * mForwardSpeed);
+        mFaceDirection = FaceDirection::South;
         mIsRunning = true;
     }
 }
@@ -71,13 +72,20 @@ void Player::OnProcessInput(const uint8_t *state) {
 void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
 
-    if (scanCode == GetActionCode()) {
-        SDL_Log("Player %d ACTION", mPlayerType);
+    if (scanCode == GetPickUpCode()) {
+        // Calculate which block this player faces
+        // Handle this interaction
+        // Update hand
+        if (mHandItem == nullptr) {
+            SDL_Log("Player %d got nothing", mPlayerType);
+        } else {
+            SDL_Log("Player %d got %s", mPlayerType, mHandItem->mItemType);
+        }
     }
-    if (scanCode == GetUseCode()) {
+    if (scanCode == GetChopCode()) {
         SDL_Log("Player %d USE", mPlayerType);
     }
-    if (scanCode == GetImpulseCode()) {
+    if (scanCode == GetDashCode()) {
         SDL_Log("Player %d IMPULSE", mPlayerType);
     }
 }
@@ -91,72 +99,21 @@ void Player::OnUpdate(float deltaTime) {
 }
 
 void Player::ManageAnimations() {
-    if (mIsDying) {
-        mDrawComponent->SetAnimation("Dead");
-    } else if (mIsOnPole) {
-        mDrawComponent->SetAnimation("win");
-    } else if (mIsRunning) {
+    if (mIsRunning) {
         mDrawComponent->SetAnimation("run");
     } else {
         mDrawComponent->SetAnimation("idle");
     }
 }
 
-void Player::Kill() {
-    mIsDying = true;
-    mGame->SetGamePlayState(Game::GamePlayState::GameOver);
-    mDrawComponent->SetAnimation("Dead");
-
-    // Disable collider and rigid body
-    mRigidBodyComponent->SetEnabled(false);
-    mColliderComponent->SetEnabled(false);
-
-    mGame->GetAudio()->StopAllSounds();
-    mGame->GetAudio()->PlaySound("Dead.wav");
-
-    mGame->ResetGameScene(3.5f);  // Reset the game scene after 3 seconds
-}
-
-void Player::Win(AABBColliderComponent *poleCollider) {
-    mDrawComponent->SetAnimation("win");
-    mGame->SetGamePlayState(Game::GamePlayState::LevelComplete);
-
-    // Set player velocity to go down
-    mRigidBodyComponent->SetVelocity(Vector2::UnitY *
-                                     100.0f);  // 100 pixels per second
-
-    // Disable collider
-    poleCollider->SetEnabled(false);
-
-    // Adjust player x position to grab the pole
-    mPosition.Set(
-        poleCollider->GetOwner()->GetPosition().x + Game::TILE_SIZE / 4.0f,
-        mPosition.y);
-
-    mGame->GetAudio()->StopAllSounds();
-
-    mPoleSlideTimer = POLE_SLIDE_TIME;  // Start the pole slide timer
-}
-
 void Player::OnHorizontalCollision(const float minOverlap,
                                    AABBColliderComponent *other) {
-    if (other->GetLayer() == ColliderLayer::Enemy) {
-        Kill();
-    } else if (other->GetLayer() == ColliderLayer::Pole) {
-        mIsOnPole = true;
-        Win(other);
-    }
+    // Later handle collision
 }
 
 void Player::OnVerticalCollision(const float minOverlap,
                                  AABBColliderComponent *other) {
-    if (other->GetLayer() == ColliderLayer::Enemy) {
-        other->GetOwner()->Kill();
-        mRigidBodyComponent->SetVelocity(
-            Vector2(mRigidBodyComponent->GetVelocity().x, mJumpSpeed / 2.5f));
-
-        mGame->GetAudio()->PlaySound("Stomp.wav");
-    }
+    // Later handle collision
 }
 
 SDL_Scancode Player::GetDownCode() {
@@ -195,7 +152,7 @@ SDL_Scancode Player::GetUpCode() {
     }
 }
 
-SDL_Scancode Player::GetActionCode() {
+SDL_Scancode Player::GetPickUpCode() {
     switch (mPlayerType) {
         case PlayerType::PlayerB:
             return SDL_SCANCODE_LSHIFT;
@@ -204,7 +161,7 @@ SDL_Scancode Player::GetActionCode() {
     }
 }
 
-SDL_Scancode Player::GetUseCode() {
+SDL_Scancode Player::GetChopCode() {
     switch (mPlayerType) {
         case PlayerType::PlayerB:
             return SDL_SCANCODE_LCTRL;
@@ -213,7 +170,7 @@ SDL_Scancode Player::GetUseCode() {
     }
 }
 
-SDL_Scancode Player::GetImpulseCode() {
+SDL_Scancode Player::GetDashCode() {
     switch (mPlayerType) {
         case PlayerType::PlayerB:
             return SDL_SCANCODE_LALT;

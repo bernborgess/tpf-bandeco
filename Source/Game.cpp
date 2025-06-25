@@ -13,6 +13,7 @@
 #include "Actors/Actor.h"
 #include "Actors/Block.h"
 #include "Actors/FoodBoxBlock.h"
+#include "Actors/Item.h"
 #include "Actors/Player.h"
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
@@ -254,7 +255,7 @@ void Game::BuildLevel(int **levelData, int width, int height) {
                 if (it != tileMap.end()) {
                     // Tomato Box
                     FoodBoxBlock *fBblock =
-                        new FoodBoxBlock(this, it->second, FoodType::Tomato);
+                        new FoodBoxBlock(this, it->second, ItemType::Tomato);
                     fBblock->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
                 }
 
@@ -269,6 +270,10 @@ void Game::BuildLevel(int **levelData, int width, int height) {
             }
         }
     }
+
+    const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
+    Item *a_tomato = new Item(this, tomatoTilePath, ItemType::Tomato);
+    a_tomato->SetPosition(Vector2(200, 200));
 }
 
 int **Game::ReadLevelData(const std::string &fileName, int width, int height) {

@@ -6,8 +6,10 @@
 #include <SDL2/SDL_scancode.h>
 
 #include "Actor.h"
+#include "Item.h"
 
 enum class PlayerType { PlayerB, PlayerD };
+enum class FaceDirection { North, East, South, West };
 
 class Player : public Actor {
    public:
@@ -26,9 +28,6 @@ class Player : public Actor {
     void OnVerticalCollision(const float minOverlap,
                              AABBColliderComponent* other) override;
 
-    void Kill() override;
-    void Win(AABBColliderComponent* poleCollider);
-
    private:
     static const int POLE_SLIDE_TIME =
         1;  // Time in seconds to slide down the pole
@@ -41,16 +40,15 @@ class Player : public Actor {
     SDL_Scancode GetLeftCode();
     SDL_Scancode GetRightCode();
     SDL_Scancode GetUpCode();
-    SDL_Scancode GetActionCode();
-    SDL_Scancode GetUseCode();
-    SDL_Scancode GetImpulseCode();
+    SDL_Scancode GetPickUpCode();
+    SDL_Scancode GetChopCode();
+    SDL_Scancode GetDashCode();
 
     float mForwardSpeed;
-    float mJumpSpeed;
-    float mPoleSlideTimer;
     bool mIsRunning;
-    bool mIsOnPole;
-    bool mIsDying;
+    FaceDirection mFaceDirection;
+
+    Item* mHandItem;
 
     class RigidBodyComponent* mRigidBodyComponent;
     class DrawAnimatedComponent* mDrawComponent;
