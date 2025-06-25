@@ -46,6 +46,7 @@ class Player : public Actor {
     FaceDirection mFaceDirection;
 
     Item* mHandItem;
+    void HandlePickUp();
 
     class RigidBodyComponent* mRigidBodyComponent;
     class DrawAnimatedComponent* mDrawComponent;

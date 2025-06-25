@@ -8,6 +8,7 @@
 #include "../Components/DrawComponents/DrawPolygonComponent.h"
 #include "../Game.h"
 #include "Block.h"
+#include "Item.h"
 
 Player::Player(Game *game, const PlayerType playerType,
                const float forwardSpeed, const float jumpSpeed)
@@ -73,13 +74,11 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
 
     if (scanCode == GetPickUpCode()) {
-        // Calculate which block this player faces
-        // Handle this interaction
-        // Update hand
+        HandlePickUp();
         if (mHandItem == nullptr) {
             SDL_Log("Player %d got nothing", mPlayerType);
         } else {
-            SDL_Log("Player %d got %s", mPlayerType, mHandItem->mItemType);
+            SDL_Log("Player %d got %d", mPlayerType, mHandItem->mItemType);
         }
     }
     if (scanCode == GetChopCode()) {
@@ -90,10 +89,52 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
     }
 }
 
+void Player::HandlePickUp() {
+    // Calculate which block this player faces
+    auto [px, py] = mPosition;
+    int pxg = px / 64;
+    int pyg = py / 64;
+
+    // Add the direction the player is facing
+    switch (mFaceDirection) {
+        case FaceDirection::North:
+            pyg--;
+            break;
+        case FaceDirection::East:
+            pxg++;
+            break;
+        case FaceDirection::South:
+            pyg++;
+            break;
+        case FaceDirection::West:
+            pxg--;
+            break;
+    }
+
+    // We look at the level data
+    LevelDataEntry levelEntry = mGame->mLevelData[pyg][pxg];
+    SDL_Log("Level entry is a %d", levelEntry);
+
+    // Handle this interaction
+
+    // Getting food from box
+    if (levelEntry == LevelDataEntry::TileFoodTomato) {
+        if (mHandItem == nullptr) {
+            const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
+            mHandItem = new Item(mGame, tomatoTilePath, ItemType::Tomato);
+        }
+    }
+}
+
 void Player::OnUpdate(float deltaTime) {
     // TODO: Check win and set the game scene to Level 2
     // mState = ActorState::Destroy;
     // mGame->SetGameScene(Game::GameScene::Level2, 3.5f);
+
+    // Hand Item follows player
+    if (mHandItem != nullptr) {
+        mHandItem->SetPosition(mPosition);
+    }
 
     ManageAnimations();
 }

@@ -47,7 +47,8 @@ Game::Game(int windowWidth, int windowHeight)
       mNextScene(GameScene::MainMenu),
       mBackgroundTexture(nullptr),
       mBackgroundSize(Vector2::Zero),
-      mBackgroundPosition(Vector2::Zero) {}
+      mBackgroundPosition(Vector2::Zero),
+      mLevelData(nullptr) {}
 
 bool Game::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -210,7 +211,7 @@ void Game::LoadMainMenu() {
 void Game::LoadLevel(const std::string &levelName, const int levelWidth,
                      const int levelHeight) {
     // Load level data
-    int **mLevelData = ReadLevelData(levelName, levelWidth, levelHeight);
+    mLevelData = ReadLevelData(levelName, levelWidth, levelHeight);
 
     if (!mLevelData) {
         SDL_Log("Failed to load level data");
@@ -221,36 +222,39 @@ void Game::LoadLevel(const std::string &levelName, const int levelWidth,
     BuildLevel(mLevelData, levelWidth, levelHeight);
 }
 
-void Game::BuildLevel(int **levelData, int width, int height) {
+void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
     // Const map to convert tile ID to block type
-    const std::map<int, const std::string> tileMap = {
-        {1, "../Assets/Prototype/Wall.png"},
-        {2, "../Assets/Prototype/FoodBread.png"},
-        {3, "../Assets/Prototype/FoodLettuce.png"},
-        {4, "../Assets/Prototype/FoodMeat.png"},
-        {5, "../Assets/Prototype/FoodTomato.png"},
-        {6, "../Assets/Prototype/Table.png"},
-        {7, "../Assets/Prototype/TableCut.png"},
-        {8, "../Assets/Prototype/Trash.png"},
-        {9, "../Assets/Prototype/Sink.png"},
-        {10, "../Assets/Prototype/Deliver.png"},
-        {11, "../Assets/Prototype/PlayerB.png"},
-        {12, "../Assets/Prototype/PlayerD.png"},
+    const std::map<LevelDataEntry, const std::string> tileMap = {
+        {LevelDataEntry::TileWall, "../Assets/Prototype/Wall.png"},
+        {LevelDataEntry::TileFoodBread, "../Assets/Prototype/FoodBread.png"},
+        {LevelDataEntry::TileFoodLettuce,
+         "../Assets/Prototype/FoodLettuce.png"},
+        {LevelDataEntry::TileFoodMeat, "../Assets/Prototype/FoodMeat.png"},
+        {LevelDataEntry::TileFoodTomato, "../Assets/Prototype/FoodTomato.png"},
+        {LevelDataEntry::TileTable, "../Assets/Prototype/Table.png"},
+        {LevelDataEntry::TileTableCut, "../Assets/Prototype/TableCut.png"},
+        {LevelDataEntry::TileTrash, "../Assets/Prototype/Trash.png"},
+        {LevelDataEntry::TileSink, "../Assets/Prototype/Sink.png"},
+        {LevelDataEntry::TileDeliver, "../Assets/Prototype/Deliver.png"},
+        {LevelDataEntry::TilePlayerBStart, "../Assets/Prototype/PlayerB.png"},
+        {LevelDataEntry::TilePlayerDStart, "../Assets/Prototype/PlayerD.png"},
     };
 
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
-            int tile = levelData[y][x];
+            LevelDataEntry tile = levelData[y][x];
 
-            if (tile == 11 && !mPlayerB)  // PlayerB
+            if (tile == LevelDataEntry::TilePlayerBStart &&
+                !mPlayerB)  // PlayerB
             {
                 mPlayerB = new Player(this, PlayerType::PlayerB);
                 mPlayerB->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-            } else if (tile == 12 && !mPlayerD)  // PlayerD
+            } else if (tile == LevelDataEntry::TilePlayerDStart &&
+                       !mPlayerD)  // PlayerD
             {
                 mPlayerD = new Player(this, PlayerType::PlayerD);
                 mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-            } else if (tile == 5) {  // FoodTomato
+            } else if (tile == LevelDataEntry::TileFoodTomato) {  // FoodTomato
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     // Tomato Box
@@ -276,7 +280,8 @@ void Game::BuildLevel(int **levelData, int width, int height) {
     a_tomato->SetPosition(Vector2(200, 200));
 }
 
-int **Game::ReadLevelData(const std::string &fileName, int width, int height) {
+LevelDataEntry **Game::ReadLevelData(const std::string &fileName, int width,
+                                     int height) {
     std::ifstream file(fileName);
     if (!file.is_open()) {
         SDL_Log("Failed to load paths: %s", fileName.c_str());
@@ -314,7 +319,7 @@ int **Game::ReadLevelData(const std::string &fileName, int width, int height) {
     // Close the file
     file.close();
 
-    return levelData;
+    return (LevelDataEntry **)levelData;
 }
 
 void Game::RunLoop() {

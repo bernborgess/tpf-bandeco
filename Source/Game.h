@@ -8,6 +8,22 @@
 #include "AudioSystem.h"
 #include "Math.h"
 
+enum class LevelDataEntry {
+    TileNothing = -1,
+    TileWall = 1,
+    TileFoodBread = 2,
+    TileFoodLettuce = 3,
+    TileFoodMeat = 4,
+    TileFoodTomato = 5,
+    TileTable = 6,
+    TileTableCut = 7,
+    TileTrash = 8,
+    TileSink = 9,
+    TileDeliver = 10,
+    TilePlayerBStart = 11,
+    TilePlayerDStart = 12
+};
+
 class Game {
    public:
     static const int LEVEL_WIDTH = 25;
@@ -84,6 +100,8 @@ class Game {
 
     // Game-specific
     const class Player *GetPlayerB() { return mPlayerB; }
+    const class Player *GetPlayerD() { return mPlayerD; }
+    LevelDataEntry **mLevelData;
 
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
@@ -104,8 +122,9 @@ class Game {
     void UpdateLevelTime(float deltaTime);
 
     // Load the level from a CSV file as a 2D array
-    int **ReadLevelData(const std::string &fileName, int width, int height);
-    void BuildLevel(int **levelData, int width, int height);
+    LevelDataEntry **ReadLevelData(const std::string &fileName, int width,
+                                   int height);
+    void BuildLevel(LevelDataEntry **levelData, int width, int height);
 
     // Spatial Hashing for collision detection
     class SpatialHashing *mSpatialHashing;
