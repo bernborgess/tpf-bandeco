@@ -12,6 +12,7 @@
 
 #include "Actors/Actor.h"
 #include "Actors/Block.h"
+#include "Actors/FoodBoxBlock.h"
 #include "Actors/Player.h"
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
@@ -248,6 +249,15 @@ void Game::BuildLevel(int **levelData, int width, int height) {
             {
                 mPlayerD = new Player(this, PlayerType::PlayerD);
                 mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+            } else if (tile == 5) {  // FoodTomato
+                auto it = tileMap.find(tile);
+                if (it != tileMap.end()) {
+                    // Tomato Box
+                    FoodBoxBlock *fBblock =
+                        new FoodBoxBlock(this, it->second, FoodType::Tomato);
+                    fBblock->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                }
+
             } else  // Blocks
             {
                 auto it = tileMap.find(tile);
