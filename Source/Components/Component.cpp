@@ -15,6 +15,6 @@ void Component::Update(float deltaTime) {}
 
 void Component::ProcessInput(const Uint8* keyState) {}
 
-void Component::HandleKeyPress(const int key, bool isPressed) {}
+void Component::HandleKeyPress(const int scanCode, bool isPressed) {}
 
 class Game* Component::GetGame() const { return mOwner->GetGame(); }

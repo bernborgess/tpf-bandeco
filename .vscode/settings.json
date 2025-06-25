@@ -4,7 +4,13 @@
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4 }",
     "C_Cpp.errorSquiggles": "enabled",
     "cSpell.words": [
-        "bandeco"
+        "bandeco",
+        "LALT",
+        "RALT",
+        "LCTRL",
+        "LSHIFT",
+        "RALT",
+        "RCTRL"
     ],
     "editor.detectIndentation": false,
     "files.associations": {

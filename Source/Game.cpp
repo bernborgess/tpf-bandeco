@@ -323,15 +323,15 @@ void Game::ProcessInput() {
             case SDL_KEYDOWN:
                 // Handle key press for UI screens
                 if (!mUIStack.empty()) {
-                    mUIStack.back()->HandleKeyPress(event.key.keysym.sym);
+                    mUIStack.back()->HandleKeyPress(event.key.keysym.scancode);
                 }
 
-                HandleKeyPressActors(event.key.keysym.sym,
+                HandleKeyPressActors(event.key.keysym.scancode,
                                      event.key.repeat == 0);
 
                 // Check if the P key has been pressed to pause/unpause the
                 // game
-                if (event.key.keysym.sym == SDLK_p) {
+                if (event.key.keysym.scancode == SDL_SCANCODE_P) {
                     TogglePause();
                 }
                 // Quickly end the game
@@ -371,7 +371,7 @@ void Game::ProcessInputActors() {
     }
 }
 
-void Game::HandleKeyPressActors(const int key, const bool isPressed) {
+void Game::HandleKeyPressActors(const int scanCode, const bool isPressed) {
     if (mGamePlayState == GamePlayState::Playing) {
         // Get actors on camera
         std::vector<Actor *> actorsOnCamera = mSpatialHashing->QueryOnCamera(
@@ -380,7 +380,7 @@ void Game::HandleKeyPressActors(const int key, const bool isPressed) {
         // Handle key press for actors
         bool isPlayerOnCamera = false;
         for (auto actor : actorsOnCamera) {
-            actor->HandleKeyPress(key, isPressed);
+            actor->HandleKeyPress(scanCode, isPressed);
 
             if (actor == mPlayerB) {
                 isPlayerOnCamera = true;
@@ -389,7 +389,7 @@ void Game::HandleKeyPressActors(const int key, const bool isPressed) {
 
         // If Player is not on camera, handle key press for him
         if (!isPlayerOnCamera && mPlayerB) {
-            mPlayerB->HandleKeyPress(key, isPressed);
+            mPlayerB->HandleKeyPress(scanCode, isPressed);
         }
     }
 }

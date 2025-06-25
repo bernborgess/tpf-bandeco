@@ -41,6 +41,9 @@ class Player : public Actor {
     SDL_Scancode GetLeftCode();
     SDL_Scancode GetRightCode();
     SDL_Scancode GetUpCode();
+    SDL_Scancode GetActionCode();
+    SDL_Scancode GetUseCode();
+    SDL_Scancode GetImpulseCode();
 
     float mForwardSpeed;
     float mJumpSpeed;

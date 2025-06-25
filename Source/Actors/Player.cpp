@@ -68,8 +68,18 @@ void Player::OnProcessInput(const uint8_t *state) {
     }
 }
 
-void Player::OnHandleKeyPress(const int key, const bool isPressed) {
+void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
+
+    if (scanCode == GetActionCode()) {
+        SDL_Log("Player %d ACTION", mPlayerType);
+    }
+    if (scanCode == GetUseCode()) {
+        SDL_Log("Player %d USE", mPlayerType);
+    }
+    if (scanCode == GetImpulseCode()) {
+        SDL_Log("Player %d IMPULSE", mPlayerType);
+    }
 }
 
 void Player::OnUpdate(float deltaTime) {
@@ -182,5 +192,32 @@ SDL_Scancode Player::GetUpCode() {
             return SDL_SCANCODE_W;
         case PlayerType::PlayerD:
             return SDL_SCANCODE_UP;
+    }
+}
+
+SDL_Scancode Player::GetActionCode() {
+    switch (mPlayerType) {
+        case PlayerType::PlayerB:
+            return SDL_SCANCODE_LSHIFT;
+        case PlayerType::PlayerD:
+            return SDL_SCANCODE_RSHIFT;
+    }
+}
+
+SDL_Scancode Player::GetUseCode() {
+    switch (mPlayerType) {
+        case PlayerType::PlayerB:
+            return SDL_SCANCODE_LCTRL;
+        case PlayerType::PlayerD:
+            return SDL_SCANCODE_RCTRL;
+    }
+}
+
+SDL_Scancode Player::GetImpulseCode() {
+    switch (mPlayerType) {
+        case PlayerType::PlayerB:
+            return SDL_SCANCODE_LALT;
+        case PlayerType::PlayerD:
+            return SDL_SCANCODE_RALT;
     }
 }

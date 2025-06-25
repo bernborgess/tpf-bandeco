@@ -23,7 +23,7 @@ class UIScreen {
     virtual void Update(float deltaTime);
     virtual void Draw(class SDL_Renderer *renderer);
     virtual void ProcessInput(const uint8_t *keys);
-    virtual void HandleKeyPress(int key);
+    virtual void HandleKeyPress(int scanCode);
 
     // Set state to closing
     void Close();

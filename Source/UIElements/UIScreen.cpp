@@ -49,25 +49,25 @@ void UIScreen::Draw(SDL_Renderer *renderer) {
 
 void UIScreen::ProcessInput(const uint8_t *keys) {}
 
-void UIScreen::HandleKeyPress(int key) {
+void UIScreen::HandleKeyPress(int scanCode) {
     size_t n = mButtons.size();
     if (n < 1) return;
-    switch (key) {
-        case SDLK_w: {
+    switch (scanCode) {
+        case SDL_SCANCODE_W: {
             mButtons[mSelectedButtonIndex]->SetHighlighted(false);
             mSelectedButtonIndex += n - 1;
             mSelectedButtonIndex %= n;
             mButtons[mSelectedButtonIndex]->SetHighlighted(true);
             break;
         }
-        case SDLK_s: {
+        case SDL_SCANCODE_S: {
             mButtons[mSelectedButtonIndex]->SetHighlighted(false);
             mSelectedButtonIndex += 1;
             mSelectedButtonIndex %= n;
             mButtons[mSelectedButtonIndex]->SetHighlighted(true);
             break;
         }
-        case SDLK_RETURN: {
+        case SDL_SCANCODE_RETURN: {
             if (mSelectedButtonIndex < 0 || mSelectedButtonIndex >= n) return;
             mButtons[mSelectedButtonIndex]->OnClick();
             break;
