@@ -31,7 +31,8 @@ Game::Game(int windowWidth, int windowHeight)
       mIsRunning(true),
       mWindowWidth(windowWidth),
       mWindowHeight(windowHeight),
-      mPlayer(nullptr),
+      mPlayerB(nullptr),
+      mPlayerD(nullptr),
       mHUD(nullptr),
       mBackgroundColor(0, 0, 0),
       mModColor(255, 255, 255),
@@ -240,10 +241,14 @@ void Game::BuildLevel(int **levelData, int width, int height) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             int tile = levelData[y][x];
 
-            if (tile == 11)  // PlayerB
+            if (tile == 11 && !mPlayerB)  // PlayerB
             {
-                mPlayer = new Player(this);
-                mPlayer->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                mPlayerB = new Player(this, PlayerType::PlayerB);
+                mPlayerB->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+            } else if (tile == 12 && !mPlayerD)  // PlayerD
+            {
+                mPlayerD = new Player(this, PlayerType::PlayerD);
+                mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
             } else  // Blocks
             {
                 auto it = tileMap.find(tile);
@@ -352,14 +357,14 @@ void Game::ProcessInputActors() {
         for (auto actor : actorsOnCamera) {
             actor->ProcessInput(state);
 
-            if (actor == mPlayer) {
+            if (actor == mPlayerB) {
                 isPlayerOnCamera = true;
             }
         }
 
         // If Player is not on camera, process input for him
-        if (!isPlayerOnCamera && mPlayer) {
-            mPlayer->ProcessInput(state);
+        if (!isPlayerOnCamera && mPlayerB) {
+            mPlayerB->ProcessInput(state);
         }
     }
 }
@@ -375,14 +380,14 @@ void Game::HandleKeyPressActors(const int key, const bool isPressed) {
         for (auto actor : actorsOnCamera) {
             actor->HandleKeyPress(key, isPressed);
 
-            if (actor == mPlayer) {
+            if (actor == mPlayerB) {
                 isPlayerOnCamera = true;
             }
         }
 
         // If Player is not on camera, handle key press for him
-        if (!isPlayerOnCamera && mPlayer) {
-            mPlayer->HandleKeyPress(key, isPressed);
+        if (!isPlayerOnCamera && mPlayerB) {
+            mPlayerB->HandleKeyPress(key, isPressed);
         }
     }
 }
@@ -478,16 +483,16 @@ void Game::UpdateLevelTime(float deltaTime) {
         mGameTimeLimit -= 1;
         mHUD->SetTime(mGameTimeLimit);
         if (mGameTimeLimit <= 0) {
-            mPlayer->Kill();
+            mPlayerB->Kill();
         }
     }
 }
 
 void Game::UpdateCamera() {
-    if (!mPlayer) return;
+    if (!mPlayerB) return;
 
     float horizontalCameraPos =
-        mPlayer->GetPosition().x - (mWindowWidth / 2.0f);
+        mPlayerB->GetPosition().x - (mWindowWidth / 2.0f);
 
     float maxCameraPos = (LEVEL_WIDTH * TILE_SIZE) - mWindowWidth;
     horizontalCameraPos = Math::Clamp(horizontalCameraPos, 0.0f, maxCameraPos);
@@ -504,21 +509,24 @@ void Game::UpdateActors(float deltaTime) {
     bool isPlayerOnCamera = false;
     for (auto actor : actorsOnCamera) {
         actor->Update(deltaTime);
-        if (actor == mPlayer) {
+        if (actor == mPlayerB) {
             isPlayerOnCamera = true;
         }
     }
 
     // If Player is not on camera, reset camera position
-    if (!isPlayerOnCamera && mPlayer) {
-        mPlayer->Update(deltaTime);
+    if (!isPlayerOnCamera && mPlayerB) {
+        mPlayerB->Update(deltaTime);
     }
 
     for (auto actor : actorsOnCamera) {
         if (actor->GetState() == ActorState::Destroy) {
             delete actor;
-            if (actor == mPlayer) {
-                mPlayer = nullptr;
+            if (actor == mPlayerB) {
+                mPlayerB = nullptr;
+            }
+            if (actor == mPlayerD) {
+                mPlayerD = nullptr;
             }
         }
     }

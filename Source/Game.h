@@ -84,7 +84,7 @@ class Game {
     void TogglePause();
 
     // Game-specific
-    const class Player *GetPlayer() { return mPlayer; }
+    const class Player *GetPlayerB() { return mPlayerB; }
 
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
@@ -141,7 +141,9 @@ class Game {
     Vector2 mCameraPos;
 
     // Game-specific
-    class Player *mPlayer;
+    class Player *mPlayerB;
+    class Player *mPlayerD;
+
     class HUD *mHUD;
     SoundHandle mMusicHandle;
 

@@ -9,11 +9,13 @@
 #include "../Game.h"
 #include "Block.h"
 
-Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
+Player::Player(Game *game, const PlayerType playerType,
+               const float forwardSpeed, const float jumpSpeed)
     : Actor(game),
       mIsRunning(false),
       mIsOnPole(false),
       mIsDying(false),
+      mPlayerType(playerType),
       mForwardSpeed(forwardSpeed),
       mJumpSpeed(jumpSpeed),
       mPoleSlideTimer(0.0f) {
@@ -21,9 +23,13 @@ Player::Player(Game *game, const float forwardSpeed, const float jumpSpeed)
     mColliderComponent = new AABBColliderComponent(
         this, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT, ColliderLayer::Player);
 
-    mDrawComponent =
-        new DrawAnimatedComponent(this, "../Assets/Sprites/PlayerB/Player.png",
-                                  "../Assets/Sprites/PlayerB/Player.json");
+    mDrawComponent = mPlayerType == PlayerType::PlayerB
+                         ? new DrawAnimatedComponent(
+                               this, "../Assets/Sprites/PlayerB/Player.png",
+                               "../Assets/Sprites/PlayerB/Player.json")
+                         : new DrawAnimatedComponent(
+                               this, "../Assets/Sprites/PlayerD/Player.png",
+                               "../Assets/Sprites/PlayerD/Player.json");
 
     mDrawComponent->AddAnimation("Dead", {0});
     mDrawComponent->AddAnimation("idle", {1});
@@ -39,24 +45,24 @@ void Player::OnProcessInput(const uint8_t *state) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
 
     mIsRunning = false;
-    if (state[SDL_SCANCODE_D]) {
+    if (state[GetRightCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitX * mForwardSpeed);
         mRotation = 0.0f;
         mIsRunning = true;
     }
 
-    if (state[SDL_SCANCODE_A]) {
+    if (state[GetLeftCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitX * -mForwardSpeed);
         mRotation = Math::Pi;
         mIsRunning = true;
     }
 
-    if (state[SDL_SCANCODE_W]) {
+    if (state[GetUpCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitY * -mForwardSpeed);
         mIsRunning = true;
     }
 
-    if (state[SDL_SCANCODE_S]) {
+    if (state[GetDownCode()]) {
         mRigidBodyComponent->ApplyForce(Vector2::UnitY * mForwardSpeed);
         mIsRunning = true;
     }
@@ -140,5 +146,41 @@ void Player::OnVerticalCollision(const float minOverlap,
             Vector2(mRigidBodyComponent->GetVelocity().x, mJumpSpeed / 2.5f));
 
         mGame->GetAudio()->PlaySound("Stomp.wav");
+    }
+}
+
+SDL_Scancode Player::GetDownCode() {
+    switch (mPlayerType) {
+        case PlayerType::PlayerB:
+            return SDL_SCANCODE_S;
+        case PlayerType::PlayerD:
+            return SDL_SCANCODE_DOWN;
+    }
+}
+
+SDL_Scancode Player::GetLeftCode() {
+    switch (mPlayerType) {
+        case PlayerType::PlayerB:
+            return SDL_SCANCODE_A;
+        case PlayerType::PlayerD:
+            return SDL_SCANCODE_LEFT;
+    }
+}
+
+SDL_Scancode Player::GetRightCode() {
+    switch (mPlayerType) {
+        case PlayerType::PlayerB:
+            return SDL_SCANCODE_D;
+        case PlayerType::PlayerD:
+            return SDL_SCANCODE_RIGHT;
+    }
+}
+
+SDL_Scancode Player::GetUpCode() {
+    switch (mPlayerType) {
+        case PlayerType::PlayerB:
+            return SDL_SCANCODE_W;
+        case PlayerType::PlayerD:
+            return SDL_SCANCODE_UP;
     }
 }

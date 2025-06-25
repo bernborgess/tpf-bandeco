@@ -3,15 +3,19 @@
 //
 
 #pragma once
+#include <SDL2/SDL_scancode.h>
+
 #include "Actor.h"
+
+enum class PlayerType { PlayerB, PlayerD };
 
 class Player : public Actor {
    public:
     static const int PLAYER_WIDTH = 28;
     static const int PLAYER_HEIGHT = 32;
 
-    explicit Player(Game* game, float forwardSpeed = 1500.0f,
-                    float jumpSpeed = -750.0f);
+    explicit Player(Game* game, PlayerType playerType,
+                    float forwardSpeed = 1500.0f, float jumpSpeed = -750.0f);
 
     void OnProcessInput(const Uint8* keyState) override;
     void OnUpdate(float deltaTime) override;
@@ -30,6 +34,13 @@ class Player : public Actor {
         1;  // Time in seconds to slide down the pole
 
     void ManageAnimations();
+
+    PlayerType mPlayerType;
+    // Manage different players
+    SDL_Scancode GetDownCode();
+    SDL_Scancode GetLeftCode();
+    SDL_Scancode GetRightCode();
+    SDL_Scancode GetUpCode();
 
     float mForwardSpeed;
     float mJumpSpeed;

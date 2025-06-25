@@ -12,7 +12,7 @@ Spawner::Spawner(Game* game, float spawnDistance)
     : Actor(game), mSpawnDistance(spawnDistance) {}
 
 void Spawner::OnUpdate(float deltaTime) {
-    if (abs(GetGame()->GetPlayer()->GetPosition().x - GetPosition().x) <
+    if (abs(GetGame()->GetPlayerB()->GetPosition().x - GetPosition().x) <
         mSpawnDistance) {
         auto goomba = new Goomba(GetGame());
         goomba->SetPosition(GetPosition());
