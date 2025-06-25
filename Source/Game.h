@@ -10,9 +10,9 @@
 
 class Game {
    public:
-    static const int LEVEL_WIDTH = 215;
-    static const int LEVEL_HEIGHT = 15;
-    static const int TILE_SIZE = 40;
+    static const int LEVEL_WIDTH = 25;
+    static const int LEVEL_HEIGHT = 14;
+    static const int TILE_SIZE = 64;
     static const int SPAWN_DISTANCE = 700;
     static const int TRANSITION_TIME = 1;
 
