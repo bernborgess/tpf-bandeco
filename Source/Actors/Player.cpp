@@ -134,7 +134,7 @@ void Player::HandlePickUp() {
         if (!item) {
             // Put the item on the empty table
             table->SetItemOnTop(mHandItem);
-            mHandItem->SetPosition(table->GetPosition() + Vector2(16, 16));
+            mHandItem->SetPosition(table->GetPosition() + Vector2(16, 8));
             mHandItem = nullptr;
         } else {
             // Remove item from if hand is empty
