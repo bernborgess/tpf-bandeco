@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Actors/Block.h"
 #include "AudioSystem.h"
 #include "Math.h"
 
@@ -62,8 +63,7 @@ class Game {
     void LoadLevel(const std::string &levelName, const int levelWidth,
                    const int levelHeight);
 
-    std::vector<Actor *> GetNearbyActors(const Vector2 &position,
-                                         const int range = 1);
+    Block *GetBlockAt(int x, int y);
     std::vector<class AABBColliderComponent *> GetNearbyColliders(
         const Vector2 &position, const int range = 2);
 
@@ -125,6 +125,7 @@ class Game {
     LevelDataEntry **ReadLevelData(const std::string &fileName, int width,
                                    int height);
     void BuildLevel(LevelDataEntry **levelData, int width, int height);
+    std::vector<Block *> mLevelBlocks;
 
     // Spatial Hashing for collision detection
     class SpatialHashing *mSpatialHashing;

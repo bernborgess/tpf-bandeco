@@ -21,6 +21,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Item.h
         Source/Actors/FoodBoxBlock.cpp
         Source/Actors/FoodBoxBlock.h
+        Source/Actors/Table.cpp
+        Source/Actors/Table.h
         Source/Actors/Player.cpp
         Source/Actors/Player.h
         Source/AudioSystem.cpp

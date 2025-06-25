@@ -15,6 +15,7 @@
 #include "Actors/FoodBoxBlock.h"
 #include "Actors/Item.h"
 #include "Actors/Player.h"
+#include "Actors/Table.h"
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 #include "Components/DrawComponents/DrawComponent.h"
@@ -244,33 +245,46 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             LevelDataEntry tile = levelData[y][x];
 
-            if (tile == LevelDataEntry::TilePlayerBStart &&
-                !mPlayerB)  // PlayerB
-            {
+            if (tile == LevelDataEntry::TilePlayerBStart && !mPlayerB) {
                 mPlayerB = new Player(this, PlayerType::PlayerB);
                 mPlayerB->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-            } else if (tile == LevelDataEntry::TilePlayerDStart &&
-                       !mPlayerD)  // PlayerD
-            {
+                continue;
+            }
+
+            if (tile == LevelDataEntry::TilePlayerDStart && !mPlayerD) {
                 mPlayerD = new Player(this, PlayerType::PlayerD);
                 mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-            } else if (tile == LevelDataEntry::TileFoodTomato) {  // FoodTomato
+                continue;
+            }
+
+            if (tile == LevelDataEntry::TileFoodTomato) {  // FoodTomato
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     // Tomato Box
-                    FoodBoxBlock *fBblock =
-                        new FoodBoxBlock(this, it->second, ItemType::Tomato);
+                    FoodBoxBlock *fBblock = new FoodBoxBlock(
+                        this, it->second, ItemType::Tomato, {x, y});
                     fBblock->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
                 }
+                continue;
+            }
 
-            } else  // Blocks
-            {
+            // Empty Table
+            if (tile == LevelDataEntry::TileTable) {
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
-                    // Create a block actor
-                    Block *block = new Block(this, it->second);
-                    block->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                    Table *table = new Table(this, it->second, {x, y});
+                    table->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                    mLevelBlocks.push_back(table);
                 }
+            }
+
+            // Blocks
+            auto it = tileMap.find(tile);
+            if (it != tileMap.end()) {
+                // Create a block actor
+                Block *block = new Block(this, it->second, {x, y});
+                block->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                mLevelBlocks.push_back(block);
             }
         }
     }
@@ -556,9 +570,15 @@ void Game::AddActor(Actor *actor) { mSpatialHashing->Insert(actor); }
 void Game::RemoveActor(Actor *actor) { mSpatialHashing->Remove(actor); }
 void Game::Reinsert(Actor *actor) { mSpatialHashing->Reinsert(actor); }
 
-std::vector<Actor *> Game::GetNearbyActors(const Vector2 &position,
-                                           const int range) {
-    return mSpatialHashing->Query(position, range);
+Block *Game::GetBlockAt(int x, int y) {
+    if (x < 0 || x >= LEVEL_WIDTH || y < 0 || y >= LEVEL_HEIGHT) return nullptr;
+    for (Block *block : mLevelBlocks) {
+        auto [bx, by] = block->GetGridPosition();
+        if (x == bx && y == by) {
+            return block;
+        }
+    }
+    return nullptr;
 }
 
 std::vector<AABBColliderComponent *> Game::GetNearbyColliders(

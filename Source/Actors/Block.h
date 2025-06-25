@@ -11,7 +11,7 @@
 class Block : public Actor {
    public:
     explicit Block(Game* game, const std::string& texturePath,
-                   const bool isStatic = true);
+                   std::pair<int, int> gridPos);
 
     void SetPosition(const Vector2& position) {
         Actor::SetPosition(position);
@@ -22,10 +22,14 @@ class Block : public Actor {
     void OnVerticalCollision(const float minOverlap,
                              AABBColliderComponent* other) override;
 
+    std::pair<int, int> GetGridPosition() { return mGridPosition; }
+
    private:
     const int BUMP_FORCE = 200;
 
     Vector2 mOriginalPosition;
+
+    std::pair<int, int> mGridPosition;  // (x,y) in the grid
 
     class AABBColliderComponent* mColliderComponent;
     class RigidBodyComponent* mRigidBodyComponent;

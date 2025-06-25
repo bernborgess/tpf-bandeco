@@ -7,7 +7,8 @@
 
 class FoodBoxBlock : public Block {
    public:
-    FoodBoxBlock(Game* game, const std::string& texturePath, ItemType foodType);
+    FoodBoxBlock(Game* game, const std::string& texturePath, ItemType foodType,
+                 std::pair<int, int> gridPos);
 
     ItemType mFoodType;
 };

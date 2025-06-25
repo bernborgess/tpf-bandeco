@@ -9,6 +9,7 @@
 #include "../Game.h"
 #include "Block.h"
 #include "Item.h"
+#include "Table.h"
 
 Player::Player(Game *game, const PlayerType playerType,
                const float forwardSpeed, const float jumpSpeed)
@@ -115,13 +116,25 @@ void Player::HandlePickUp() {
     LevelDataEntry levelEntry = mGame->mLevelData[pyg][pxg];
     SDL_Log("Level entry is a %d", levelEntry);
 
-    // Handle this interaction
-
     // Getting food from box
     if (levelEntry == LevelDataEntry::TileFoodTomato) {
         if (mHandItem == nullptr) {
             const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
             mHandItem = new Item(mGame, tomatoTilePath, ItemType::Tomato);
+        }
+    } else if (levelEntry == LevelDataEntry::TileTable) {
+        Block *block = mGame->GetBlockAt(pxg, pyg);
+        if (block == nullptr) {
+            SDL_Log("Expected a table, didn't find it!");
+            return;
+        }
+        // I know it's a table
+        Table *table = (Table *)block;
+        if (!table->GetItemOnTop()) {
+            // Put the item on the empty table
+            table->SetItemOnTop(mHandItem);
+            mHandItem->SetPosition(table->GetPosition());
+            mHandItem = nullptr;
         }
     }
 }
