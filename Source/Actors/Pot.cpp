@@ -37,7 +37,7 @@ Item* Pot::PutItem(Item* item) {
     }
 
     mItemCounter += 1;
-    delete item;
+    item->SetState(ActorState::Destroy);
     SDL_Log("Another item in the pot, now there are %d", mItemCounter);
     return nullptr;
 }
@@ -59,6 +59,9 @@ void Pot::OnUpdate(float deltaTime) {
     if (mCookTime >= COOK_TIME_MAX && !isCooked) {
         // TODO: Swap the TomatoCut to TomatoSoup
         SDL_Log("COOKED!");
+        Item* soup = NewItem(mGame, ItemType::TomatoSoup);
+        mItemInside->SetState(ActorState::Destroy);
+        mItemInside = soup;
         isCooked = true;
     }
 }

@@ -51,7 +51,7 @@ void TableCut::OnItemCut() {
         // Now transforms into finished item
         if (mItemOnTop->GetItemType() == ItemType::Tomato) {
             Item* cutTomato = Item::NewItem(mGame, ItemType::TomatoCut);
-            delete mItemOnTop;
+            mItemOnTop->SetState(ActorState::Destroy);
             mItemOnTop = cutTomato;
             cutTomato->SetPosition(GetPosition() + Vector2(16, 8));
         }

@@ -8,11 +8,11 @@ Item* Trash::DiscardItem(Item* item) {
         Pot* pot = (Pot*)item;
         Item* itemInside = pot->PickItem();
         if (itemInside) {
-            delete itemInside;
+            itemInside->SetState(ActorState::Destroy);
         }
         return item;
     } else {
-        delete item;
+        item->SetState(ActorState::Destroy);
         return nullptr;
     }
 }
