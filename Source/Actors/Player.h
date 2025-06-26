@@ -50,6 +50,7 @@ class Player : public Actor {
     std::tuple<LevelDataEntry, int, int> GetFocusBlock();
     void HandlePickUp();
     void HandlePutDown();
+    void HandleChop();
 
     class RigidBodyComponent* mRigidBodyComponent;
     class DrawAnimatedComponent* mDrawComponent;

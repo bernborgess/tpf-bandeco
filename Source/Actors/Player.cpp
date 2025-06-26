@@ -78,6 +78,7 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
             HandlePutDown();
         }
 
+        // TODO: Remove this debug
         if (mHandItem == nullptr) {
             SDL_Log("Player %d got nothing", (int)mPlayerType);
         } else {
@@ -86,10 +87,11 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
         }
     }
     if (scanCode == GetChopCode()) {
-        SDL_Log("Player %d USE", (int)mPlayerType);
+        HandleChop();
+        SDL_Log("Player %d CHOP", (int)mPlayerType);
     }
     if (scanCode == GetDashCode()) {
-        SDL_Log("Player %d IMPULSE", (int)mPlayerType);
+        SDL_Log("Player %d DASH", (int)mPlayerType);
     }
 }
 
@@ -154,8 +156,13 @@ void Player::HandlePickUp() {
         TableCut *tableCut = (TableCut *)block;
         Item *item = tableCut->GetItemOnTop();
         if (item) {  // get item from table
+
+            // TODO: Only allow removing if cut level is either 0 or
+            // CUT_LEVEL_MAX
             mHandItem = item;
             tableCut->SetItemOnTop(nullptr);
+            // If it's CUT_LEVEL_MAX, you should return the cut version of the
+            // item.
         }
     }
 }
@@ -193,13 +200,32 @@ void Player::HandlePutDown() {
             table->SetItemOnTop(mHandItem);
             mHandItem->SetPosition(table->GetPosition() + Vector2(16, 8));
             mHandItem = nullptr;
-        } else {
-            // Remove item from if hand is empty
-            if (mHandItem == nullptr) {
-                mHandItem = item;
-                table->SetItemOnTop(nullptr);
-            }
         }
+    }
+}
+
+// If it's a TableCut and there's food on it, will chop
+void Player::HandleChop() {
+    if (mHandItem != nullptr) return;
+    const auto [levelEntry, pxg, pyg] = GetFocusBlock();
+    if (levelEntry != LevelDataEntry::TileTableCut) return;
+    Block *block = mGame->GetBlockAt(pxg, pyg);
+    if (block == nullptr) {
+        SDL_Log("Expected a tableCut, didn't find it!");
+        return;
+    }
+    TableCut *tableCut = (TableCut *)block;
+    Item *item = tableCut->GetItemOnTop();
+    if (!item) return;  // empty table
+    // TODO: Increase cut level if it's not maxed out
+    if (item->mItemType == ItemType::Tomato) {
+        const std::string cutTomatoTilePath =
+            "../Assets/Prototype/TomatoCut.png";
+        Item *cutTomato =
+            new Item(mGame, cutTomatoTilePath, ItemType::CutTomato);
+        delete item;
+        tableCut->SetItemOnTop(cutTomato);
+        cutTomato->SetPosition(tableCut->GetPosition() + Vector2(16, 8));
     }
 }
 
@@ -241,7 +267,7 @@ SDL_Scancode Player::GetDownCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_DOWN;
     }
-    SDL_Log("Invalid player %s", mPlayerType);
+    SDL_Log("Invalid player %d", (int)mPlayerType);
     return SDL_SCANCODE_0;
 }
 
@@ -252,7 +278,7 @@ SDL_Scancode Player::GetLeftCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_LEFT;
     }
-    SDL_Log("Invalid player %s", mPlayerType);
+    SDL_Log("Invalid player %d", (int)mPlayerType);
     return SDL_SCANCODE_0;
 }
 
@@ -263,7 +289,7 @@ SDL_Scancode Player::GetRightCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RIGHT;
     }
-    SDL_Log("Invalid player %s", mPlayerType);
+    SDL_Log("Invalid player %d", (int)mPlayerType);
     return SDL_SCANCODE_0;
 }
 
@@ -274,7 +300,7 @@ SDL_Scancode Player::GetUpCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_UP;
     }
-    SDL_Log("Invalid player %s", mPlayerType);
+    SDL_Log("Invalid player %d", (int)mPlayerType);
     return SDL_SCANCODE_0;
 }
 
@@ -285,7 +311,7 @@ SDL_Scancode Player::GetPickUpCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RSHIFT;
     }
-    SDL_Log("Invalid player %s", mPlayerType);
+    SDL_Log("Invalid player %d", (int)mPlayerType);
     return SDL_SCANCODE_0;
 }
 
@@ -296,7 +322,7 @@ SDL_Scancode Player::GetChopCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RCTRL;
     }
-    SDL_Log("Invalid player %s", mPlayerType);
+    SDL_Log("Invalid player %d", (int)mPlayerType);
     return SDL_SCANCODE_0;
 }
 
@@ -307,6 +333,6 @@ SDL_Scancode Player::GetDashCode() {
         case PlayerType::PlayerD:
             return SDL_SCANCODE_RALT;
     }
-    SDL_Log("Invalid player %s", mPlayerType);
+    SDL_Log("Invalid player %d", (int)mPlayerType);
     return SDL_SCANCODE_0;
 }
