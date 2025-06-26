@@ -5,6 +5,7 @@
 #pragma once
 #include <SDL2/SDL_scancode.h>
 
+#include "../Game.h"
 #include "Actor.h"
 #include "Item.h"
 
@@ -46,7 +47,9 @@ class Player : public Actor {
     FaceDirection mFaceDirection;
 
     Item* mHandItem;
+    std::tuple<LevelDataEntry, int, int> GetFocusBlock();
     void HandlePickUp();
+    void HandlePutDown();
 
     class RigidBodyComponent* mRigidBodyComponent;
     class DrawAnimatedComponent* mDrawComponent;

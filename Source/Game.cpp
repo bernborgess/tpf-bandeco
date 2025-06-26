@@ -16,6 +16,7 @@
 #include "Actors/Item.h"
 #include "Actors/Player.h"
 #include "Actors/Table.h"
+#include "Actors/TableCut.h"
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 #include "Components/DrawComponents/DrawComponent.h"
@@ -278,6 +279,16 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 }
             }
 
+            // Table Cut
+            if (tile == LevelDataEntry::TileTableCut) {
+                auto it = tileMap.find(tile);
+                if (it != tileMap.end()) {
+                    TableCut *tableCut = new TableCut(this, it->second, {x, y});
+                    tableCut->SetPosition(
+                        Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                    mLevelBlocks.push_back(tableCut);
+                }
+            }
             // Blocks
             auto it = tileMap.find(tile);
             if (it != tileMap.end()) {

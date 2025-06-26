@@ -1,7 +1,3 @@
-//
-// Created by Lucas N. Ferreira on 03/08/23.
-//
-
 #include "Player.h"
 
 #include "../Components/DrawComponents/DrawAnimatedComponent.h"
@@ -10,6 +6,7 @@
 #include "Block.h"
 #include "Item.h"
 #include "Table.h"
+#include "TableCut.h"
 
 Player::Player(Game *game, const PlayerType playerType,
                const float forwardSpeed, const float jumpSpeed)
@@ -75,26 +72,32 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
     if (mGame->GetGamePlayState() != Game::GamePlayState::Playing) return;
 
     if (scanCode == GetPickUpCode()) {
-        HandlePickUp();
         if (mHandItem == nullptr) {
-            SDL_Log("Player %d got nothing", mPlayerType);
+            HandlePickUp();
         } else {
-            SDL_Log("Player %d got %d", mPlayerType, mHandItem->mItemType);
+            HandlePutDown();
+        }
+
+        if (mHandItem == nullptr) {
+            SDL_Log("Player %d got nothing", (int)mPlayerType);
+        } else {
+            SDL_Log("Player %d got %d", (int)mPlayerType,
+                    (int)mHandItem->mItemType);
         }
     }
     if (scanCode == GetChopCode()) {
-        SDL_Log("Player %d USE", mPlayerType);
+        SDL_Log("Player %d USE", (int)mPlayerType);
     }
     if (scanCode == GetDashCode()) {
-        SDL_Log("Player %d IMPULSE", mPlayerType);
+        SDL_Log("Player %d IMPULSE", (int)mPlayerType);
     }
 }
 
-void Player::HandlePickUp() {
+std::tuple<LevelDataEntry, int, int> Player::GetFocusBlock() {
     // Calculate which block this player faces
     auto [px, py] = mPosition;
-    int pxg = px / 64;
-    int pyg = py / 64;
+    int pxg = (px + 16) / 64;
+    int pyg = (py + 16) / 64;
 
     // Add the direction the player is facing
     switch (mFaceDirection) {
@@ -114,18 +117,72 @@ void Player::HandlePickUp() {
 
     // We look at the level data
     LevelDataEntry levelEntry = mGame->mLevelData[pyg][pxg];
-    SDL_Log("Level entry is a %d", levelEntry);
+    SDL_Log("Level entry is a %d", (int)levelEntry);
+    return {levelEntry, pxg, pyg};
+}
+
+// Assumes player has empty hand
+void Player::HandlePickUp() {
+    if (mHandItem != nullptr) return;
+    auto [levelEntry, pxg, pyg] = GetFocusBlock();
 
     // Getting food from box
     if (levelEntry == LevelDataEntry::TileFoodTomato) {
-        if (mHandItem == nullptr) {
-            const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
-            mHandItem = new Item(mGame, tomatoTilePath, ItemType::Tomato);
-        }
+        const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
+        mHandItem = new Item(mGame, tomatoTilePath, ItemType::Tomato);
     } else if (levelEntry == LevelDataEntry::TileTable) {
         Block *block = mGame->GetBlockAt(pxg, pyg);
         if (block == nullptr) {
             SDL_Log("Expected a table, didn't find it!");
+            return;
+        }
+        // I know it's a table
+        Table *table = (Table *)block;
+        Item *item = table->GetItemOnTop();
+        if (item) {
+            // Remove item from if hand is empty
+            mHandItem = item;
+            table->SetItemOnTop(nullptr);
+        }
+    } else if (levelEntry == LevelDataEntry::TileTableCut) {
+        Block *block = mGame->GetBlockAt(pxg, pyg);
+        if (block == nullptr) {
+            SDL_Log("Expected a tableCut, didn't find it!");
+            return;
+        }
+        // I know it's a table
+        TableCut *tableCut = (TableCut *)block;
+        Item *item = tableCut->GetItemOnTop();
+        if (item) {  // get item from table
+            mHandItem = item;
+            tableCut->SetItemOnTop(nullptr);
+        }
+    }
+}
+
+// Assumes player has item in hand
+void Player::HandlePutDown() {
+    if (mHandItem == nullptr) return;
+    const auto [levelEntry, pxg, pyg] = GetFocusBlock();
+
+    if (levelEntry == LevelDataEntry::TileTable) {
+        Block *block = mGame->GetBlockAt(pxg, pyg);
+        if (block == nullptr) {
+            SDL_Log("Expected a table, didn't find it!");
+            return;
+        }
+        // I know it's a table
+        Table *table = (Table *)block;
+        Item *item = table->GetItemOnTop();
+        if (!item) {  // Put the item on the empty table
+            table->SetItemOnTop(mHandItem);
+            mHandItem->SetPosition(table->GetPosition() + Vector2(16, 8));
+            mHandItem = nullptr;
+        }
+    } else if (levelEntry == LevelDataEntry::TileTableCut) {
+        Block *block = mGame->GetBlockAt(pxg, pyg);
+        if (block == nullptr) {
+            SDL_Log("Expected a tableCut, didn't find it!");
             return;
         }
         // I know it's a table

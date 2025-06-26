@@ -17,14 +17,16 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Actor.cpp
         Source/Actors/Block.cpp
         Source/Actors/Block.h
-        Source/Actors/Item.cpp
-        Source/Actors/Item.h
         Source/Actors/FoodBoxBlock.cpp
         Source/Actors/FoodBoxBlock.h
-        Source/Actors/Table.cpp
-        Source/Actors/Table.h
+        Source/Actors/Item.cpp
+        Source/Actors/Item.h
         Source/Actors/Player.cpp
         Source/Actors/Player.h
+        Source/Actors/Table.cpp
+        Source/Actors/Table.h
+        Source/Actors/TableCut.cpp
+        Source/Actors/TableCut.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
@@ -60,7 +62,6 @@ add_executable(${PROJECT_NAME}
         Source/UIElements/UIScreen.h
         Source/UIElements/UIText.cpp
         Source/UIElements/UIText.h
- 
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)
