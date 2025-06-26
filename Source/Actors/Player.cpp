@@ -118,39 +118,43 @@ void Player::HandlePickUp() {
     if (mHandItem != nullptr) return;
     auto [levelEntry, pxg, pyg] = GetFocusBlock();
 
-    SDL_Log("Handle Pick Up");
-
     // Getting food from box
-    if (levelEntry == LevelDataEntry::TileFoodTomato) {
-        mHandItem = Item::NewItem(mGame, ItemType::Tomato);
-    } else if (levelEntry == LevelDataEntry::TileTable) {
-        Block *block = mGame->GetBlockAt(pxg, pyg);
-        if (block == nullptr) {
-            SDL_Log("Expected a table, didn't find it!");
-            return;
+    switch (levelEntry) {
+        case LevelDataEntry::TileFoodTomato: {
+            mHandItem = Item::NewItem(mGame, ItemType::Tomato);
+            break;
         }
-        // I know it's a table
-        Table *table = (Table *)block;
-        Item *item = table->PickItemOnTop();
-        if (item) {
-            mHandItem = item;
+        case LevelDataEntry::TileTable: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a table, didn't find it!");
+                return;
+            }
+            // I know it's a table
+            Table *table = (Table *)block;
+            Item *item = table->PickItemOnTop();
+            if (item) {
+                mHandItem = item;
+            }
+            break;
         }
-    } else if (levelEntry == LevelDataEntry::TileTableCut) {
-        Block *block = mGame->GetBlockAt(pxg, pyg);
-        if (block == nullptr) {
-            SDL_Log("Expected a tableCut, didn't find it!");
-            return;
+        case LevelDataEntry::TileTableCut: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a tableCut, didn't find it!");
+                return;
+            }
+            // I know it's a table
+            TableCut *tableCut = (TableCut *)block;
+            Item *item = tableCut->PickItemOnTop();
+            if (item) {  // Get item from table
+                mHandItem = item;
+            }
+            break;
         }
-        // I know it's a table
-        TableCut *tableCut = (TableCut *)block;
-        Item *item = tableCut->PickItemOnTop();
-        if (item) {  // get item from table
-
-            // TODO: Only allow removing if cut level is either 0 or
-            // CUT_LEVEL_MAX
-            mHandItem = item;
-            // If it's CUT_LEVEL_MAX, you should return the cut version of the
-            // item.
+        default: {
+            SDL_Log("Not available pick up from this block");
+            break;
         }
     }
 }

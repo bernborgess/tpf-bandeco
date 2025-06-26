@@ -10,6 +10,8 @@ class Stove : public Block {
     Stove(Game* game, const std::string& texturePath,
           std::pair<int, int> gridPos);
 
+    bool HasPotOnTop() { return mPotOnTop != nullptr; }
+
     // TODO: Tick cooking time
 
    protected:
