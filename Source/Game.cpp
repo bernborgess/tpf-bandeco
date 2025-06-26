@@ -300,8 +300,8 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
         }
     }
 
-    const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
-    Item *a_tomato = new Item(this, tomatoTilePath, ItemType::Tomato);
+    // const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
+    Item *a_tomato = Item::NewItem(this, ItemType::Tomato);
     a_tomato->SetPosition(Vector2(200, 200));
 }
 

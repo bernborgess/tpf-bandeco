@@ -77,15 +77,7 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
         } else {
             HandlePutDown();
         }
-
-        // TODO: Remove this debug
-        if (mHandItem == nullptr) {
-            SDL_Log("Player %d got nothing", (int)mPlayerType);
-        } else {
-            SDL_Log("Player %d got %d", (int)mPlayerType,
-                    (int)mHandItem->mItemType);
         }
-    }
     if (scanCode == GetChopCode()) {
         HandleChop();
         SDL_Log("Player %d CHOP", (int)mPlayerType);
@@ -130,8 +122,7 @@ void Player::HandlePickUp() {
 
     // Getting food from box
     if (levelEntry == LevelDataEntry::TileFoodTomato) {
-        const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
-        mHandItem = new Item(mGame, tomatoTilePath, ItemType::Tomato);
+        mHandItem = Item::NewItem(mGame, ItemType::Tomato);
     } else if (levelEntry == LevelDataEntry::TileTable) {
         Block *block = mGame->GetBlockAt(pxg, pyg);
         if (block == nullptr) {
@@ -218,11 +209,8 @@ void Player::HandleChop() {
     Item *item = tableCut->GetItemOnTop();
     if (!item) return;  // empty table
     // TODO: Increase cut level if it's not maxed out
-    if (item->mItemType == ItemType::Tomato) {
-        const std::string cutTomatoTilePath =
-            "../Assets/Prototype/TomatoCut.png";
-        Item *cutTomato =
-            new Item(mGame, cutTomatoTilePath, ItemType::CutTomato);
+    if (item->GetItemType() == ItemType::Tomato) {
+        Item *cutTomato = Item::NewItem(mGame, ItemType::TomatoCut);
         delete item;
         tableCut->SetItemOnTop(cutTomato);
         cutTomato->SetPosition(tableCut->GetPosition() + Vector2(16, 8));
