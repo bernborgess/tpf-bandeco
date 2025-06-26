@@ -180,19 +180,11 @@ void Player::HandlePutDown() {
                 SDL_Log("Expected a table, didn't find it!");
                 return;
             }
-            // I know it's a table
             Table *table = (Table *)block;
-            SDL_Log("Try put down at table");
             if (!table->HasItemOnTop()) {  // Put the item on the empty table
-                Item *maybeItem = table->SetItemOnTop(mHandItem);
-                if (maybeItem) {
-                    SDL_Log("Table rejected the item");
-                } else {
-                    SDL_Log("Table accepted the item");
+                if (!table->SetItemOnTop(mHandItem)) {
                     mHandItem = nullptr;
                 }
-            } else {
-                SDL_Log("There's stuff at the table!");
             }
             break;
         }
