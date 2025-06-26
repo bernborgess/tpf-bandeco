@@ -15,18 +15,26 @@ Pot* Pot::NewPot(Game* game) {
 }
 
 Item* Pot::PutItem(Item* item) {
+    if (!item) return item;
+
     // If no item, just accept it
     if (!mItemInside) {
-        SDL_Log("No item in pot, just accept");
-        mItemInside = item;
-        mItemCounter = 1;
-        return nullptr;
+        switch (item->GetItemType()) {
+            case ItemType::TomatoCut: {
+                mItemInside = item;
+                mItemCounter = 1;
+                return nullptr;
+            }
+        }
+        // Not a supported item
+        return item;
     }
     // Only accept if it's the same type
     if (mItemInside->GetItemType() != item->GetItemType()) {
         SDL_Log("Have to refuse,since types are different");
         return item;
     }
+
     mItemCounter += 1;
     delete item;
     SDL_Log("Another item in the pot, now there are %d", mItemCounter);
