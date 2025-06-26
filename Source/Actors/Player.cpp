@@ -228,9 +228,21 @@ void Player::HandlePutDown() {
                 return;
             }
             Stove *stove = (Stove *)block;
-            if (mHandItem->GetItemType() != ItemType::Pot) return;
-            Pot *pot = (Pot *)mHandItem;
-            mHandItem = stove->PutPotOnTop(pot);
+            switch (mHandItem->GetItemType()) {
+                case ItemType::Pot: {
+                    Pot *pot = (Pot *)mHandItem;
+                    mHandItem = stove->PutPotOnTop(pot);
+                    break;
+                }
+                case ItemType::Plate: {
+                    // TODO Handle pick food to plate
+                    break;
+                }
+                default: {
+                    // TODO Put the food in the pot
+                    mHandItem = stove->PutFoodInPot(mHandItem);
+                }
+            }
             break;
         }
     }

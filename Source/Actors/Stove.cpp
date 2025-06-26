@@ -32,3 +32,14 @@ Pot* Stove::PutPotOnTop(Pot* pot) {
     mPotOnTop->SetPosition(GetPosition() + Vector2(16, 24));
     return nullptr;
 }
+
+Item* Stove::PutFoodInPot(Item* item) {
+    SDL_Log("PutFoodInPot");
+    if (!mPotOnTop) {
+        // Can't put food without pot
+        SDL_Log("Can't put food without pot!");
+        return item;
+    }
+    SDL_Log("PutItem in pot");
+    return mPotOnTop->PutItem(item);
+}

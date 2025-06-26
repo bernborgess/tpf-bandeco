@@ -13,6 +13,7 @@ class Stove : public Block {
     bool HasPotOnTop() { return mPotOnTop != nullptr; }
     Pot* PickPotOnTop();
     Pot* PutPotOnTop(Pot* pot);
+    Item* PutFoodInPot(Item* item);
 
     // TODO: Tick cooking time
 
