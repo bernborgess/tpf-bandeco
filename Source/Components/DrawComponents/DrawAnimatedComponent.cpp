@@ -69,8 +69,8 @@ void DrawAnimatedComponent::Draw(SDL_Renderer* renderer,
                            static_cast<Uint8>(modColor.y),
                            static_cast<Uint8>(modColor.z));
 
-    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, srcRect, &dstRect,
-                     mOwner->GetRotation(), nullptr, flip);
+    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, srcRect, &dstRect, 0,
+                     nullptr, flip);
 }
 
 void DrawAnimatedComponent::Update(float deltaTime) {

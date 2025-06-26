@@ -19,6 +19,7 @@
 #include "Actors/Stove.h"
 #include "Actors/Table.h"
 #include "Actors/TableCut.h"
+#include "Actors/Trash.h"
 #include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 #include "Components/DrawComponents/DrawComponent.h"
@@ -299,6 +300,15 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 }
             }
 
+            // Trash
+            if (tile == LevelDataEntry::TileTrash) {
+                auto it = tileMap.find(tile);
+                if (it != tileMap.end()) {
+                    Trash *trash = new Trash(this, it->second, {x, y});
+                    mLevelBlocks.push_back(trash);
+                }
+            }
+
             // Blocks
             auto it = tileMap.find(tile);
             if (it != tileMap.end()) {
@@ -425,22 +435,14 @@ void Game::HandleKeyPressActors(const int scanCode, const bool isPressed) {
             mCameraPos, mWindowWidth, mWindowHeight);
 
         // Handle key press for actors
-        bool isPlayerOnCamera = false;
         for (auto actor : actorsOnCamera) {
             if (!actor) {
                 SDL_Log("Null actor...");
                 continue;
             }
-            actor->HandleKeyPress(scanCode, isPressed);
-
-            if (actor == mPlayerB) {
-                isPlayerOnCamera = true;
+            if (actor == mPlayerB || actor == mPlayerD) {
+                actor->HandleKeyPress(scanCode, isPressed);
             }
-        }
-
-        // If Player is not on camera, handle key press for him
-        if (!isPlayerOnCamera && mPlayerB) {
-            mPlayerB->HandleKeyPress(scanCode, isPressed);
         }
     }
 }

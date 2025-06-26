@@ -10,5 +10,5 @@ Stove::Stove(Game* game, const std::string& texturePath,
     // Also create a Pot on top of it!
     Pot* pot = Pot::NewPot(mGame);
     pot->SetPosition(GetPosition() + Vector2(16, 24));
-    // mItemOnTop = pot;
+    mPotOnTop = pot;
 }

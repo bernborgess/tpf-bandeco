@@ -194,6 +194,15 @@ void Player::HandlePutDown() {
             // Put the item on the empty tableCut
             mHandItem = tableCut->SetItemOnTop(mHandItem);
         }
+    } else if (levelEntry == LevelDataEntry::TileTrash) {
+        Block *block = mGame->GetBlockAt(pxg, pyg);
+        if (block == nullptr) {
+            SDL_Log("Expected a Trash, didn't find it!");
+            return;
+        }
+        // Just get rid of item
+        delete mHandItem;
+        mHandItem = nullptr;
     }
 }
 
