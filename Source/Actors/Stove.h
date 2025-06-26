@@ -15,7 +15,7 @@ class Stove : public Block {
     Pot* PutPotOnTop(Pot* pot);
     Item* PutFoodInPot(Item* item);
 
-    // TODO: Tick cooking time
+    void OnUpdate(float deltaTime) override;
 
    protected:
     Pot* mPotOnTop;

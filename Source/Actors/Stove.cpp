@@ -40,3 +40,10 @@ Item* Stove::PutFoodInPot(Item* item) {
     }
     return mPotOnTop->PutItem(item);
 }
+
+void Stove::OnUpdate(float deltaTime) {
+    // Cook it!
+    if (mPotOnTop) {
+        mPotOnTop->OnCook(deltaTime);
+    }
+}

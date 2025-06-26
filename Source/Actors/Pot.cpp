@@ -23,6 +23,7 @@ Item* Pot::PutItem(Item* item) {
             case ItemType::TomatoCut: {
                 mItemInside = item;
                 mItemCounter = 1;
+                mCookTime = 0.0f;
                 return nullptr;
             }
         }
@@ -43,6 +44,7 @@ Item* Pot::PutItem(Item* item) {
 
 Item* Pot::PickItem() {
     if (!mItemInside) return nullptr;
+
     // TODO: Resolve when cooking is done
     Item* item = mItemInside;
     mItemInside = nullptr;
@@ -50,7 +52,19 @@ Item* Pot::PickItem() {
 }
 
 void Pot::OnUpdate(float deltaTime) {
+    if (!mItemInside) return;
+    mItemInside->SetPosition(GetPosition() + Vector2(0, -10));
+
+    // Check if cooking is done!
+    if (mCookTime >= COOK_TIME_MAX && !isCooked) {
+        // TODO: Swap the TomatoCut to TomatoSoup
+        SDL_Log("COOKED!");
+        isCooked = true;
+    }
+}
+
+void Pot::OnCook(float deltaTime) {
     if (mItemInside) {
-        mItemInside->SetPosition(GetPosition() + Vector2(0, -10));
+        mCookTime += deltaTime;
     }
 }
