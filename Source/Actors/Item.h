@@ -4,7 +4,7 @@
 
 #include "Actor.h"
 
-enum class ItemType { Plate, Tomato, TomatoCut, TomatoSoup, Pot };
+enum class ItemType { Plate, Tomato, TomatoCut, TomatoSoup, TomatoBurn, Pot };
 
 class Item : public Actor {
    public:

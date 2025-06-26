@@ -57,12 +57,21 @@ void Pot::OnUpdate(float deltaTime) {
 
     // Check if cooking is done!
     if (mCookTime >= COOK_TIME_MAX && !isCooked) {
-        // TODO: Swap the TomatoCut to TomatoSoup
-        SDL_Log("COOKED!");
+        // Swap the TomatoCut to TomatoSoup
         Item* soup = NewItem(mGame, ItemType::TomatoSoup);
         mItemInside->SetState(ActorState::Destroy);
         mItemInside = soup;
         isCooked = true;
+    }
+
+    // Check if burning!
+    if (mCookTime >= BURN_TIME_MAX && !isBurnt) {
+        // Swap the TomatoSoup to TomatoBurn
+        SDL_Log("BURNING!!");
+        Item* burnt = NewItem(mGame, ItemType::TomatoBurn);
+        mItemInside->SetState(ActorState::Destroy);
+        mItemInside = burnt;
+        isBurnt = true;
     }
 }
 
