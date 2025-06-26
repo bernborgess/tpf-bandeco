@@ -11,6 +11,8 @@ class Stove : public Block {
           std::pair<int, int> gridPos);
 
     bool HasPotOnTop() { return mPotOnTop != nullptr; }
+    Pot* PickPotOnTop();
+    Pot* PutPotOnTop(Pot* pot);
 
     // TODO: Tick cooking time
 

@@ -5,6 +5,7 @@
 #include "../Game.h"
 #include "Block.h"
 #include "Item.h"
+#include "Stove.h"
 #include "Table.h"
 #include "TableCut.h"
 
@@ -130,7 +131,6 @@ void Player::HandlePickUp() {
                 SDL_Log("Expected a table, didn't find it!");
                 return;
             }
-            // I know it's a table
             Table *table = (Table *)block;
             Item *item = table->PickItemOnTop();
             if (item) {
@@ -144,7 +144,6 @@ void Player::HandlePickUp() {
                 SDL_Log("Expected a tableCut, didn't find it!");
                 return;
             }
-            // I know it's a table
             TableCut *tableCut = (TableCut *)block;
             Item *item = tableCut->PickItemOnTop();
             if (item) {  // Get item from table
@@ -152,8 +151,17 @@ void Player::HandlePickUp() {
             }
             break;
         }
-        default: {
-            SDL_Log("Not available pick up from this block");
+        case LevelDataEntry::TileStove: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a stove, didn't find it!");
+                return;
+            }
+            Stove *stove = (Stove *)block;
+            Pot *pot = stove->PickPotOnTop();
+            if (pot) {
+                mHandItem = pot;
+            }
             break;
         }
     }
@@ -164,49 +172,67 @@ void Player::HandlePutDown() {
     if (mHandItem == nullptr) return;
     const auto [levelEntry, pxg, pyg] = GetFocusBlock();
 
-    if (levelEntry == LevelDataEntry::TileTable) {
-        Block *block = mGame->GetBlockAt(pxg, pyg);
-        if (block == nullptr) {
-            SDL_Log("Expected a table, didn't find it!");
-            return;
-        }
-        // I know it's a table
-        Table *table = (Table *)block;
-        SDL_Log("Try put down at table");
-        if (!table->HasItemOnTop()) {  // Put the item on the empty table
-            Item *maybeItem = table->SetItemOnTop(mHandItem);
-            if (maybeItem) {
-                SDL_Log("Table rejected the item");
-            } else {
-                SDL_Log("Table accepted the item");
-                mHandItem = nullptr;
+    switch (levelEntry) {
+        case LevelDataEntry::TileTable: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a table, didn't find it!");
+                return;
             }
-        } else {
-            SDL_Log("There's stuff at the table!");
+            // I know it's a table
+            Table *table = (Table *)block;
+            SDL_Log("Try put down at table");
+            if (!table->HasItemOnTop()) {  // Put the item on the empty table
+                Item *maybeItem = table->SetItemOnTop(mHandItem);
+                if (maybeItem) {
+                    SDL_Log("Table rejected the item");
+                } else {
+                    SDL_Log("Table accepted the item");
+                    mHandItem = nullptr;
+                }
+            } else {
+                SDL_Log("There's stuff at the table!");
+            }
+            break;
         }
-
-    } else if (levelEntry == LevelDataEntry::TileTableCut) {
-        Block *block = mGame->GetBlockAt(pxg, pyg);
-        if (block == nullptr) {
-            SDL_Log("Expected a tableCut, didn't find it!");
-            return;
+        case LevelDataEntry::TileTableCut: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a tableCut, didn't find it!");
+                return;
+            }
+            // I know it's a table
+            TableCut *tableCut = (TableCut *)block;
+            Item *item = tableCut->PickItemOnTop();
+            if (!item) {
+                // Put the item on the empty tableCut
+                mHandItem = tableCut->SetItemOnTop(mHandItem);
+            }
+            break;
         }
-        // I know it's a table
-        TableCut *tableCut = (TableCut *)block;
-        Item *item = tableCut->PickItemOnTop();
-        if (!item) {
-            // Put the item on the empty tableCut
-            mHandItem = tableCut->SetItemOnTop(mHandItem);
+        case LevelDataEntry::TileTrash: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a Trash, didn't find it!");
+                return;
+            }
+            // Just get rid of item
+            delete mHandItem;
+            mHandItem = nullptr;
+            break;
         }
-    } else if (levelEntry == LevelDataEntry::TileTrash) {
-        Block *block = mGame->GetBlockAt(pxg, pyg);
-        if (block == nullptr) {
-            SDL_Log("Expected a Trash, didn't find it!");
-            return;
+        case LevelDataEntry::TileStove: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a stove, didn't find it!");
+                return;
+            }
+            Stove *stove = (Stove *)block;
+            if (mHandItem->GetItemType() != ItemType::Pot) return;
+            Pot *pot = (Pot *)mHandItem;
+            mHandItem = stove->PutPotOnTop(pot);
+            break;
         }
-        // Just get rid of item
-        delete mHandItem;
-        mHandItem = nullptr;
     }
 }
 

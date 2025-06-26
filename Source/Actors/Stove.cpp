@@ -12,3 +12,23 @@ Stove::Stove(Game* game, const std::string& texturePath,
     pot->SetPosition(GetPosition() + Vector2(16, 24));
     mPotOnTop = pot;
 }
+
+Pot* Stove::PickPotOnTop() {
+    if (mPotOnTop) {
+        Pot* pot = mPotOnTop;
+        mPotOnTop = nullptr;
+        return pot;
+    }
+    return nullptr;
+}
+
+Pot* Stove::PutPotOnTop(Pot* pot) {
+    if (mPotOnTop) {
+        // Reject, it's already occupied
+        return pot;
+    }
+    // Accept the pot
+    mPotOnTop = pot;
+    mPotOnTop->SetPosition(GetPosition() + Vector2(16, 24));
+    return nullptr;
+}

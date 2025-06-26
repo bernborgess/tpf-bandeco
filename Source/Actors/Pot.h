@@ -5,7 +5,7 @@
 #include "Actor.h"
 #include "Item.h"
 
-class Pot : public Actor {
+class Pot : public Item {
    public:
     static Pot* NewPot(Game* game);
 

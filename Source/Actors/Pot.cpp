@@ -3,7 +3,9 @@
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
 
 Pot::Pot(Game* game, const std::string& texturePath)
-    : Actor(game), mItemCounter(0), mItemInside(nullptr) {
+    : Item(game, texturePath, ItemType::Pot),
+      mItemCounter(0),
+      mItemInside(nullptr) {
     new DrawSpriteComponent(this, texturePath, 32, 32, 200);
 }
 
