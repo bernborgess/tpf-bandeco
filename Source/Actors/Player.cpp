@@ -188,11 +188,11 @@ void Player::HandlePutDown() {
             return;
         }
         // I know it's a table
-        Table *table = (Table *)block;
-        Item *item = table->PickItemOnTop();
+        TableCut *tableCut = (TableCut *)block;
+        Item *item = tableCut->PickItemOnTop();
         if (!item) {
-            // Put the item on the empty table
-            mHandItem = table->SetItemOnTop(mHandItem);
+            // Put the item on the empty tableCut
+            mHandItem = tableCut->SetItemOnTop(mHandItem);
         }
     }
 }

@@ -7,7 +7,10 @@ TableCut::TableCut(Game* game, const std::string& texturePath,
     : Table(game, texturePath, gridPos) {}
 
 Item* TableCut::PickItemOnTop() {
-    if (!mItemOnTop) return nullptr;
+    if (!mItemOnTop) {
+        SDL_Log("There's nothing on it!");
+        return nullptr;
+    }
 
     // Didn't finish the cut
     if (cutLevel > 0 && cutLevel < CUT_LEVEL_MAX) return nullptr;
@@ -27,14 +30,21 @@ Item* TableCut::SetItemOnTop(Item* item) {
     // TODO: Check item is cuttable
     mItemOnTop = item;
     mItemOnTop->SetPosition(GetPosition() + Vector2(16, 8));
+    SDL_Log("HOY!");
     cutLevel = 0;
     return nullptr;
 }
 
 void TableCut::OnItemCut() {
-    if (mItemOnTop == nullptr) return;
-    if (cutLevel == CUT_LEVEL_MAX) return;  // Finished
-    cutLevel++;                             // Add a cut
+    if (mItemOnTop == nullptr) {
+        SDL_Log("There's nothing on it to cut");
+        return;
+    }
+    if (cutLevel == CUT_LEVEL_MAX) {
+        SDL_Log("It's cut to the maximum already");
+        return;
+    }  // Finished
+    cutLevel++;  // Add a cut
     SDL_Log("CUT lvl %d!", cutLevel);
     if (cutLevel == CUT_LEVEL_MAX) {
         SDL_Log("Finished cut!");
@@ -45,6 +55,7 @@ void TableCut::OnItemCut() {
             delete mItemOnTop;
             mItemOnTop = cutTomato;
             cutTomato->SetPosition(GetPosition() + Vector2(16, 8));
+            SDL_Log("Brand new cut tomato!");
         }
     }
 }
