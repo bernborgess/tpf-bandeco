@@ -10,4 +10,6 @@ class Trash : public Block {
     Trash(Game* game, const std::string& texturePath,
           std::pair<int, int> gridPos)
         : Block(game, texturePath, gridPos) {}
+
+    Item* DiscardItem(Item* item);
 };

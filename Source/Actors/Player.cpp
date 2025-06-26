@@ -8,6 +8,7 @@
 #include "Stove.h"
 #include "Table.h"
 #include "TableCut.h"
+#include "Trash.h"
 
 Player::Player(Game *game, const PlayerType playerType,
                const float forwardSpeed, const float jumpSpeed)
@@ -201,7 +202,6 @@ void Player::HandlePutDown() {
                 SDL_Log("Expected a tableCut, didn't find it!");
                 return;
             }
-            // I know it's a table
             TableCut *tableCut = (TableCut *)block;
             Item *item = tableCut->PickItemOnTop();
             if (!item) {
@@ -216,9 +216,8 @@ void Player::HandlePutDown() {
                 SDL_Log("Expected a Trash, didn't find it!");
                 return;
             }
-            // Just get rid of item
-            delete mHandItem;
-            mHandItem = nullptr;
+            Trash *trash = (Trash *)block;
+            mHandItem = trash->DiscardItem(mHandItem);
             break;
         }
         case LevelDataEntry::TileStove: {
@@ -239,7 +238,7 @@ void Player::HandlePutDown() {
                     break;
                 }
                 default: {
-                    // TODO Put the food in the pot
+                    // Put the food in the pot
                     mHandItem = stove->PutFoodInPot(mHandItem);
                 }
             }

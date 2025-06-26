@@ -32,6 +32,7 @@ add_executable(${PROJECT_NAME}
         Source/Actors/TableCut.cpp
         Source/Actors/TableCut.h
         Source/Actors/Trash.h
+        Source/Actors/Trash.cpp
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp

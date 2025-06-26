@@ -41,6 +41,14 @@ Item* Pot::PutItem(Item* item) {
     return nullptr;
 }
 
+Item* Pot::PickItem() {
+    if (!mItemInside) return nullptr;
+    // TODO: Resolve when cooking is done
+    Item* item = mItemInside;
+    mItemInside = nullptr;
+    return item;
+}
+
 void Pot::OnUpdate(float deltaTime) {
     if (mItemInside) {
         mItemInside->SetPosition(GetPosition() + Vector2(0, -10));

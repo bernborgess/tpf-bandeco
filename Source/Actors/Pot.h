@@ -9,6 +9,7 @@ class Pot : public Item {
    public:
     static Pot* NewPot(Game* game);
     Item* PutItem(Item* item);
+    Item* PickItem();
     void OnUpdate(float deltaTime) override;
 
    private:
