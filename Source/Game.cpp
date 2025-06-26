@@ -15,6 +15,7 @@
 #include "Actors/FoodBoxBlock.h"
 #include "Actors/Item.h"
 #include "Actors/Player.h"
+#include "Actors/Pot.h"
 #include "Actors/Stove.h"
 #include "Actors/Table.h"
 #include "Actors/TableCut.h"

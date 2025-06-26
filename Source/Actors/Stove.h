@@ -2,16 +2,16 @@
 
 #include <string>
 
-#include "Table.h"
+#include "Block.h"
+#include "Pot.h"
 
-class Stove : public Table {
+class Stove : public Block {
    public:
     Stove(Game* game, const std::string& texturePath,
           std::pair<int, int> gridPos);
 
     // TODO: Tick cooking time
 
-   private:
-    static const int CUT_LEVEL_MAX = 5;
-    int cutLevel;
+   protected:
+    Pot* mPotOnTop;
 };
