@@ -22,7 +22,8 @@ enum class LevelDataEntry {
     TileSink = 9,
     TileDeliver = 10,
     TilePlayerBStart = 11,
-    TilePlayerDStart = 12
+    TilePlayerDStart = 12,
+    TileStove = 13
 };
 
 class Game {

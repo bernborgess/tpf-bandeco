@@ -23,6 +23,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Item.h
         Source/Actors/Player.cpp
         Source/Actors/Player.h
+        Source/Actors/Stove.cpp
+        Source/Actors/Stove.h
         Source/Actors/Table.cpp
         Source/Actors/Table.h
         Source/Actors/TableCut.cpp

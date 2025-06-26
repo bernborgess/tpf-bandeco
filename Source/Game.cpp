@@ -15,6 +15,7 @@
 #include "Actors/FoodBoxBlock.h"
 #include "Actors/Item.h"
 #include "Actors/Player.h"
+#include "Actors/Stove.h"
 #include "Actors/Table.h"
 #include "Actors/TableCut.h"
 #include "CSV.h"
@@ -240,6 +241,7 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
         {LevelDataEntry::TileDeliver, "../Assets/Prototype/Deliver.png"},
         {LevelDataEntry::TilePlayerBStart, "../Assets/Prototype/PlayerB.png"},
         {LevelDataEntry::TilePlayerDStart, "../Assets/Prototype/PlayerD.png"},
+        {LevelDataEntry::TileStove, "../Assets/Prototype/Stove.png"},
     };
 
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
@@ -289,6 +291,17 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                     mLevelBlocks.push_back(tableCut);
                 }
             }
+
+            // Stove
+            if (tile == LevelDataEntry::TileStove) {
+                auto it = tileMap.find(tile);
+                if (it != tileMap.end()) {
+                    Stove *stove = new Stove(this, it->second, {x, y});
+                    stove->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                    mLevelBlocks.push_back(stove);
+                }
+            }
+
             // Blocks
             auto it = tileMap.find(tile);
             if (it != tileMap.end()) {
