@@ -73,7 +73,7 @@ class Actor {
     // Any actor-specific update code (overridable)
     virtual void OnUpdate(float deltaTime);
     virtual void OnProcessInput(const Uint8* keyState);
-    virtual void OnHandleKeyPress(const int key, const bool isPressed);
+    virtual void OnHandleKeyPress(const int scanCode, const bool isPressed);
 
     // Actor's state
     ActorState mState;

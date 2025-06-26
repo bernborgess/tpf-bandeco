@@ -427,6 +427,10 @@ void Game::HandleKeyPressActors(const int scanCode, const bool isPressed) {
         // Handle key press for actors
         bool isPlayerOnCamera = false;
         for (auto actor : actorsOnCamera) {
+            if (!actor) {
+                SDL_Log("Null actor...");
+                continue;
+            }
             actor->HandleKeyPress(scanCode, isPressed);
 
             if (actor == mPlayerB) {
