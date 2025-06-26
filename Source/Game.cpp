@@ -58,11 +58,10 @@ bool Game::Initialize() {
         return false;
     }
 
-    mWindow =
-        SDL_CreateWindow("Pesadelo no Bandeco!", SDL_WINDOWPOS_UNDEFINED,
-                         SDL_WINDOWPOS_UNDEFINED, mWindowWidth, mWindowHeight, 0
-                         // TODO: SDL_WINDOW_FULLSCREEN);
-        );
+    mWindow = SDL_CreateWindow(
+        "Pesadelo no Bandeco!", 500, 0, mWindowWidth, mWindowHeight, 0
+        // TODO: SDL_WINDOW_FULLSCREEN);
+    );
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
@@ -226,6 +225,7 @@ void Game::LoadLevel(const std::string &levelName, const int levelWidth,
 
 void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
     // Const map to convert tile ID to block type
+    // TODO: Rethink where these paths should be
     const std::map<LevelDataEntry, const std::string> tileMap = {
         {LevelDataEntry::TileWall, "../Assets/Prototype/Wall.png"},
         {LevelDataEntry::TileFoodBread, "../Assets/Prototype/FoodBread.png"},
@@ -299,10 +299,6 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
             }
         }
     }
-
-    // const std::string tomatoTilePath = "../Assets/Prototype/Tomato.png";
-    Item *a_tomato = Item::NewItem(this, ItemType::Tomato);
-    a_tomato->SetPosition(Vector2(200, 200));
 }
 
 LevelDataEntry **Game::ReadLevelData(const std::string &fileName, int width,

@@ -10,9 +10,15 @@ class Table : public Block {
     Table(Game* game, const std::string& texturePath,
           std::pair<int, int> gridPos);
 
-    Item* GetItemOnTop() { return mItemOnTop; }
-    void SetItemOnTop(Item* item) { mItemOnTop = item; }
+    // Returns the item and empties the table
+    Item* PickItemOnTop();
 
-   private:
+    // Peek without changes
+    bool HasItemOnTop();
+
+    // Returns nullptr if it got the item, returns the item if rejected
+    Item* SetItemOnTop(Item* item);
+
+   protected:
     Item* mItemOnTop;
 };

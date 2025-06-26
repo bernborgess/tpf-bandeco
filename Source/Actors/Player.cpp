@@ -77,10 +77,9 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
         } else {
             HandlePutDown();
         }
-        }
+    }
     if (scanCode == GetChopCode()) {
         HandleChop();
-        SDL_Log("Player %d CHOP", (int)mPlayerType);
     }
     if (scanCode == GetDashCode()) {
         SDL_Log("Player %d DASH", (int)mPlayerType);
@@ -111,7 +110,6 @@ std::tuple<LevelDataEntry, int, int> Player::GetFocusBlock() {
 
     // We look at the level data
     LevelDataEntry levelEntry = mGame->mLevelData[pyg][pxg];
-    SDL_Log("Level entry is a %d", (int)levelEntry);
     return {levelEntry, pxg, pyg};
 }
 
@@ -119,6 +117,8 @@ std::tuple<LevelDataEntry, int, int> Player::GetFocusBlock() {
 void Player::HandlePickUp() {
     if (mHandItem != nullptr) return;
     auto [levelEntry, pxg, pyg] = GetFocusBlock();
+
+    SDL_Log("Handle Pick Up");
 
     // Getting food from box
     if (levelEntry == LevelDataEntry::TileFoodTomato) {
@@ -131,11 +131,9 @@ void Player::HandlePickUp() {
         }
         // I know it's a table
         Table *table = (Table *)block;
-        Item *item = table->GetItemOnTop();
+        Item *item = table->PickItemOnTop();
         if (item) {
-            // Remove item from if hand is empty
             mHandItem = item;
-            table->SetItemOnTop(nullptr);
         }
     } else if (levelEntry == LevelDataEntry::TileTableCut) {
         Block *block = mGame->GetBlockAt(pxg, pyg);
@@ -145,13 +143,12 @@ void Player::HandlePickUp() {
         }
         // I know it's a table
         TableCut *tableCut = (TableCut *)block;
-        Item *item = tableCut->GetItemOnTop();
+        Item *item = tableCut->PickItemOnTop();
         if (item) {  // get item from table
 
             // TODO: Only allow removing if cut level is either 0 or
             // CUT_LEVEL_MAX
             mHandItem = item;
-            tableCut->SetItemOnTop(nullptr);
             // If it's CUT_LEVEL_MAX, you should return the cut version of the
             // item.
         }
@@ -171,12 +168,19 @@ void Player::HandlePutDown() {
         }
         // I know it's a table
         Table *table = (Table *)block;
-        Item *item = table->GetItemOnTop();
-        if (!item) {  // Put the item on the empty table
-            table->SetItemOnTop(mHandItem);
-            mHandItem->SetPosition(table->GetPosition() + Vector2(16, 8));
-            mHandItem = nullptr;
+        SDL_Log("Try put down at table");
+        if (!table->HasItemOnTop()) {  // Put the item on the empty table
+            Item *maybeItem = table->SetItemOnTop(mHandItem);
+            if (maybeItem) {
+                SDL_Log("Table rejected the item");
+            } else {
+                SDL_Log("Table accepted the item");
+                mHandItem = nullptr;
+            }
+        } else {
+            SDL_Log("There's stuff at the table!");
         }
+
     } else if (levelEntry == LevelDataEntry::TileTableCut) {
         Block *block = mGame->GetBlockAt(pxg, pyg);
         if (block == nullptr) {
@@ -185,12 +189,10 @@ void Player::HandlePutDown() {
         }
         // I know it's a table
         Table *table = (Table *)block;
-        Item *item = table->GetItemOnTop();
+        Item *item = table->PickItemOnTop();
         if (!item) {
             // Put the item on the empty table
-            table->SetItemOnTop(mHandItem);
-            mHandItem->SetPosition(table->GetPosition() + Vector2(16, 8));
-            mHandItem = nullptr;
+            mHandItem = table->SetItemOnTop(mHandItem);
         }
     }
 }
@@ -206,15 +208,7 @@ void Player::HandleChop() {
         return;
     }
     TableCut *tableCut = (TableCut *)block;
-    Item *item = tableCut->GetItemOnTop();
-    if (!item) return;  // empty table
-    // TODO: Increase cut level if it's not maxed out
-    if (item->GetItemType() == ItemType::Tomato) {
-        Item *cutTomato = Item::NewItem(mGame, ItemType::TomatoCut);
-        delete item;
-        tableCut->SetItemOnTop(cutTomato);
-        cutTomato->SetPosition(tableCut->GetPosition() + Vector2(16, 8));
-    }
+    tableCut->OnItemCut();
 }
 
 void Player::OnUpdate(float deltaTime) {
