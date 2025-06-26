@@ -14,6 +14,7 @@
 #include "Actors/Block.h"
 #include "Actors/FoodBoxBlock.h"
 #include "Actors/Item.h"
+#include "Actors/Plate.h"
 #include "Actors/Player.h"
 #include "Actors/Pot.h"
 #include "Actors/Stove.h"
@@ -272,13 +273,25 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 }
                 continue;
             }
-
             // Empty Table
             if (tile == LevelDataEntry::TileTable) {
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     Table *table = new Table(this, it->second, {x, y});
                     mLevelBlocks.push_back(table);
+                }
+            }
+
+            // Table with Plate
+            if (tile == LevelDataEntry::TileTablePlate) {
+                auto it = tileMap.find(LevelDataEntry::TileTable);
+                if (it != tileMap.end()) {
+                    Table *table = new Table(this, it->second, {x, y});
+                    mLevelBlocks.push_back(table);
+                    // Create Plate on Top of table
+                    Plate *plate = Plate::NewPlate(this);
+                    table->SetItemOnTop(plate);
+                    levelData[y][x] = LevelDataEntry::TileTable;
                 }
             }
 

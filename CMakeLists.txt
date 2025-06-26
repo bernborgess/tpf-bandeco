@@ -21,6 +21,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/FoodBoxBlock.h
         Source/Actors/Item.cpp
         Source/Actors/Item.h
+        Source/Actors/Plate.cpp
+        Source/Actors/Plate.h
         Source/Actors/Player.cpp
         Source/Actors/Player.h
         Source/Actors/Pot.cpp
@@ -31,8 +33,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Table.h
         Source/Actors/TableCut.cpp
         Source/Actors/TableCut.h
-        Source/Actors/Trash.h
         Source/Actors/Trash.cpp
+        Source/Actors/Trash.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
