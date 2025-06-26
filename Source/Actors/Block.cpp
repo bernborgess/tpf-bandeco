@@ -17,6 +17,9 @@ Block::Block(Game* game, const std::string& texturePath,
     mColliderComponent = new AABBColliderComponent(
         this, 0, 0, Game::TILE_SIZE, Game::TILE_SIZE, ColliderLayer::Blocks);
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 0.0f, false);
+
+    SetPosition(Vector2(gridPos.first * Game::TILE_SIZE,
+                        gridPos.second * Game::TILE_SIZE));
 }
 
 void Block::OnUpdate(float deltaTime) {

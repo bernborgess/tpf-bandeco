@@ -267,7 +267,7 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                     // Tomato Box
                     FoodBoxBlock *fBblock = new FoodBoxBlock(
                         this, it->second, ItemType::Tomato, {x, y});
-                    fBblock->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+                    mLevelBlocks.push_back(fBblock);
                 }
                 continue;
             }
@@ -277,7 +277,6 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     Table *table = new Table(this, it->second, {x, y});
-                    table->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
                     mLevelBlocks.push_back(table);
                 }
             }
@@ -287,8 +286,6 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     TableCut *tableCut = new TableCut(this, it->second, {x, y});
-                    tableCut->SetPosition(
-                        Vector2(x * TILE_SIZE, y * TILE_SIZE));
                     mLevelBlocks.push_back(tableCut);
                 }
             }
@@ -298,7 +295,6 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     Stove *stove = new Stove(this, it->second, {x, y});
-                    stove->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
                     mLevelBlocks.push_back(stove);
                 }
             }
@@ -308,7 +304,6 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
             if (it != tileMap.end()) {
                 // Create a block actor
                 Block *block = new Block(this, it->second, {x, y});
-                block->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
                 mLevelBlocks.push_back(block);
             }
         }
