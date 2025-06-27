@@ -22,6 +22,8 @@ Item* Pot::PutItem(Item* item) {
                 mItemInside = item;
                 mItemCounter = 1;
                 mCookTime = 0.0f;
+                mIsCooked = mIsBurnt = false;
+                SDL_Log("New item in the pot!");
                 return nullptr;
             }
             // In case someone transfers soup
@@ -29,6 +31,8 @@ Item* Pot::PutItem(Item* item) {
                 mItemInside = item;
                 mItemCounter = 3;
                 mCookTime = COOK_TIME_MAX;
+                mIsCooked = true;
+                mIsBurnt = false;
                 return nullptr;
             }
             // In case someone transfers burnt food
@@ -36,6 +40,7 @@ Item* Pot::PutItem(Item* item) {
                 mItemInside = item;
                 mItemCounter = 3;
                 mCookTime = BURN_TIME_MAX;
+                mIsBurnt = mIsCooked = true;
                 return nullptr;
             }
         }
@@ -68,21 +73,30 @@ void Pot::OnUpdate(float deltaTime) {
     mItemInside->SetPosition(GetPosition() + Vector2(0, -10));
 
     // Check if cooking is done!
-    if (mCookTime >= COOK_TIME_MAX && !isCooked) {
-        // Swap the TomatoCut to TomatoSoup
-        Item* soup = NewItem(mGame, ItemType::TomatoSoup);
-        mItemInside->SetState(ActorState::Destroy);
-        mItemInside = soup;
-        isCooked = true;
+    if (mCookTime >= mItemCounter * COOK_TIME_MAX && !mIsCooked) {
+        // Case of tomatoes: We need 3 to get a soup
+        if (mItemInside->GetItemType() == ItemType::TomatoCut) {
+            // Swap the TomatoCut to TomatoSoup
+            Item* soup = NewItem(mGame, ItemType::TomatoSoup);
+            mItemInside->SetState(ActorState::Destroy);
+            mItemInside = soup;
+            mIsCooked = true;
+        }
     }
 
     // Check if burning!
-    if (mCookTime >= BURN_TIME_MAX && !isBurnt) {
-        // Swap the TomatoSoup to TomatoBurn
-        Item* burnt = NewItem(mGame, ItemType::TomatoBurn);
-        mItemInside->SetState(ActorState::Destroy);
-        mItemInside = burnt;
-        isBurnt = true;
+    if (mCookTime >= mItemCounter * BURN_TIME_MAX && !mIsBurnt) {
+        switch (mItemInside->GetItemType()) {
+            case ItemType::TomatoCut:
+            case ItemType::TomatoSoup: {
+                // Swap the TomatoSoup to TomatoBurn
+                Item* burnt = NewItem(mGame, ItemType::TomatoBurn);
+                mItemInside->SetState(ActorState::Destroy);
+                mItemInside = burnt;
+                mIsBurnt = true;
+                break;
+            }
+        }
     }
 }
 

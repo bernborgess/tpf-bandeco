@@ -17,9 +17,10 @@ class Pot : public Item {
     Pot(Game* game, const std::string& texturePath);
     Item* mItemInside;
     int mItemCounter;
+    // Cook & Burn times are proportional to `mItemCounter`
     static constexpr float COOK_TIME_MAX = 5.0f;
-    static constexpr float BURN_TIME_MAX = 30.0f;
+    static constexpr float BURN_TIME_MAX = 10.0f;
     float mCookTime;
-    bool isCooked;
-    bool isBurnt;
+    bool mIsCooked;
+    bool mIsBurnt;
 };
