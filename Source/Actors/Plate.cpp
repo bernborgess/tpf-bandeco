@@ -30,9 +30,13 @@ Item* Plate::PutItem(Item* item) {
     return item;
 }
 
-void Plate::Deliver() {
+std::vector<Item*> Plate::PickItems() {
     // TODO: Interact with the Deliver block and check if there's
     // this recibe on the orders queue
+
+    std::vector<Item*> items = mItems;
+    mItems.clear();
+    return items;
 }
 
 void Plate::OnUpdate(float deltaTime) {

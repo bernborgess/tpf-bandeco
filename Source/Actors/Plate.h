@@ -9,9 +9,8 @@ class Plate : public Item {
    public:
     static Plate* NewPlate(Game* game);
     Item* PutItem(Item* item);
+    std::vector<Item*> PickItems();
 
-    // TODO: Think about this action
-    void Deliver();
     void OnUpdate(float deltaTime) override;
 
    private:
