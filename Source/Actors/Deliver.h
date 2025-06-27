@@ -12,5 +12,5 @@ class Deliver : public Block {
             std::pair<int, int> gridPos)
         : Block(game, texturePath, gridPos) {}
 
-    Item* SetItemOnTop(Item* item);
+    Item* SetItemOnTop(Item* item) override;
 };

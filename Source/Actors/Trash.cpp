@@ -2,7 +2,7 @@
 
 #include "Pot.h"
 
-Item* Trash::DiscardItem(Item* item) {
+Item* Trash::SetItemOnTop(Item* item) {
     if (!item) return nullptr;
     if (item->GetItemType() == ItemType::Pot) {
         Pot* pot = (Pot*)item;

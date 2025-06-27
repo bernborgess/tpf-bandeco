@@ -173,60 +173,12 @@ void Player::HandlePickUp() {
 void Player::HandlePutDown() {
     if (mHandItem == nullptr) return;
     const auto [levelEntry, pxg, pyg] = GetFocusBlock();
-
-    switch (levelEntry) {
-        case LevelDataEntry::TileTable: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a table, didn't find it!");
-                return;
-            }
-            Table *table = (Table *)block;
-            mHandItem = table->SetItemOnTop(mHandItem);
-            break;
-        }
-        case LevelDataEntry::TileTableCut: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a tableCut, didn't find it!");
-                return;
-            }
-            TableCut *tableCut = (TableCut *)block;
-            Item *item = tableCut->PickItemOnTop();
-            mHandItem = tableCut->SetItemOnTop(mHandItem);
-            break;
-        }
-        case LevelDataEntry::TileTrash: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a Trash, didn't find it!");
-                return;
-            }
-            Trash *trash = (Trash *)block;
-            mHandItem = trash->DiscardItem(mHandItem);
-            break;
-        }
-        case LevelDataEntry::TileStove: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a stove, didn't find it!");
-                return;
-            }
-            Stove *stove = (Stove *)block;
-            mHandItem = stove->SetItemOnTop(mHandItem);
-            break;
-        }
-        case LevelDataEntry::TileDeliver: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a stove, didn't find it!");
-                return;
-            }
-            Deliver *deliver = (Deliver *)block;
-            mHandItem = deliver->SetItemOnTop(mHandItem);
-            break;
-        }
+    Block *block = mGame->GetBlockAt(pxg, pyg);
+    if (block == nullptr) {  // Expected a block, didn't find it!
+        return;
     }
+
+    mHandItem = block->SetItemOnTop(mHandItem);
 }
 
 // If it's a TableCut and there's food on it, will chop

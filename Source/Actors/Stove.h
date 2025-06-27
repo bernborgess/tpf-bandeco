@@ -11,7 +11,7 @@ class Stove : public Block {
           std::pair<int, int> gridPos);
 
     Pot* PickPotOnTop();
-    Item* SetItemOnTop(Item* item);
+    Item* SetItemOnTop(Item* item) override;
 
     void OnUpdate(float deltaTime) override;
 

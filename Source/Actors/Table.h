@@ -17,7 +17,7 @@ class Table : public Block {
     bool HasItemOnTop();
 
     // Returns nullptr if it got the item, returns the item if rejected
-    Item* SetItemOnTop(Item* item);
+    Item* SetItemOnTop(Item* item) override;
 
    protected:
     Item* mItemOnTop;

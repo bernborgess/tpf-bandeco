@@ -40,3 +40,9 @@ void Block::OnVerticalCollision(const float minOverlap,
         mOriginalPosition.Set(mPosition.x, mPosition.y);
     }
 }
+
+Item* Block::SetItemOnTop(Item* item) {
+    // Block::SetItemOnTop is virtual. Check that you
+    // are passing an object that implements it
+    return item;
+}

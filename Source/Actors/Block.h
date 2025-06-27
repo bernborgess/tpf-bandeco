@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Actor.h"
+#include "Item.h"
 
 class Block : public Actor {
    public:
@@ -23,6 +24,8 @@ class Block : public Actor {
                              AABBColliderComponent* other) override;
 
     std::pair<int, int> GetGridPosition() { return mGridPosition; }
+
+    virtual Item* SetItemOnTop(Item* item);
 
    private:
     const int BUMP_FORCE = 200;

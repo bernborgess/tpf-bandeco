@@ -11,5 +11,5 @@ class Trash : public Block {
           std::pair<int, int> gridPos)
         : Block(game, texturePath, gridPos) {}
 
-    Item* DiscardItem(Item* item);
+    Item* SetItemOnTop(Item* item) override;
 };

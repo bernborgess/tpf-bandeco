@@ -12,7 +12,7 @@ class TableCut : public Table {
     // Changes item if finished cutting
     Item* PickItemOnTop();
 
-    Item* SetItemOnTop(Item* item);
+    Item* SetItemOnTop(Item* item) override;
 
     void OnItemCut();
 
