@@ -238,7 +238,7 @@ void Player::OnUpdate(float deltaTime) {
 
     // Hand Item follows player
     if (mHandItem != nullptr) {
-        mHandItem->SetPosition(mPosition);
+        mHandItem->SetPosition(mPosition + Vector2(16, -16));
     }
 
     ManageAnimations();
