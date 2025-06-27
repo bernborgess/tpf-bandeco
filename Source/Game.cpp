@@ -149,10 +149,10 @@ void Game::ChangeScene() {
         // Initialize main menu actors
         LoadMainMenu();
     } else if (mNextScene == GameScene::Level1) {
-        mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
-        mGameTimeLimit = 400;
-        mHUD->SetTime(400);
-        mHUD->SetLevelName("1-1");
+        mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
+        mGameTimeLimit = 180;
+        mHUD->SetTime(180);
+        mHUD->SetLevelName("Cantina do ICEx");
 
         // TODO: Add level music
         // mMusicHandle = mAudio->PlaySound("MusicMain.ogg", true);
