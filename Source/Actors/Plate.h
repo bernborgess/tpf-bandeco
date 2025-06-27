@@ -11,6 +11,7 @@ class Plate : public Item {
     Item* PutItem(Item* item);
     // TODO: Think about this action
     void Deliver();
+    void OnUpdate(float deltaTime) override;
 
    private:
     Plate(Game* game, const std::string& texturePath);

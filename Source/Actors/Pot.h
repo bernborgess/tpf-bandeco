@@ -18,7 +18,7 @@ class Pot : public Item {
     Item* mItemInside;
     int mItemCounter;
     static constexpr float COOK_TIME_MAX = 5.0f;
-    static constexpr float BURN_TIME_MAX = 10.0f;
+    static constexpr float BURN_TIME_MAX = 30.0f;
     float mCookTime;
     bool isCooked;
     bool isBurnt;

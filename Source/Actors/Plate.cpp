@@ -15,10 +15,31 @@ Plate* Plate::NewPlate(Game* game) {
 Item* Plate::PutItem(Item* item) {
     if (!item) return item;
 
-    // TODO
+    switch (item->GetItemType()) {
+        case ItemType::TomatoSoup: {
+            // Accepted the item if plate is empty
+            if (mItems.empty()) {
+                mItems.push_back(item);
+                return nullptr;
+            }
+        }
+            // Other food will accept on different rules
+    }
+
+    // Can't use it, reject
+    return item;
 }
 
 void Plate::Deliver() {
     // TODO: Interact with the Deliver block and check if there's
     // this recibe on the orders queue
+}
+
+void Plate::OnUpdate(float deltaTime) {
+    if (mItems.empty()) return;
+
+    for (int i = 0; i < mItems.size(); i++) {
+        Item*& item = mItems[i];
+        item->SetPosition(GetPosition() + Vector2(0, -16 + 4 * i));
+    }
 }

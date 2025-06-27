@@ -19,6 +19,8 @@ Item* Table::PickItemOnTop() {
 bool Table::HasItemOnTop() { return mItemOnTop != nullptr; }
 
 Item* Table::SetItemOnTop(Item* item) {
+    if (!item) return item;
+
     if (mItemOnTop) {
         // Check if item on top is a Pot or Plate
         if (mItemOnTop->GetItemType() == ItemType::Pot) {
@@ -27,6 +29,13 @@ Item* Table::SetItemOnTop(Item* item) {
         }
         if (mItemOnTop->GetItemType() == ItemType::Plate) {
             Plate* plate = (Plate*)mItemOnTop;
+            // Check if player has a Pot on his hand
+            if (item->GetItemType() == ItemType::Pot) {
+                Pot* pot = (Pot*)item;
+                Item* itemInside = pot->PickItem();
+                pot->PutItem(plate->PutItem(itemInside));
+                return pot;
+            }
             return plate->PutItem(item);
         }
 

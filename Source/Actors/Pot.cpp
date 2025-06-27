@@ -24,6 +24,13 @@ Item* Pot::PutItem(Item* item) {
                 mCookTime = 0.0f;
                 return nullptr;
             }
+            // In case someone transfers soup
+            case ItemType::TomatoSoup: {
+                mItemInside = item;
+                mItemCounter = 3;
+                mCookTime = COOK_TIME_MAX;
+                return nullptr;
+            }
         }
         // Not a supported item
         return item;
