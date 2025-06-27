@@ -314,7 +314,7 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                     // TODO: For easy debug REMOVE LATER
                     Item *tomatoSoup =
                         Item::NewItem(this, ItemType::TomatoSoup);
-                    stove->PutFoodInPot(tomatoSoup);
+                    stove->SetItemOnTop(tomatoSoup);
                 }
             }
 

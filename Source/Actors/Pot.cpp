@@ -31,6 +31,13 @@ Item* Pot::PutItem(Item* item) {
                 mCookTime = COOK_TIME_MAX;
                 return nullptr;
             }
+            // In case someone transfers burnt food
+            case ItemType::TomatoBurn: {
+                mItemInside = item;
+                mItemCounter = 3;
+                mCookTime = BURN_TIME_MAX;
+                return nullptr;
+            }
         }
         // Not a supported item
         return item;
@@ -72,7 +79,6 @@ void Pot::OnUpdate(float deltaTime) {
     // Check if burning!
     if (mCookTime >= BURN_TIME_MAX && !isBurnt) {
         // Swap the TomatoSoup to TomatoBurn
-        SDL_Log("BURNING!!");
         Item* burnt = NewItem(mGame, ItemType::TomatoBurn);
         mItemInside->SetState(ActorState::Destroy);
         mItemInside = burnt;

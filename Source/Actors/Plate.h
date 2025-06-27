@@ -9,6 +9,7 @@ class Plate : public Item {
    public:
     static Plate* NewPlate(Game* game);
     Item* PutItem(Item* item);
+
     // TODO: Think about this action
     void Deliver();
     void OnUpdate(float deltaTime) override;
