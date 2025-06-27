@@ -181,11 +181,7 @@ void Player::HandlePutDown() {
                 return;
             }
             Table *table = (Table *)block;
-            if (!table->HasItemOnTop()) {  // Put the item on the empty table
-                if (!table->SetItemOnTop(mHandItem)) {
-                    mHandItem = nullptr;
-                }
-            }
+            mHandItem = table->SetItemOnTop(mHandItem);
             break;
         }
         case LevelDataEntry::TileTableCut: {
@@ -196,10 +192,7 @@ void Player::HandlePutDown() {
             }
             TableCut *tableCut = (TableCut *)block;
             Item *item = tableCut->PickItemOnTop();
-            if (!item) {
-                // Put the item on the empty tableCut
-                mHandItem = tableCut->SetItemOnTop(mHandItem);
-            }
+            mHandItem = tableCut->SetItemOnTop(mHandItem);
             break;
         }
         case LevelDataEntry::TileTrash: {

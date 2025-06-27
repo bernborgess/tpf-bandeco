@@ -1,5 +1,10 @@
 #include "Table.h"
 
+#include <SDL.h>
+
+#include "Plate.h"
+#include "Pot.h"
+
 Table::Table(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
     : Block(game, texturePath, gridPos), mItemOnTop(nullptr) {}
@@ -15,6 +20,16 @@ bool Table::HasItemOnTop() { return mItemOnTop != nullptr; }
 
 Item* Table::SetItemOnTop(Item* item) {
     if (mItemOnTop) {
+        // Check if item on top is a Pot or Plate
+        if (mItemOnTop->GetItemType() == ItemType::Pot) {
+            Pot* pot = (Pot*)mItemOnTop;
+            return pot->PutItem(item);
+        }
+        if (mItemOnTop->GetItemType() == ItemType::Plate) {
+            Plate* plate = (Plate*)mItemOnTop;
+            return plate->PutItem(item);
+        }
+
         // Rejected the item (table full)
         return item;
     }
