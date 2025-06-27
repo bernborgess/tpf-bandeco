@@ -4,6 +4,7 @@
 #include "../Components/DrawComponents/DrawPolygonComponent.h"
 #include "../Game.h"
 #include "Block.h"
+#include "Deliver.h"
 #include "Item.h"
 #include "Stove.h"
 #include "Table.h"
@@ -213,6 +214,17 @@ void Player::HandlePutDown() {
             }
             Stove *stove = (Stove *)block;
             mHandItem = stove->SetItemOnTop(mHandItem);
+            break;
+        }
+        case LevelDataEntry::TileDeliver: {
+            Block *block = mGame->GetBlockAt(pxg, pyg);
+            if (block == nullptr) {
+                SDL_Log("Expected a stove, didn't find it!");
+                return;
+            }
+            Deliver *deliver = (Deliver *)block;
+            mHandItem = deliver->SetItemOnTop(mHandItem);
+            break;
         }
     }
 }

@@ -12,6 +12,7 @@
 
 #include "Actors/Actor.h"
 #include "Actors/Block.h"
+#include "Actors/Deliver.h"
 #include "Actors/FoodBoxBlock.h"
 #include "Actors/Item.h"
 #include "Actors/Plate.h"
@@ -324,6 +325,15 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 if (it != tileMap.end()) {
                     Trash *trash = new Trash(this, it->second, {x, y});
                     mLevelBlocks.push_back(trash);
+                }
+            }
+
+            // Deliver
+            if (tile == LevelDataEntry::TileDeliver) {
+                auto it = tileMap.find(tile);
+                if (it != tileMap.end()) {
+                    Deliver *deliver = new Deliver(this, it->second, {x, y});
+                    mLevelBlocks.push_back(deliver);
                 }
             }
 
