@@ -12,8 +12,8 @@
 Block::Block(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
     : Actor(game), mGridPosition(gridPos) {
-    new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE, Game::TILE_SIZE,
-                            10);
+    mDrawComponent = new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE,
+                                             Game::TILE_SIZE, 10);
     mColliderComponent = new AABBColliderComponent(
         this, 0, 0, Game::TILE_SIZE, Game::TILE_SIZE, ColliderLayer::Blocks);
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 0.0f, false);

@@ -33,4 +33,5 @@ class Block : public Actor {
 
     class AABBColliderComponent* mColliderComponent;
     class RigidBodyComponent* mRigidBodyComponent;
+    class DrawSpriteComponent* mDrawComponent;
 };

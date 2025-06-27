@@ -3,9 +3,8 @@
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
 
 Plate::Plate(Game* game, const std::string& texturePath)
-    : Item(game, texturePath, ItemType::Plate) {
+    : Item(game, texturePath, ItemType::Plate, 200) {
     mItems.clear();
-    new DrawSpriteComponent(this, texturePath, 32, 32, 150);
 }
 
 // Public Constructor that handles choosing the textures

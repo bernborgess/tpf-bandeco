@@ -3,11 +3,9 @@
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
 
 Pot::Pot(Game* game, const std::string& texturePath)
-    : Item(game, texturePath, ItemType::Pot),
+    : Item(game, texturePath, ItemType::Pot, 200),
       mItemCounter(0),
-      mItemInside(nullptr) {
-    new DrawSpriteComponent(this, texturePath, 32, 32, 150);
-}
+      mItemInside(nullptr) {}
 
 // Public Constructor that handles choosing the textures
 Pot* Pot::NewPot(Game* game) {
