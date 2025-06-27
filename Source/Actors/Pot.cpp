@@ -53,10 +53,19 @@ Item* Pot::PutItem(Item* item) {
         return item;
     }
 
-    mItemCounter += 1;
-    item->SetState(ActorState::Destroy);
-    SDL_Log("Another item in the pot, now there are %d", mItemCounter);
-    return nullptr;
+    // Stacking more items
+    switch (mItemInside->GetItemType()) {
+        case ItemType::TomatoCut: {
+            // At most 3
+            if (mItemCounter >= 3) break;
+            mItemCounter += 1;
+            item->SetState(ActorState::Destroy);
+            SDL_Log("Another item in the pot, now there are %d", mItemCounter);
+            return nullptr;
+        }
+    }
+    // Can't use it
+    return item;
 }
 
 Item* Pot::PickItem() {
@@ -74,13 +83,17 @@ void Pot::OnUpdate(float deltaTime) {
 
     // Check if cooking is done!
     if (mCookTime >= mItemCounter * COOK_TIME_MAX && !mIsCooked) {
-        // Case of tomatoes: We need 3 to get a soup
-        if (mItemInside->GetItemType() == ItemType::TomatoCut) {
-            // Swap the TomatoCut to TomatoSoup
-            Item* soup = NewItem(mGame, ItemType::TomatoSoup);
-            mItemInside->SetState(ActorState::Destroy);
-            mItemInside = soup;
-            mIsCooked = true;
+        switch (mItemInside->GetItemType()) {
+            case ItemType::TomatoCut: {
+                // Case of tomatoes: We need 3 to get a soup
+                if (mItemCounter < 3) break;
+                // Swap the TomatoCut to TomatoSoup
+                Item* soup = NewItem(mGame, ItemType::TomatoSoup);
+                mItemInside->SetState(ActorState::Destroy);
+                mItemInside = soup;
+                mIsCooked = true;
+                break;
+            }
         }
     }
 

@@ -311,11 +311,6 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 if (it != tileMap.end()) {
                     Stove *stove = new Stove(this, it->second, {x, y});
                     mLevelBlocks.push_back(stove);
-
-                    // TODO: For easy debug REMOVE LATER
-                    Item *tomatoSoup =
-                        Item::NewItem(this, ItemType::TomatoSoup);
-                    stove->SetItemOnTop(tomatoSoup);
                 }
             }
 
