@@ -5,6 +5,7 @@
 #include "../Game.h"
 #include "Block.h"
 #include "Deliver.h"
+#include "FoodBox.h"
 #include "Item.h"
 #include "Stove.h"
 #include "Table.h"
@@ -120,52 +121,14 @@ std::tuple<LevelDataEntry, int, int> Player::GetFocusBlock() {
 void Player::HandlePickUp() {
     if (mHandItem != nullptr) return;
     auto [levelEntry, pxg, pyg] = GetFocusBlock();
-
-    // Getting food from box
-    switch (levelEntry) {
-        case LevelDataEntry::TileFoodTomato: {
-            mHandItem = Item::NewItem(mGame, ItemType::Tomato);
-            break;
-        }
-        case LevelDataEntry::TileTable: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a table, didn't find it!");
-                return;
-            }
-            Table *table = (Table *)block;
-            Item *item = table->PickItemOnTop();
-            if (item) {
-                mHandItem = item;
-            }
-            break;
-        }
-        case LevelDataEntry::TileTableCut: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a tableCut, didn't find it!");
-                return;
-            }
-            TableCut *tableCut = (TableCut *)block;
-            Item *item = tableCut->PickItemOnTop();
-            if (item) {  // Get item from table
-                mHandItem = item;
-            }
-            break;
-        }
-        case LevelDataEntry::TileStove: {
-            Block *block = mGame->GetBlockAt(pxg, pyg);
-            if (block == nullptr) {
-                SDL_Log("Expected a stove, didn't find it!");
-                return;
-            }
-            Stove *stove = (Stove *)block;
-            Pot *pot = stove->PickPotOnTop();
-            if (pot) {
-                mHandItem = pot;
-            }
-            break;
-        }
+    Block *block = mGame->GetBlockAt(pxg, pyg);
+    if (block == nullptr) {
+        SDL_Log("Expected a table, didn't find it!");
+        return;
+    }
+    Item *item = block->PickItemOnTop();
+    if (item) {
+        mHandItem = item;
     }
 }
 
@@ -177,7 +140,6 @@ void Player::HandlePutDown() {
     if (block == nullptr) {  // Expected a block, didn't find it!
         return;
     }
-
     mHandItem = block->SetItemOnTop(mHandItem);
 }
 

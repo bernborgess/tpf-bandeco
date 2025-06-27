@@ -25,6 +25,7 @@ class Block : public Actor {
 
     std::pair<int, int> GetGridPosition() { return mGridPosition; }
 
+    virtual Item* PickItemOnTop();
     virtual Item* SetItemOnTop(Item* item);
 
    private:

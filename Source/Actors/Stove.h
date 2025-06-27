@@ -10,7 +10,7 @@ class Stove : public Block {
     Stove(Game* game, const std::string& texturePath,
           std::pair<int, int> gridPos);
 
-    Pot* PickPotOnTop();
+    Item* PickItemOnTop() override;
     Item* SetItemOnTop(Item* item) override;
 
     void OnUpdate(float deltaTime) override;

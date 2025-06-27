@@ -19,8 +19,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Block.h
         Source/Actors/Deliver.cpp
         Source/Actors/Deliver.h
-        Source/Actors/FoodBoxBlock.cpp
-        Source/Actors/FoodBoxBlock.h
+        Source/Actors/FoodBox.cpp
+        Source/Actors/FoodBox.h
         Source/Actors/Item.cpp
         Source/Actors/Item.h
         Source/Actors/Plate.cpp

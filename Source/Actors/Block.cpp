@@ -41,6 +41,12 @@ void Block::OnVerticalCollision(const float minOverlap,
     }
 }
 
+Item* Block::PickItemOnTop() {
+    // Block::PickItemOnTop is virtual. Check that you
+    // are passing an object that implements it
+    return nullptr;
+}
+
 Item* Block::SetItemOnTop(Item* item) {
     // Block::SetItemOnTop is virtual. Check that you
     // are passing an object that implements it

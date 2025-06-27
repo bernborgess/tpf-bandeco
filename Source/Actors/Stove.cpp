@@ -14,7 +14,7 @@ Stove::Stove(Game* game, const std::string& texturePath,
     mPotOnTop = pot;
 }
 
-Pot* Stove::PickPotOnTop() {
+Item* Stove::PickItemOnTop() {
     if (mPotOnTop) {
         Pot* pot = mPotOnTop;
         mPotOnTop = nullptr;

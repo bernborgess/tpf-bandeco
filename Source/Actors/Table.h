@@ -11,7 +11,7 @@ class Table : public Block {
           std::pair<int, int> gridPos);
 
     // Returns the item and empties the table
-    Item* PickItemOnTop();
+    Item* PickItemOnTop() override;
 
     // Peek without changes
     bool HasItemOnTop();

@@ -13,7 +13,7 @@
 #include "Actors/Actor.h"
 #include "Actors/Block.h"
 #include "Actors/Deliver.h"
-#include "Actors/FoodBoxBlock.h"
+#include "Actors/FoodBox.h"
 #include "Actors/Item.h"
 #include "Actors/Plate.h"
 #include "Actors/Player.h"
@@ -268,8 +268,8 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     // Tomato Box
-                    FoodBoxBlock *fBblock = new FoodBoxBlock(
-                        this, it->second, ItemType::Tomato, {x, y});
+                    FoodBox *fBblock =
+                        new FoodBox(this, it->second, ItemType::Tomato, {x, y});
                     mLevelBlocks.push_back(fBblock);
                 }
                 continue;
