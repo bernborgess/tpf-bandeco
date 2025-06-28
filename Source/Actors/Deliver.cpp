@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "../Game.h"
 #include "Plate.h"
 
 Item* Deliver::SetItemOnTop(Item* item) {
@@ -10,14 +11,16 @@ Item* Deliver::SetItemOnTop(Item* item) {
         return item;
     }
     Plate* plate = (Plate*)item;
-    std::vector<Item*> items = plate->PickItems();
-    // TODO: The items are a wanted dish?
-    // YES: Give points
-    // NO: Beep a sound of mistake
+    std::set<ItemType> recipe = plate->PickItems();
 
-    // Delete the items
-    for (auto itemInside : items) {
-        itemInside->SetState(ActorState::Destroy);
+    // Are the items are a wanted dish?
+    int points = mGame->GetOrderManager().DeliverOrder(recipe);
+    if (points > 0) {
+        // TODO
+        // YES: Give points
+
+    } else {
+        // NO: Beep a sound of mistake
     }
 
     return plate;

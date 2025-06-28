@@ -9,11 +9,9 @@ class Plate : public Item {
    public:
     static Plate* NewPlate(Game* game);
     Item* PutItem(Item* item);
-    std::vector<Item*> PickItems();
-
-    void OnUpdate(float deltaTime) override;
+    std::set<ItemType> PickItems();
 
    private:
     Plate(Game* game, const std::string& texturePath);
-    std::vector<Item*> mItems;
+    std::set<ItemType> mItems;
 };

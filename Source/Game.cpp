@@ -166,10 +166,14 @@ void Game::ChangeScene() {
         // SetBackgroundImage("../Assets/Sprites/Background.png",
         //                    Vector2(TILE_SIZE, 0), Vector2(6784, 448));
 
-        // Draw Flag
-        auto flag = new Actor(this);
-        flag->SetPosition(Vector2(
-            LEVEL_WIDTH * TILE_SIZE - (16 * TILE_SIZE) - 16, 3 * TILE_SIZE));
+        // Adding all the planned orders for this level
+        mOrderManager.Clear();
+        std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
+                                              90,  70,  50,  30,  10};
+        for (int startTime : soupStartTimes) {
+            mOrderManager.AddOrder(
+                {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
+        }
 
         // Initialize actors
         LoadLevel("../Assets/Levels/level1-1.csv", LEVEL_WIDTH, LEVEL_HEIGHT);
@@ -564,8 +568,10 @@ void Game::UpdateLevelTime(float deltaTime) {
         mGameTimeLimit -= 1;
         mHUD->SetTime(mGameTimeLimit);
         if (mGameTimeLimit <= 0) {
+            // TODO: Finish the level
             mPlayerB->Kill();
         }
+        mOrderManager.TimeTick(mGameTimeLimit);
     }
 }
 

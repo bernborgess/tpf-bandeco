@@ -16,9 +16,7 @@ Item* Trash::SetItemOnTop(Item* item) {
         }
         case ItemType::Plate: {
             Plate* plate = (Plate*)item;
-            for (auto& itemInside : plate->PickItems()) {
-                itemInside->SetState(ActorState::Destroy);
-            }
+            plate->PickItems();
             return plate;
         }
     }

@@ -1,6 +1,7 @@
 #include "Plate.h"
 
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
+#include "../Game.h"
 
 Plate::Plate(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Plate, 200) {
@@ -19,7 +20,9 @@ Item* Plate::PutItem(Item* item) {
         case ItemType::TomatoSoup: {
             // Accepted the item if plate is empty
             if (mItems.empty()) {
-                mItems.push_back(item);
+                // TODO: Update the DrawComponent
+                mItems.insert(ItemType::TomatoSoup);
+                item->SetState(ActorState::Destroy);
                 return nullptr;
             }
         }
@@ -30,20 +33,8 @@ Item* Plate::PutItem(Item* item) {
     return item;
 }
 
-std::vector<Item*> Plate::PickItems() {
-    // TODO: Interact with the Deliver block and check if there's
-    // this recibe on the orders queue
-
-    std::vector<Item*> items = mItems;
+std::set<ItemType> Plate::PickItems() {
+    std::set<ItemType> items = mItems;
     mItems.clear();
     return items;
-}
-
-void Plate::OnUpdate(float deltaTime) {
-    if (mItems.empty()) return;
-
-    for (int i = 0; i < mItems.size(); i++) {
-        Item*& item = mItems[i];
-        item->SetPosition(GetPosition() + Vector2(0, -16 + 4 * i));
-    }
 }

@@ -8,6 +8,7 @@
 #include "Actors/Block.h"
 #include "AudioSystem.h"
 #include "Math.h"
+#include "OrderManager.h"
 
 enum class LevelDataEntry {
     TileNothing = -1,
@@ -104,6 +105,7 @@ class Game {
     const class Player *GetPlayerB() { return mPlayerB; }
     const class Player *GetPlayerD() { return mPlayerD; }
     LevelDataEntry **mLevelData;
+    OrderManager &GetOrderManager() { return mOrderManager; }
 
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
@@ -164,6 +166,7 @@ class Game {
     // Game-specific
     class Player *mPlayerB;
     class Player *mPlayerD;
+    OrderManager mOrderManager;
 
     class HUD *mHUD;
     SoundHandle mMusicHandle;

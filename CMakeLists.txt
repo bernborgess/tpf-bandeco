@@ -58,6 +58,8 @@ add_executable(${PROJECT_NAME}
         Source/Game.cpp
         Source/HUD.cpp
         Source/Json.h
+	Source/OrderManager.cpp
+	Source/OrderManager.h
         Source/Random.cpp
         Source/SpatialHashing.cpp
         Source/UIElements/UIButton.cpp
