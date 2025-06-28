@@ -3,6 +3,7 @@
 #include <SDL.h>
 
 #include "../Game.h"
+#include "Plate.h"
 
 Stove::Stove(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
@@ -13,7 +14,7 @@ Stove::Stove(Game* game, const std::string& texturePath,
     mPotOnTop = pot;
 }
 
-Pot* Stove::PickPotOnTop() {
+Item* Stove::PickItemOnTop() {
     if (mPotOnTop) {
         Pot* pot = mPotOnTop;
         mPotOnTop = nullptr;
@@ -22,23 +23,54 @@ Pot* Stove::PickPotOnTop() {
     return nullptr;
 }
 
-Pot* Stove::PutPotOnTop(Pot* pot) {
-    if (mPotOnTop) {
-        // Reject, it's already occupied
-        return pot;
-    }
-    // Accept the pot
-    mPotOnTop = pot;
-    mPotOnTop->SetPosition(GetPosition() + Vector2(16, 24));
-    return nullptr;
-}
+Item* Stove::SetItemOnTop(Item* item) {
+    if (!item) return item;
 
-Item* Stove::PutFoodInPot(Item* item) {
-    if (!mPotOnTop) {
-        // Can't put food without pot
-        return item;
+    switch (item->GetItemType()) {
+        case ItemType::Pot: {
+            Pot* pot = (Pot*)item;
+            if (mPotOnTop) {  // Reject, already got a pot
+                return pot;
+            }
+            // Accept the pot
+            mPotOnTop = pot;
+            mPotOnTop->SetPosition(GetPosition() + Vector2(16, 24));
+            return nullptr;
+        }
+        case ItemType::Plate: {
+            Plate* plate = (Plate*)item;
+
+            if (!mPotOnTop) {
+                return plate;
+            }
+
+            // Transfer food to the plate if accepts
+
+            // Get what's in the pot
+            Item* foodOfPot = mPotOnTop->PickItem();
+
+            // Try put what's in the pot in the plate
+            foodOfPot = plate->PutItem(foodOfPot);
+
+            if (foodOfPot) {
+                // Plate rejected the item
+                SDL_Log("Plate rejected the item");
+                mPotOnTop->PutItem(foodOfPot);
+            } else {
+                // Plate accepted the item
+                SDL_Log("Plate accepted the item");
+                mPotOnTop->PutItem(foodOfPot);
+            }
+
+            return plate;
+        }
+        default: {
+            if (!mPotOnTop) {  // Can't put food without pot
+                return item;
+            }
+            return mPotOnTop->PutItem(item);
+        }
     }
-    return mPotOnTop->PutItem(item);
 }
 
 void Stove::OnUpdate(float deltaTime) {

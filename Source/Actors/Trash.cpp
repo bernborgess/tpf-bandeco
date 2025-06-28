@@ -1,18 +1,28 @@
 #include "Trash.h"
 
+#include "Plate.h"
 #include "Pot.h"
 
-Item* Trash::DiscardItem(Item* item) {
+Item* Trash::SetItemOnTop(Item* item) {
     if (!item) return nullptr;
-    if (item->GetItemType() == ItemType::Pot) {
-        Pot* pot = (Pot*)item;
-        Item* itemInside = pot->PickItem();
-        if (itemInside) {
-            itemInside->SetState(ActorState::Destroy);
+    switch (item->GetItemType()) {
+        case ItemType::Pot: {
+            Pot* pot = (Pot*)item;
+            Item* itemInside = pot->PickItem();
+            if (itemInside) {
+                itemInside->SetState(ActorState::Destroy);
+            }
+            return pot;
         }
-        return item;
-    } else {
-        item->SetState(ActorState::Destroy);
-        return nullptr;
+        case ItemType::Plate: {
+            Plate* plate = (Plate*)item;
+            for (auto& itemInside : plate->PickItems()) {
+                itemInside->SetState(ActorState::Destroy);
+            }
+            return plate;
+        }
     }
+
+    item->SetState(ActorState::Destroy);
+    return nullptr;
 }

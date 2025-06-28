@@ -2,9 +2,11 @@
 
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
 
-Item::Item(Game* game, const std::string& texturePath, ItemType itemType)
+Item::Item(Game* game, const std::string& texturePath, ItemType itemType,
+           int drawOrder)
     : Actor(game), mItemType(itemType) {
-    new DrawSpriteComponent(this, texturePath, 32, 32, 200);
+    mDrawComponent =
+        new DrawSpriteComponent(this, texturePath, 32, 32, drawOrder);
 }
 
 // Public Constructor that handles choosing the textures

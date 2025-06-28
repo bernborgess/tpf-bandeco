@@ -10,9 +10,9 @@ class TableCut : public Table {
              std::pair<int, int> gridPos);
 
     // Changes item if finished cutting
-    Item* PickItemOnTop();
+    Item* PickItemOnTop() override;
 
-    Item* SetItemOnTop(Item* item);
+    Item* SetItemOnTop(Item* item) override;
 
     void OnItemCut();
 

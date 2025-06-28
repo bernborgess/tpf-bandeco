@@ -11,13 +11,13 @@ class Table : public Block {
           std::pair<int, int> gridPos);
 
     // Returns the item and empties the table
-    Item* PickItemOnTop();
+    Item* PickItemOnTop() override;
 
     // Peek without changes
     bool HasItemOnTop();
 
     // Returns nullptr if it got the item, returns the item if rejected
-    Item* SetItemOnTop(Item* item);
+    Item* SetItemOnTop(Item* item) override;
 
    protected:
     Item* mItemOnTop;

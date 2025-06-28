@@ -78,9 +78,10 @@ void UIScreen::HandleKeyPress(int scanCode) {
 void UIScreen::Close() { mState = UIState::Closing; }
 
 UIText *UIScreen::AddText(const std::string &name, const Vector2 &pos,
-                          const Vector2 &dims, const int pointSize,
-                          const int unsigned wrapLength) {
-    UIText *t = new UIText(name, mFont, pointSize, wrapLength, pos, dims);
+                          const Vector2 &dims, const Vector3 &color,
+                          const int pointSize, const int unsigned wrapLength) {
+    UIText *t =
+        new UIText(name, mFont, pointSize, wrapLength, pos, dims, color);
     mTexts.push_back(t);
     return t;
 }

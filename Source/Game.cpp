@@ -12,7 +12,8 @@
 
 #include "Actors/Actor.h"
 #include "Actors/Block.h"
-#include "Actors/FoodBoxBlock.h"
+#include "Actors/Deliver.h"
+#include "Actors/FoodBox.h"
 #include "Actors/Item.h"
 #include "Actors/Plate.h"
 #include "Actors/Player.h"
@@ -148,10 +149,10 @@ void Game::ChangeScene() {
         // Initialize main menu actors
         LoadMainMenu();
     } else if (mNextScene == GameScene::Level1) {
-        mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
-        mGameTimeLimit = 400;
-        mHUD->SetTime(400);
-        mHUD->SetLevelName("1-1");
+        mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
+        mGameTimeLimit = 180;
+        mHUD->SetTime(180);
+        mHUD->SetLevelName("Cantina do ICEx");
 
         // TODO: Add level music
         // mMusicHandle = mAudio->PlaySound("MusicMain.ogg", true);
@@ -267,8 +268,8 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 auto it = tileMap.find(tile);
                 if (it != tileMap.end()) {
                     // Tomato Box
-                    FoodBoxBlock *fBblock = new FoodBoxBlock(
-                        this, it->second, ItemType::Tomato, {x, y});
+                    FoodBox *fBblock =
+                        new FoodBox(this, it->second, ItemType::Tomato, {x, y});
                     mLevelBlocks.push_back(fBblock);
                 }
                 continue;
@@ -310,6 +311,9 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 if (it != tileMap.end()) {
                     Stove *stove = new Stove(this, it->second, {x, y});
                     mLevelBlocks.push_back(stove);
+                    Item *tomatoSoup =
+                        Item::NewItem(this, ItemType::TomatoSoup);
+                    stove->SetItemOnTop(tomatoSoup);
                 }
             }
 
@@ -319,6 +323,15 @@ void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
                 if (it != tileMap.end()) {
                     Trash *trash = new Trash(this, it->second, {x, y});
                     mLevelBlocks.push_back(trash);
+                }
+            }
+
+            // Deliver
+            if (tile == LevelDataEntry::TileDeliver) {
+                auto it = tileMap.find(tile);
+                if (it != tileMap.end()) {
+                    Deliver *deliver = new Deliver(this, it->second, {x, y});
+                    mLevelBlocks.push_back(deliver);
                 }
             }
 

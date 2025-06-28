@@ -12,8 +12,8 @@
 Block::Block(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
     : Actor(game), mGridPosition(gridPos) {
-    new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE, Game::TILE_SIZE,
-                            10);
+    mDrawComponent = new DrawSpriteComponent(this, texturePath, Game::TILE_SIZE,
+                                             Game::TILE_SIZE, 10);
     mColliderComponent = new AABBColliderComponent(
         this, 0, 0, Game::TILE_SIZE, Game::TILE_SIZE, ColliderLayer::Blocks);
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 0.0f, false);
@@ -39,4 +39,16 @@ void Block::OnVerticalCollision(const float minOverlap,
         mRigidBodyComponent->SetVelocity(Vector2::NegUnitY * BUMP_FORCE);
         mOriginalPosition.Set(mPosition.x, mPosition.y);
     }
+}
+
+Item* Block::PickItemOnTop() {
+    // Block::PickItemOnTop is virtual. Check that you
+    // are passing an object that implements it
+    return nullptr;
+}
+
+Item* Block::SetItemOnTop(Item* item) {
+    // Block::SetItemOnTop is virtual. Check that you
+    // are passing an object that implements it
+    return item;
 }
