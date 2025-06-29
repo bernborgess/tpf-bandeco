@@ -71,7 +71,6 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
-        {LevelTile::TileDeliver, "../Assets/Prototype/Deliver.png"},
     };
 
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
@@ -135,11 +134,8 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
 
             // Deliver
             if (tile == LevelTile::TileDeliver) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Deliver *deliver = new Deliver(mGame, it->second, {x, y});
-                    mLevelBlocks.push_back(deliver);
-                }
+                Deliver *deliver = Deliver::NewDeliver(mGame, tile, {x, y});
+                mLevelBlocks.push_back(deliver);
             }
 
             // Blocks

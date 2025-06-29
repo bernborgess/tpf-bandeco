@@ -5,6 +5,19 @@
 #include "../Game.h"
 #include "Plate.h"
 
+const std::string Deliver::DELIVER_FRONT_PATH =
+    "../Assets/Prototype/Deliver.png";
+
+Deliver* Deliver::NewDeliver(Game* game, LevelTile tile,
+                             std::pair<int, int> gridPos) {
+    switch (tile) {
+        case LevelTile::TileDeliver: {
+            return new Deliver(game, DELIVER_FRONT_PATH, gridPos);
+        }
+    }
+    return nullptr;
+}
+
 Item* Deliver::SetItemOnTop(Item* item) {
     if (item->GetItemType() != ItemType::Plate) {
         SDL_Log("Needs plate!");
