@@ -12,8 +12,8 @@ const std::string Plate::PLATE_TOMATO_CUT_PATH =
 
 Plate::Plate(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Plate,
-           /* width = */ 32,
-           /* height = */ 32,
+           /* width = */ 64,
+           /* height = */ 64,
            /* drawOrder = */ 200) {
     mItems.clear();
 }

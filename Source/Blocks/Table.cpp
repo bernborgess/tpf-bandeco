@@ -94,6 +94,6 @@ Item* Table::SetItemOnTop(Item* item) {
     }
     // Accepted the item, returns nothing
     mItemOnTop = item;
-    mItemOnTop->SetPosition(GetPosition() + Vector2(16, 8));
+    mItemOnTop->SetPosition(GetPosition());
     return nullptr;
 }

@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <vector>
 
+const Vector2 TableCut::TOMATO_OFFSET = Vector2(16, 8);
+
 const std::string TableCut::TABLE_CUT_FRONT_PATH =
     "../Assets/Prototype/TableCut.png";
 const std::string TableCut::TABLE_CUT_RIGHT_PATH =
@@ -50,7 +52,7 @@ Item* TableCut::SetItemOnTop(Item* item) {
     if (!cuttable) return item;
 
     mItemOnTop = item;
-    mItemOnTop->SetPosition(GetPosition() + Vector2(16, 8));
+    mItemOnTop->SetPosition(GetPosition() + TOMATO_OFFSET);
     cutLevel = 0;
     return nullptr;
 }
@@ -68,7 +70,7 @@ void TableCut::OnItemCut() {
             Item* cutTomato = Item::NewItem(mGame, ItemType::TomatoCut);
             mItemOnTop->SetState(ActorState::Destroy);
             mItemOnTop = cutTomato;
-            cutTomato->SetPosition(GetPosition() + Vector2(16, 8));
+            cutTomato->SetPosition(GetPosition() + TOMATO_OFFSET);
         }
     }
 }

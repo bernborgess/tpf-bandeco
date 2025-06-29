@@ -22,6 +22,8 @@ class Stove : public Block {
 
     Pot* mPotOnTop;
 
+    static const Vector2 POT_OFFSET;
+
     static const std::string STOVE_FRONT_PATH;
     static const std::string STOVE_RIGHT_PATH;
 };
