@@ -19,7 +19,7 @@ class Pot : public Item {
     int mItemCounter;
     // Cook & Burn times are proportional to `mItemCounter`
     static constexpr float COOK_TIME_MAX = 5.0f;
-    static constexpr float BURN_TIME_MAX = 10.0f;
+    static constexpr float BURN_TIME_MAX = 60.0f;
     float mCookTime;
     bool mIsCooked;
     bool mIsBurnt;
