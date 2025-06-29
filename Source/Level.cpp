@@ -72,9 +72,6 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
         {LevelTile::TileDeliver, "../Assets/Prototype/Deliver.png"},
-        {LevelTile::TilePlayerBStart, "../Assets/Prototype/PlayerB.png"},
-        {LevelTile::TilePlayerDStart, "../Assets/Prototype/PlayerD.png"},
-        {LevelTile::TileStove, "../Assets/Prototype/Stove.png"},
     };
 
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
@@ -125,14 +122,9 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
 
             // Stove
             if (tile == LevelTile::TileStove) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Stove *stove = new Stove(mGame, it->second, {x, y});
-                    mLevelBlocks.push_back(stove);
-                    Item *tomatoSoup =
-                        Item::NewItem(mGame, ItemType::TomatoSoup);
-                    stove->SetItemOnTop(tomatoSoup);
-                }
+                Stove *stove = Stove::NewStove(mGame, tile, {x, y});
+                mLevelBlocks.push_back(stove);
+                levelData[y][x] = LevelTile::TileStove;
             }
 
             // Trash

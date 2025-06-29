@@ -5,6 +5,9 @@
 #include "../Game.h"
 #include "Plate.h"
 
+const std::string Stove::STOVE_FRONT_PATH = "../Assets/Prototype/Stove.png";
+const std::string Stove::STOVE_RIGHT_PATH = "../Assets/Prototype/Stove.png";
+
 Stove::Stove(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
     : Block(game, texturePath, gridPos), mPotOnTop(nullptr) {
@@ -12,6 +15,15 @@ Stove::Stove(Game* game, const std::string& texturePath,
     Pot* pot = Pot::NewPot(mGame);
     pot->SetPosition(GetPosition() + Vector2(16, 24));
     mPotOnTop = pot;
+}
+
+Stove* Stove::NewStove(Game* game, LevelTile tile,
+                       std::pair<int, int> gridPos) {
+    switch (tile) {
+        case LevelTile::TileStove:
+            return new Stove(game, STOVE_FRONT_PATH, gridPos);
+    }
+    return nullptr;
 }
 
 Item* Stove::PickItemOnTop() {
