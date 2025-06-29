@@ -69,6 +69,9 @@ void Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
+        {LevelTile::TileCeil, "../Assets/Prototype/Ceil.png"},
+        {LevelTile::TileCeilCorner, "../Assets/Prototype/CeilCorner.png"},
+        {LevelTile::TileCeilRotate, "../Assets/Prototype/CeilRotate.png"},
     };
 
     auto it = tileMap.find(tile);
