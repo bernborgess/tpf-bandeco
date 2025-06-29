@@ -26,5 +26,9 @@ class Table : public Block {
 
     Item* mItemOnTop;
 
+    static const std::string TABLE_CENTER_PATH;
     static const std::string TABLE_FRONT_PATH;
+    static const std::string TABLE_LEFT_PATH;
+    static const std::string TABLE_PLAIN_PATH;
+    static const std::string TABLE_RIGHT_PATH;
 };

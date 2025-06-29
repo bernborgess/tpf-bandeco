@@ -24,4 +24,5 @@ class TableCut : public Table {
     int cutLevel;
 
     static const std::string TABLE_CUT_FRONT_PATH;
+    static const std::string TABLE_CUT_RIGHT_PATH;
 };

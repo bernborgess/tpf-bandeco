@@ -7,6 +7,8 @@
 
 const std::string TableCut::TABLE_CUT_FRONT_PATH =
     "../Assets/Prototype/TableCut.png";
+const std::string TableCut::TABLE_CUT_RIGHT_PATH =
+    "../Assets/Prototype/TableCut.png";
 
 TableCut::TableCut(Game* game, const std::string& texturePath,
                    std::pair<int, int> gridPos)
@@ -16,6 +18,7 @@ TableCut* TableCut::NewTableCut(Game* game, LevelTile tile,
                                 std::pair<int, int> gridPos) {
     switch (tile) {
         case LevelTile::TileTableCut:
+        case LevelTile::TileTableCutRight:
             return new TableCut(game, TABLE_CUT_FRONT_PATH, gridPos);
     }
     return nullptr;

@@ -5,7 +5,13 @@
 #include "../Actors/Plate.h"
 #include "../Actors/Pot.h"
 
+const std::string Table::TABLE_CENTER_PATH = "../Assets/Prototype/Table.png";
 const std::string Table::TABLE_FRONT_PATH = "../Assets/Prototype/Table.png";
+const std::string Table::TABLE_LEFT_PATH = "../Assets/Prototype/TableLeft.png";
+const std::string Table::TABLE_PLAIN_PATH =
+    "../Assets/Prototype/TablePlain.png";
+const std::string Table::TABLE_RIGHT_PATH =
+    "../Assets/Prototype/TableRight.png";
 
 Table::Table(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
@@ -13,18 +19,29 @@ Table::Table(Game* game, const std::string& texturePath,
 
 Table* Table::NewTable(Game* game, LevelTile tile,
                        std::pair<int, int> gridPos) {
+    const std::map<LevelTile, const std::string> tileMap = {
+        {LevelTile::TileTable, TABLE_FRONT_PATH},
+        {LevelTile::TileTablePlate, TABLE_FRONT_PATH},
+        {LevelTile::TileTableLeft, TABLE_LEFT_PATH},
+        {LevelTile::TileTableRight, TABLE_RIGHT_PATH},
+        {LevelTile::TileTableCenter, TABLE_CENTER_PATH},
+        {LevelTile::TileTablePlain, TABLE_PLAIN_PATH},
+    };
+
+    auto it = tileMap.find(tile);
+    if (it == tileMap.end()) return nullptr;
+
+    Table* table = new Table(game, it->second, gridPos);
+
+    // When we need a plate on top
     switch (tile) {
-        case LevelTile::TileTable: {
-            return new Table(game, TABLE_FRONT_PATH, gridPos);
-        }
         case LevelTile::TileTablePlate: {
-            Table* table = new Table(game, TABLE_FRONT_PATH, gridPos);
             Plate* plate = Plate::NewPlate(game);
             table->SetItemOnTop(plate);
-            return table;
         }
     }
-    return nullptr;
+
+    return table;
 }
 
 Item* Table::PickItemOnTop() {

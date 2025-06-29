@@ -21,6 +21,8 @@ Stove* Stove::NewStove(Game* game, LevelTile tile,
                        std::pair<int, int> gridPos) {
     switch (tile) {
         case LevelTile::TileStove:
+        case LevelTile::TileStovePotTomatoSoup:
+        case LevelTile::TileStovePot:
             return new Stove(game, STOVE_FRONT_PATH, gridPos);
     }
     return nullptr;

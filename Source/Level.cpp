@@ -99,19 +99,26 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             return;
         }
         case LevelTile::TileTable:
-        case LevelTile::TileTablePlate: {
+        case LevelTile::TileTablePlate:
+        case LevelTile::TileTableLeft:
+        case LevelTile::TileTableRight:
+        case LevelTile::TileTableCenter:
+        case LevelTile::TileTablePlain: {
             Table *table = Table::NewTable(mGame, tile, {x, y});
             mLevelBlocks.push_back(table);
             tile = LevelTile::TileTable;
             return;
         }
-        case LevelTile::TileTableCut: {
+        case LevelTile::TileTableCut:
+        case LevelTile::TileTableCutRight: {
             TableCut *tableCut = TableCut::NewTableCut(mGame, tile, {x, y});
             mLevelBlocks.push_back(tableCut);
             tile = LevelTile ::TileTableCut;
             return;
         }
-        case LevelTile::TileStove: {
+        case LevelTile::TileStove:
+        case LevelTile::TileStovePotTomatoSoup:
+        case LevelTile::TileStovePot: {
             Stove *stove = Stove::NewStove(mGame, tile, {x, y});
             mLevelBlocks.push_back(stove);
             tile = LevelTile::TileStove;

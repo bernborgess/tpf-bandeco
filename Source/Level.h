@@ -11,7 +11,7 @@ enum class LevelTile {
     TileFoodBread = 2,
     TileFoodLettuce = 3,
     TileFoodMeat = 4,
-    TileFoodTomato = 5,
+    TileFoodTomato = 24,
     TileTable = 6,
     TileTableCut = 7,
     TileTrash = 8,
@@ -20,7 +20,20 @@ enum class LevelTile {
     TilePlayerBStart = 11,
     TilePlayerDStart = 12,
     TileStove = 13,
-    TileTablePlate = 14
+    TileTablePlate = 14,
+    TileTableLeft = 15,
+    TileTableRight = 16,
+    TileTableCenter = 17,
+    TileTablePlain = 18,
+    TileStovePotTomatoSoup = 19,
+    TileStovePot = 22,
+    TileTableCutRight = 23,
+    TileDeliverDownRight = 25,
+    TileDeliverDownLeft = 26,
+    TileCeil = 27,
+    TileCeilCorner = 28,
+    TileCeilRotate = 29
+
 };
 
 class Level {
