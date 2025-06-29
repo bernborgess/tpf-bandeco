@@ -46,3 +46,8 @@ void DrawSpriteComponent::Draw(SDL_Renderer *renderer,
     SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &dstRect, 0,
                      nullptr, flip);
 }
+
+void DrawSpriteComponent::UpdateTexture(const std::string &texturePath) {
+    SDL_DestroyTexture(mSpriteSheetSurface);
+    mSpriteSheetSurface = mOwner->GetGame()->LoadTexture(texturePath);
+}

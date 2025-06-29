@@ -3,15 +3,18 @@
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
 #include "../Game.h"
 
+// Paths to the plate variants
+const std::string Plate::PLATE_EMPTY_PATH = "../Assets/Prototype/Plate.png";
+const std::string Plate::PLATE_TOMATO_SOUP_PATH =
+    "../Assets/Prototype/PlateTomatoSoup.png";
+
 Plate::Plate(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Plate, 200) {
     mItems.clear();
 }
 
 // Public Constructor that handles choosing the textures
-Plate* Plate::NewPlate(Game* game) {
-    return new Plate(game, "../Assets/Prototype/Plate.png");
-}
+Plate* Plate::NewPlate(Game* game) { return new Plate(game, PLATE_EMPTY_PATH); }
 
 Item* Plate::PutItem(Item* item) {
     if (!item) return item;
@@ -20,9 +23,14 @@ Item* Plate::PutItem(Item* item) {
         case ItemType::TomatoSoup: {
             // Accepted the item if plate is empty
             if (mItems.empty()) {
-                // TODO: Update the DrawComponent
+                // Change the item set
                 mItems.insert(ItemType::TomatoSoup);
+
+                // Destroy the tomato soup item
                 item->SetState(ActorState::Destroy);
+
+                // Update the DrawComponent
+                mDrawComponent->UpdateTexture(PLATE_TOMATO_SOUP_PATH);
                 return nullptr;
             }
         }

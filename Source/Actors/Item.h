@@ -13,7 +13,7 @@ class Item : public Actor {
 
    protected:
     Item(Game* game, const std::string& texturePath, ItemType itemType,
-         int drawOrder = 300);
+         int width = 32, int height = 32, int drawOrder = 300);
     bool mIsHoldable;
     ItemType mItemType;
 

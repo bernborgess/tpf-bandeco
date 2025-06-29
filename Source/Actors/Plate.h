@@ -14,4 +14,7 @@ class Plate : public Item {
    private:
     Plate(Game* game, const std::string& texturePath);
     std::set<ItemType> mItems;
+
+    static const std::string PLATE_EMPTY_PATH;
+    static const std::string PLATE_TOMATO_SOUP_PATH;
 };
