@@ -9,8 +9,11 @@ const std::string Plate::PLATE_TOMATO_SOUP_PATH =
     "../Assets/Prototype/PlateTomatoSoup.png";
 
 Plate::Plate(Game* game, const std::string& texturePath)
-    : Item(game, texturePath, ItemType::Plate, 200) {
-    mItems.clear();
+    : Item(game, texturePath, ItemType::Plate,
+           /* width = */ 32,
+           /* height = */ 32,
+           /* drawOrder = */ 200) {
+     mItems.clear();
 }
 
 // Public Constructor that handles choosing the textures

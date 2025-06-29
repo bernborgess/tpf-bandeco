@@ -3,7 +3,10 @@
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
 
 Pot::Pot(Game* game, const std::string& texturePath)
-    : Item(game, texturePath, ItemType::Pot, 200),
+    : Item(game, texturePath, ItemType::Pot,
+           /* width = */ 32,
+           /* height = */ 32,
+           /* drawOrder = */ 200),
       mItemCounter(0),
       mItemInside(nullptr) {}
 
