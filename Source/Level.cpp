@@ -65,14 +65,22 @@ void Level::LoadLevel(const std::string &levelName, const int levelWidth,
     BuildLevel(mLevelData, levelWidth, levelHeight);
 }
 
-void Level::BuildLevel(LevelTile **levelData, int width, int height) {
-    // Const map to convert tile ID to block type
-    // TODO: Rethink where these paths should be
+Block *Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
     };
 
+    // Blocks
+    auto it = tileMap.find(tile);
+    if (it != tileMap.end()) {
+        // Create a block actor
+        Block *block = new Block(mGame, it->second, gridPos);
+        mLevelBlocks.push_back(block);
+    }
+}
+
+void Level::BuildLevel(LevelTile **levelData, int width, int height) {
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             LevelTile tile = levelData[y][x];
@@ -139,12 +147,7 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
             }
 
             // Blocks
-            auto it = tileMap.find(tile);
-            if (it != tileMap.end()) {
-                // Create a block actor
-                Block *block = new Block(mGame, it->second, {x, y});
-                mLevelBlocks.push_back(block);
-            }
+            NewDecorativeBlock(tile, {x, y});
         }
     }
 }

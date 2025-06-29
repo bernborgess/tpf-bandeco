@@ -41,6 +41,9 @@ class Level {
                               int height);
     void BuildLevel(LevelTile** levelData, int width, int height);
 
+    // Helper to avoid hard coding paths in multiple places
+    Block* NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos);
+
     class Game* mGame;
     LevelTile** mLevelData;
     std::vector<Block*> mLevelBlocks;
