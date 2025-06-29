@@ -28,6 +28,10 @@ class Pot : public Item {
 
    private:
     Pot(Game* game, const std::string& texturePath);
+
+    // Return true if item was accepted
+    bool AddItem(ItemType itemType);
+
     std::optional<ItemType> mItemInside;
     int mItemCounter;
     // Cook & Burn times are proportional to `mItemCounter`

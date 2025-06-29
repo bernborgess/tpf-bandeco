@@ -56,6 +56,11 @@ Item* Stove::SetItemOnTop(Item* item) {
                 return plate;
             }
 
+            // From plate to the pot
+            if (plate->HasFood()) {
+                return mPotOnTop->PutItem(plate);
+            }
+
             // Transfer food to the plate if accepts
 
             // Get what's in the pot

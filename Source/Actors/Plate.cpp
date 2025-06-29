@@ -8,7 +8,7 @@ const std::string Plate::PLATE_EMPTY_PATH = "../Assets/Prototype/Plate.png";
 const std::string Plate::PLATE_TOMATO_SOUP_PATH =
     "../Assets/Prototype/PlateTomatoSoup.png";
 const std::string Plate::PLATE_TOMATO_CUT_PATH =
-    "../Assets/Protype/PlateTomatoCut.png";
+    "../Assets/Prototype/PlateTomatoCut.png";
 
 Plate::Plate(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Plate,

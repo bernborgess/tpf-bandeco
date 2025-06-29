@@ -19,6 +19,9 @@ class Plate : public Item {
     // Returns the item set, empties itself
     std::set<ItemType> PickItems();
 
+    // Checks for content
+    bool HasFood() { return mItems.size() != 0; }
+
    private:
     Plate(Game* game, const std::string& texturePath);
     std::set<ItemType> mItems;

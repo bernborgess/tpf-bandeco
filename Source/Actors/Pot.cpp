@@ -1,6 +1,7 @@
 #include "Pot.h"
 
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
+#include "Plate.h"
 
 const std::string Pot::POT_EMPTY_PATH = "../Assets/Prototype/Pot.png";
 const std::string Pot::POT_TOMATO_SOUP_PATH =
@@ -19,22 +20,16 @@ Pot::Pot(Game* game, const std::string& texturePath)
 // Public Constructor that handles choosing the textures
 Pot* Pot::NewPot(Game* game) { return new Pot(game, POT_EMPTY_PATH); }
 
-Item* Pot::PutItem(Item* item) {
-    if (!item) return item;
-
-    // If no item, just accept it
+bool Pot::AddItem(ItemType itemType) {
     if (!mItemInside) {
-        switch (item->GetItemType()) {
+        switch (itemType) {
             case ItemType::TomatoCut: {
                 mItemInside = ItemType::TomatoCut;
                 mItemCounter = 1;
                 mCookTime = 0.0f;
                 mIsCooked = mIsBurnt = false;
-                item->SetState(ActorState::Destroy);
-                SDL_Log("New item in the pot!");
-                // TODO: Feedback on cook progress
                 mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
-                return nullptr;
+                return true;
             }
             // In case someone transfers soup
             case ItemType::TomatoSoup: {
@@ -44,7 +39,7 @@ Item* Pot::PutItem(Item* item) {
                 mIsCooked = true;
                 mIsBurnt = false;
                 mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
-                return nullptr;
+                return true;
             }
             // In case someone transfers burnt food
             case ItemType::TomatoBurn: {
@@ -53,17 +48,17 @@ Item* Pot::PutItem(Item* item) {
                 mCookTime = BURN_TIME_MAX;
                 mIsBurnt = mIsCooked = true;
                 mDrawComponent->UpdateTexture(POT_BURNT_PATH);
-                return nullptr;
+                return true;
             }
         }
         // Not a supported item
-        return item;
+        return false;
     }
 
     // Only accept if it's the same type
-    if (*mItemInside != item->GetItemType()) {
+    if (*mItemInside != itemType) {
         SDL_Log("Have to refuse,since types are different");
-        return item;
+        return false;
     }
 
     // Stacking more items
@@ -72,15 +67,39 @@ Item* Pot::PutItem(Item* item) {
             // At most 3
             if (mItemCounter >= 3) break;
             mItemCounter += 1;
-            item->SetState(ActorState::Destroy);
-            // TODO: Show to the user that there are `mItemCounter` items inside
-            // the pot
+            // TODO: Show to the user that there are `mItemCounter`
+            // items inside the pot
             SDL_Log("Another item in the pot, now there are %d", mItemCounter);
-            return nullptr;
+            return true;
         }
     }
     // Can't use it
-    return item;
+    return false;
+}
+
+Item* Pot::PutItem(Item* item) {
+    if (!item) return item;
+
+    bool accepted = AddItem(item->GetItemType());
+
+    if (accepted) {
+        item->SetState(ActorState::Destroy);
+        return nullptr;
+    } else if (item->GetItemType() == ItemType::Plate) {
+        SDL_Log("Adding plate to pot? Just pass the ingredients");
+        Plate* plate = (Plate*)item;
+        auto items = plate->PickItems();
+        for (auto& itemType : items) {
+            bool accepted = AddItem(itemType);
+            if (!accepted) {
+                // Give back to the plate
+                plate->PutItem(itemType);
+            }
+        }
+        return plate;
+    } else {
+        return item;
+    }
 }
 
 std::optional<ItemType> Pot::PickItem() {
@@ -126,6 +145,7 @@ void Pot::OnUpdate(float deltaTime) {
                 // Swap the TomatoCut to TomatoSoup
                 mItemInside = ItemType::TomatoSoup;
                 mIsCooked = true;
+                SDL_Log("SOUP IS COOKED!");
                 break;
             }
         }
@@ -139,6 +159,7 @@ void Pot::OnUpdate(float deltaTime) {
                 // Swap the TomatoSoup to TomatoBurn
                 mItemInside = ItemType::TomatoBurn;
                 mIsBurnt = true;
+                SDL_Log("SOUP JUST BURNT!");
                 break;
             }
         }
