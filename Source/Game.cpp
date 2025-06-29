@@ -10,19 +10,7 @@
 #include <map>
 #include <vector>
 
-#include "Actors/Actor.h"
-#include "Actors/Block.h"
-#include "Actors/Deliver.h"
-#include "Actors/FoodBox.h"
-#include "Actors/Item.h"
-#include "Actors/Plate.h"
 #include "Actors/Player.h"
-#include "Actors/Pot.h"
-#include "Actors/Stove.h"
-#include "Actors/Table.h"
-#include "Actors/TableCut.h"
-#include "Actors/Trash.h"
-#include "CSV.h"
 #include "Components/ColliderComponents/AABBColliderComponent.h"
 #include "Components/DrawComponents/DrawComponent.h"
 #include "Components/DrawComponents/DrawPolygonComponent.h"
@@ -55,7 +43,6 @@ Game::Game(int windowWidth, int windowHeight)
       mBackgroundTexture(nullptr),
       mBackgroundSize(Vector2::Zero),
       mBackgroundPosition(Vector2::Zero),
-      mLevelData(nullptr),
       mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT) {}
 
 bool Game::Initialize() {
@@ -177,7 +164,8 @@ void Game::ChangeScene() {
         }
 
         // Initialize actors
-        LoadLevel("../Assets/Levels/level1-1.csv", LEVEL_WIDTH, LEVEL_HEIGHT);
+        mLevelManager.LoadLevel("../Assets/Levels/level1-1.csv", LEVEL_WIDTH,
+                                LEVEL_HEIGHT);
     } else if (mNextScene == GameScene::Level2) {
         mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
         mGameTimeLimit = 400;
@@ -191,185 +179,12 @@ void Game::ChangeScene() {
         mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
 
         // Initialize actors
-        LoadLevel("../Assets/Levels/level1-2.csv", LEVEL_WIDTH, LEVEL_HEIGHT);
+        mLevelManager.LoadLevel("../Assets/Levels/level1-2.csv", LEVEL_WIDTH,
+                                LEVEL_HEIGHT);
     }
 
     // Set new scene
     mGameScene = mNextScene;
-}
-
-void Game::LoadLevel(const std::string &levelName, const int levelWidth,
-                     const int levelHeight) {
-    // Load level data
-    mLevelData = ReadLevelData(levelName, levelWidth, levelHeight);
-
-    if (!mLevelData) {
-        SDL_Log("Failed to load level data");
-        return;
-    }
-
-    // Instantiate level actors
-    BuildLevel(mLevelData, levelWidth, levelHeight);
-}
-
-void Game::BuildLevel(LevelDataEntry **levelData, int width, int height) {
-    // Const map to convert tile ID to block type
-    // TODO: Rethink where these paths should be
-    const std::map<LevelDataEntry, const std::string> tileMap = {
-        {LevelDataEntry::TileWall, "../Assets/Prototype/Wall.png"},
-        {LevelDataEntry::TileFoodBread, "../Assets/Prototype/FoodBread.png"},
-        {LevelDataEntry::TileFoodLettuce,
-         "../Assets/Prototype/FoodLettuce.png"},
-        {LevelDataEntry::TileFoodMeat, "../Assets/Prototype/FoodMeat.png"},
-        {LevelDataEntry::TileFoodTomato, "../Assets/Prototype/FoodTomato.png"},
-        {LevelDataEntry::TileTable, "../Assets/Prototype/Table.png"},
-        {LevelDataEntry::TileTableCut, "../Assets/Prototype/TableCut.png"},
-        {LevelDataEntry::TileTrash, "../Assets/Prototype/Trash.png"},
-        {LevelDataEntry::TileSink, "../Assets/Prototype/Sink.png"},
-        {LevelDataEntry::TileDeliver, "../Assets/Prototype/Deliver.png"},
-        {LevelDataEntry::TilePlayerBStart, "../Assets/Prototype/PlayerB.png"},
-        {LevelDataEntry::TilePlayerDStart, "../Assets/Prototype/PlayerD.png"},
-        {LevelDataEntry::TileStove, "../Assets/Prototype/Stove.png"},
-    };
-
-    for (int y = 0; y < LEVEL_HEIGHT; ++y) {
-        for (int x = 0; x < LEVEL_WIDTH; ++x) {
-            LevelDataEntry tile = levelData[y][x];
-
-            if (tile == LevelDataEntry::TilePlayerBStart && !mPlayerB) {
-                mPlayerB = new Player(this, PlayerType::PlayerB);
-                mPlayerB->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-                continue;
-            }
-
-            if (tile == LevelDataEntry::TilePlayerDStart && !mPlayerD) {
-                mPlayerD = new Player(this, PlayerType::PlayerD);
-                mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-                continue;
-            }
-
-            if (tile == LevelDataEntry::TileFoodTomato) {  // FoodTomato
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    // Tomato Box
-                    FoodBox *fBblock =
-                        new FoodBox(this, it->second, ItemType::Tomato, {x, y});
-                    mLevelBlocks.push_back(fBblock);
-                }
-                continue;
-            }
-            // Empty Table
-            if (tile == LevelDataEntry::TileTable) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Table *table = new Table(this, it->second, {x, y});
-                    mLevelBlocks.push_back(table);
-                }
-            }
-
-            // Table with Plate
-            if (tile == LevelDataEntry::TileTablePlate) {
-                auto it = tileMap.find(LevelDataEntry::TileTable);
-                if (it != tileMap.end()) {
-                    Table *table = new Table(this, it->second, {x, y});
-                    mLevelBlocks.push_back(table);
-                    // Create Plate on Top of table
-                    Plate *plate = Plate::NewPlate(this);
-                    table->SetItemOnTop(plate);
-                    levelData[y][x] = LevelDataEntry::TileTable;
-                }
-            }
-
-            // Table Cut
-            if (tile == LevelDataEntry::TileTableCut) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    TableCut *tableCut = new TableCut(this, it->second, {x, y});
-                    mLevelBlocks.push_back(tableCut);
-                }
-            }
-
-            // Stove
-            if (tile == LevelDataEntry::TileStove) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Stove *stove = new Stove(this, it->second, {x, y});
-                    mLevelBlocks.push_back(stove);
-                    Item *tomatoSoup =
-                        Item::NewItem(this, ItemType::TomatoSoup);
-                    stove->SetItemOnTop(tomatoSoup);
-                }
-            }
-
-            // Trash
-            if (tile == LevelDataEntry::TileTrash) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Trash *trash = new Trash(this, it->second, {x, y});
-                    mLevelBlocks.push_back(trash);
-                }
-            }
-
-            // Deliver
-            if (tile == LevelDataEntry::TileDeliver) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Deliver *deliver = new Deliver(this, it->second, {x, y});
-                    mLevelBlocks.push_back(deliver);
-                }
-            }
-
-            // Blocks
-            auto it = tileMap.find(tile);
-            if (it != tileMap.end()) {
-                // Create a block actor
-                Block *block = new Block(this, it->second, {x, y});
-                mLevelBlocks.push_back(block);
-            }
-        }
-    }
-}
-
-LevelDataEntry **Game::ReadLevelData(const std::string &fileName, int width,
-                                     int height) {
-    std::ifstream file(fileName);
-    if (!file.is_open()) {
-        SDL_Log("Failed to load paths: %s", fileName.c_str());
-        return nullptr;
-    }
-
-    // Create a 2D array of size width and height to store the level data
-    int **levelData = new int *[height];
-    for (int i = 0; i < height; ++i) {
-        levelData[i] = new int[width];
-    }
-
-    // Read the file line by line
-    int row = 0;
-
-    std::string line;
-    while (!file.eof()) {
-        std::getline(file, line);
-        if (!line.empty()) {
-            auto tiles = CSVHelper::Split(line);
-
-            if (tiles.size() != width) {
-                SDL_Log("Invalid level data");
-                return nullptr;
-            }
-
-            for (int i = 0; i < width; ++i) {
-                levelData[row][i] = tiles[i];
-            }
-        }
-
-        ++row;
-    }
-
-    // Close the file
-    file.close();
-
-    return (LevelDataEntry **)levelData;
 }
 
 void Game::RunLoop() {
@@ -603,17 +418,6 @@ void Game::AddActor(Actor *actor) { mSpatialHashing->Insert(actor); }
 
 void Game::RemoveActor(Actor *actor) { mSpatialHashing->Remove(actor); }
 void Game::Reinsert(Actor *actor) { mSpatialHashing->Reinsert(actor); }
-
-Block *Game::GetBlockAt(int x, int y) {
-    if (x < 0 || x >= LEVEL_WIDTH || y < 0 || y >= LEVEL_HEIGHT) return nullptr;
-    for (Block *block : mLevelBlocks) {
-        auto [bx, by] = block->GetGridPosition();
-        if (x == bx && y == by) {
-            return block;
-        }
-    }
-    return nullptr;
-}
 
 std::vector<AABBColliderComponent *> Game::GetNearbyColliders(
     const Vector2 &position, const int range) {

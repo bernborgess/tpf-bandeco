@@ -48,7 +48,7 @@ class Player : public Actor {
     FaceDirection mFaceDirection;
 
     Item* mHandItem;
-    std::tuple<LevelDataEntry, int, int> GetFocusBlock();
+    std::pair<LevelTile, Block*> GetFocusBlock();
     void HandlePickUp();
     void HandlePutDown();
     void HandleChop();

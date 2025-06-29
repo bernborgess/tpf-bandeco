@@ -44,12 +44,6 @@ class Game {
     void ProcessInputActors();
     void HandleKeyPressActors(const int key, const bool isPressed);
 
-    // Level functions
-    void LoadMainMenu();
-    void LoadLevel(const std::string &levelName, const int levelWidth,
-                   const int levelHeight);
-
-    Block *GetBlockAt(int x, int y);
     std::vector<class AABBColliderComponent *> GetNearbyColliders(
         const Vector2 &position, const int range = 2);
 
@@ -87,8 +81,10 @@ class Game {
     // Game-specific
     const class Player *GetPlayerB() { return mPlayerB; }
     const class Player *GetPlayerD() { return mPlayerD; }
-    LevelDataEntry **mLevelData;
     OrderManager &GetOrderManager() { return mOrderManager; }
+    std::pair<LevelTile, Block *> GetLevelTileAt(int x, int y) {
+        return mLevelManager.GetLevelTileAt(x, y);
+    }
 
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
@@ -109,11 +105,8 @@ class Game {
     void UpdateLevelTime(float deltaTime);
 
     // Load the level from a CSV file as a 2D array
+    friend class Level;
     Level mLevelManager;
-    LevelDataEntry **ReadLevelData(const std::string &fileName, int width,
-                                   int height);
-    void BuildLevel(LevelDataEntry **levelData, int width, int height);
-    std::vector<Block *> mLevelBlocks;
 
     // Spatial Hashing for collision detection
     class SpatialHashing *mSpatialHashing;

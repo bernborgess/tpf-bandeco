@@ -1,6 +1,11 @@
 #pragma once
 
-enum class LevelDataEntry {
+#include <string>
+#include <vector>
+
+#include "Actors/Block.h"
+
+enum class LevelTile {
     TileNothing = -1,
     TileWall = 1,
     TileFoodBread = 2,
@@ -24,17 +29,28 @@ class Level {
 
     void LoadMainMenu();
 
-   private:
-    class Game* mGame;
+    // Loads the level, populating the tiles and returns a pair with the
+    // instances for both players
+    void LoadLevel(const std::string& levelName, const int levelWidth,
+                   const int levelHeight);
 
-    const int LEVEL_WIDTH;
-    const int LEVEL_HEIGHT;
+    std::pair<LevelTile, Block*> GetLevelTileAt(int x, int y);
+
+   private:
+    LevelTile** ReadLevelData(const std::string& fileName, int width,
+                              int height);
+    void BuildLevel(LevelTile** levelData, int width, int height);
+
+    class Game* mGame;
+    LevelTile** mLevelData;
+    std::vector<Block*> mLevelBlocks;
+    int LEVEL_WIDTH;
+    int LEVEL_HEIGHT;
     const int TILE_SIZE = 64;
 };
 
-// Defines LevelDataEntry
+// Defines LevelTile
 // LoadLevel
 // LoadMainMenu
-// GetBlockAt
 // ReadLevelData
 // BuildLevel

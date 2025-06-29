@@ -51,7 +51,7 @@ SDL_Texture *UIFont::RenderText(const std::string &text,
     sdlColor.a = 255;
 
     if (mFontData.count(pointSize) == 0) {
-        SDL_Log("pointSize is not supported!");
+        SDL_Log("pointSize %d is not supported!", pointSize);
         return nullptr;
     }
 
@@ -61,7 +61,8 @@ SDL_Texture *UIFont::RenderText(const std::string &text,
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(mRenderer, surface);
     if (!texture) {
-        SDL_Log("texture could not be created!");
+        SDL_Log("Texture could not be created for text \"%s\" of length %d!",
+                text.c_str(), text.length());
         return nullptr;
     }
     return texture;
