@@ -88,9 +88,14 @@ UIText *UIScreen::AddText(const std::string &name, const Vector2 &pos,
 
 UIButton *UIScreen::AddButton(const std::string &name, const Vector2 &pos,
                               const Vector2 &dims,
-                              std::function<void()> onClick) {
-    Vector3 orange = Vector3(200, 100, 0);
-    UIButton *b = new UIButton(name, mFont, onClick, pos, dims, orange);
+                              std::function<void()> onClick,
+                              const Vector3 &backgroundColor, int pointSize,
+                              int wrapLength, const Vector2 &textPos,
+                              const Vector2 &textSize,
+                              const Vector3 &textColor) {
+    UIButton *b =
+        new UIButton(name, mFont, onClick, pos, dims, backgroundColor,
+                     pointSize, wrapLength, textPos, textSize, textColor);
     mButtons.push_back(b);
 
     if (mButtons.size() == 1) {

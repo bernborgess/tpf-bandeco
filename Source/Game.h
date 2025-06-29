@@ -109,6 +109,7 @@ class Game {
     void UpdateLevelTime(float deltaTime);
 
     // Load the level from a CSV file as a 2D array
+    Level mLevelManager;
     LevelDataEntry **ReadLevelData(const std::string &fileName, int width,
                                    int height);
     void BuildLevel(LevelDataEntry **levelData, int width, int height);

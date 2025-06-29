@@ -20,9 +20,13 @@ enum class LevelDataEntry {
 
 class Level {
    public:
-    Level(int levelWidth, int levelHeight);
+    Level(class Game* game, int levelWidth, int levelHeight);
+
+    void LoadMainMenu();
 
    private:
+    class Game* mGame;
+
     const int LEVEL_WIDTH;
     const int LEVEL_HEIGHT;
     const int TILE_SIZE = 64;

@@ -36,7 +36,11 @@ class UIScreen {
 
     // Add a button to this screen
     UIButton *AddButton(const std::string &name, const Vector2 &pos, const Vector2 &dims,
-                        std::function<void()> onClick);
+                        std::function<void()> onClick,
+                        const Vector3 &backgroundColor = Color::Green, int pointSize = 40,
+                        int wrapLength = 1024, const Vector2 &textPos = Vector2::Zero,
+                        const Vector2 &textSize = Vector2(140, 20),
+                        const Vector3 &textColor = Color::White);
     UIText *AddText(const std::string &name, const Vector2 &pos, const Vector2 &dims,
                     const Vector3 &color = Color::White, const int pointSize = 72,
                     const int unsigned wrapLength = 1024);

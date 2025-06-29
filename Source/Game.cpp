@@ -55,7 +55,8 @@ Game::Game(int windowWidth, int windowHeight)
       mBackgroundTexture(nullptr),
       mBackgroundSize(Vector2::Zero),
       mBackgroundPosition(Vector2::Zero),
-      mLevelData(nullptr) {}
+      mLevelData(nullptr),
+      mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT) {}
 
 bool Game::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -147,7 +148,7 @@ void Game::ChangeScene() {
                                mBackgroundColor.y, mBackgroundColor.z, 255);
 
         // Initialize main menu actors
-        LoadMainMenu();
+        mLevelManager.LoadMainMenu();
     } else if (mNextScene == GameScene::Level1) {
         mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
         mGameTimeLimit = 180;
@@ -195,27 +196,6 @@ void Game::ChangeScene() {
 
     // Set new scene
     mGameScene = mNextScene;
-}
-
-void Game::LoadMainMenu() {
-    auto mainMenu = new UIScreen(this, "../Assets/Fonts/SMB.ttf");
-    const Vector2 titleSize = Vector2(178.0f, 88.0f) * 2.0f;
-    const Vector2 titlePos =
-        Vector2(mWindowWidth / 2.0f - titleSize.x / 2.0f, 50.0f);
-    // TODO: Main menu
-    // mainMenu->AddImage("../Assets/Sprites/Logo.png", titlePos, titleSize);
-
-    mainMenu->AddText("1985 NINTENDO", Vector2(300, 225), Vector2(200, 18));
-
-    mainMenu->AddText("TOP - 000000", Vector2(230, 380), Vector2(180, 18));
-
-    auto button1 = mainMenu->AddButton(
-        "Level 1", Vector2(mWindowWidth / 2.0f - 100.0f, 270.0f),
-        Vector2(200.0f, 40.0f), [this]() { SetGameScene(GameScene::Level1); });
-
-    auto button2 = mainMenu->AddButton(
-        "Level 2", Vector2(mWindowWidth / 2.0f - 100.0f, 320.0f),
-        Vector2(200.0f, 40.0f), [this]() { SetGameScene(GameScene::Level2); });
 }
 
 void Game::LoadLevel(const std::string &levelName, const int levelWidth,
