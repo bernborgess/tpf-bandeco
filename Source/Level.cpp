@@ -70,7 +70,6 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
     // TODO: Rethink where these paths should be
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
-        {LevelTile::TileTableCut, "../Assets/Prototype/TableCut.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
         {LevelTile::TileDeliver, "../Assets/Prototype/Deliver.png"},
         {LevelTile::TilePlayerBStart, "../Assets/Prototype/PlayerB.png"},
@@ -119,12 +118,9 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
 
             // Table Cut
             if (tile == LevelTile::TileTableCut) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    TableCut *tableCut =
-                        new TableCut(mGame, it->second, {x, y});
-                    mLevelBlocks.push_back(tableCut);
-                }
+                TableCut *tableCut = TableCut::NewTableCut(mGame, tile, {x, y});
+                mLevelBlocks.push_back(tableCut);
+                levelData[y][x] = LevelTile ::TileTableCut;
             }
 
             // Stove

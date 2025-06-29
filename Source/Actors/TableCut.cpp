@@ -5,9 +5,21 @@
 #include <algorithm>
 #include <vector>
 
+const std::string TableCut::TABLE_CUT_FRONT_PATH =
+    "../Assets/Prototype/TableCut.png";
+
 TableCut::TableCut(Game* game, const std::string& texturePath,
                    std::pair<int, int> gridPos)
     : Table(game, texturePath, gridPos) {}
+
+TableCut* TableCut::NewTableCut(Game* game, LevelTile tile,
+                                std::pair<int, int> gridPos) {
+    switch (tile) {
+        case LevelTile::TileTableCut:
+            return new TableCut(game, TABLE_CUT_FRONT_PATH, gridPos);
+    }
+    return nullptr;
+}
 
 Item* TableCut::PickItemOnTop() {
     if (!mItemOnTop) return nullptr;
