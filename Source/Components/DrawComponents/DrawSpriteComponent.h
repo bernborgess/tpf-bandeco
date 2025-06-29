@@ -17,6 +17,8 @@ class DrawSpriteComponent : public DrawComponent {
     void Draw(SDL_Renderer* renderer,
               const Vector3& modColor = Color::White) override;
 
+    void UpdateTexture(const std::string& texturePath);
+
    protected:
     // Map of textures loaded
     SDL_Texture* mSpriteSheetSurface;

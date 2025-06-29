@@ -1,24 +1,24 @@
 #include "Trash.h"
 
-#include "Plate.h"
-#include "Pot.h"
+#include "../Actors/Plate.h"
+#include "../Actors/Pot.h"
+
+const std::string Trash::TRASH_PATH = "../Assets/Prototype/Trash.png";
+
+Trash::Trash(Game* game, std::pair<int, int> gridPos)
+    : Block(game, TRASH_PATH, gridPos) {}
 
 Item* Trash::SetItemOnTop(Item* item) {
     if (!item) return nullptr;
     switch (item->GetItemType()) {
         case ItemType::Pot: {
             Pot* pot = (Pot*)item;
-            Item* itemInside = pot->PickItem();
-            if (itemInside) {
-                itemInside->SetState(ActorState::Destroy);
-            }
+            pot->Clear();
             return pot;
         }
         case ItemType::Plate: {
             Plate* plate = (Plate*)item;
-            for (auto& itemInside : plate->PickItems()) {
-                itemInside->SetState(ActorState::Destroy);
-            }
+            plate->PickItems();
             return plate;
         }
     }

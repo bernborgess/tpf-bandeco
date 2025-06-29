@@ -15,12 +15,20 @@ add_executable(${PROJECT_NAME}
         Source/Main.cpp
         Source/Math.cpp
         Source/Actors/Actor.cpp
-        Source/Actors/Block.cpp
-        Source/Actors/Block.h
-        Source/Actors/Deliver.cpp
-        Source/Actors/Deliver.h
-        Source/Actors/FoodBox.cpp
-        Source/Actors/FoodBox.h
+        Source/Blocks/Block.cpp
+        Source/Blocks/Block.h
+        Source/Blocks/Deliver.cpp
+        Source/Blocks/Deliver.h
+        Source/Blocks/FoodBox.cpp
+        Source/Blocks/FoodBox.h
+        Source/Blocks/Stove.cpp
+        Source/Blocks/Stove.h
+        Source/Blocks/Table.cpp
+        Source/Blocks/Table.h
+        Source/Blocks/TableCut.cpp
+        Source/Blocks/TableCut.h
+        Source/Blocks/Trash.cpp
+        Source/Blocks/Trash.h
         Source/Actors/Item.cpp
         Source/Actors/Item.h
         Source/Actors/Plate.cpp
@@ -29,14 +37,6 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Player.h
         Source/Actors/Pot.cpp
         Source/Actors/Pot.h
-        Source/Actors/Stove.cpp
-        Source/Actors/Stove.h
-        Source/Actors/Table.cpp
-        Source/Actors/Table.h
-        Source/Actors/TableCut.cpp
-        Source/Actors/TableCut.h
-        Source/Actors/Trash.cpp
-        Source/Actors/Trash.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
@@ -58,6 +58,10 @@ add_executable(${PROJECT_NAME}
         Source/Game.cpp
         Source/HUD.cpp
         Source/Json.h
+        Source/Level.cpp
+        Source/Level.h
+        Source/OrderManager.cpp
+        Source/OrderManager.h
         Source/Random.cpp
         Source/SpatialHashing.cpp
         Source/UIElements/UIButton.cpp

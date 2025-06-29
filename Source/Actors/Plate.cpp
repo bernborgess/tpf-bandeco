@@ -1,25 +1,41 @@
 #include "Plate.h"
 
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
+#include "../Game.h"
+
+// Paths to the plate variants
+const std::string Plate::PLATE_EMPTY_PATH = "../Assets/Prototype/Plate.png";
+const std::string Plate::PLATE_TOMATO_SOUP_PATH =
+    "../Assets/Prototype/PlateTomatoSoup.png";
+const std::string Plate::PLATE_TOMATO_CUT_PATH =
+    "../Assets/Prototype/PlateTomatoCut.png";
 
 Plate::Plate(Game* game, const std::string& texturePath)
-    : Item(game, texturePath, ItemType::Plate, 200) {
+    : Item(game, texturePath, ItemType::Plate,
+           /* width = */ 32,
+           /* height = */ 32,
+           /* drawOrder = */ 200) {
     mItems.clear();
 }
 
 // Public Constructor that handles choosing the textures
-Plate* Plate::NewPlate(Game* game) {
-    return new Plate(game, "../Assets/Prototype/Plate.png");
-}
+Plate* Plate::NewPlate(Game* game) { return new Plate(game, PLATE_EMPTY_PATH); }
 
 Item* Plate::PutItem(Item* item) {
     if (!item) return item;
 
     switch (item->GetItemType()) {
-        case ItemType::TomatoSoup: {
+        case ItemType::TomatoCut: {
             // Accepted the item if plate is empty
             if (mItems.empty()) {
-                mItems.push_back(item);
+                // Change the item set
+                mItems.insert(ItemType::TomatoCut);
+
+                // Destroy the tomato cut item
+                item->SetState(ActorState::Destroy);
+
+                // Update the DrawComponent
+                mDrawComponent->UpdateTexture(PLATE_TOMATO_CUT_PATH);
                 return nullptr;
             }
         }
@@ -30,20 +46,33 @@ Item* Plate::PutItem(Item* item) {
     return item;
 }
 
-std::vector<Item*> Plate::PickItems() {
-    // TODO: Interact with the Deliver block and check if there's
-    // this recibe on the orders queue
-
-    std::vector<Item*> items = mItems;
-    mItems.clear();
-    return items;
+std::optional<ItemType> Plate::PutItem(ItemType itemType) {
+    switch (itemType) {
+        case ItemType::TomatoSoup: {
+            if (mItems.empty()) {
+                mItems.insert(itemType);
+                mDrawComponent->UpdateTexture(PLATE_TOMATO_SOUP_PATH);
+                return {};
+            }
+            // Can't put two soups in the same plate.
+            return itemType;
+        }
+        case ItemType::TomatoCut: {
+            // TODO: This will be part of hamburger recipe
+            if (mItems.empty()) {
+                mItems.insert(itemType);
+                mDrawComponent->UpdateTexture(PLATE_TOMATO_CUT_PATH);
+                return {};
+            }
+            return itemType;
+        }
+    }
+    return itemType;
 }
 
-void Plate::OnUpdate(float deltaTime) {
-    if (mItems.empty()) return;
-
-    for (int i = 0; i < mItems.size(); i++) {
-        Item*& item = mItems[i];
-        item->SetPosition(GetPosition() + Vector2(0, -16 + 4 * i));
-    }
+std::set<ItemType> Plate::PickItems() {
+    std::set<ItemType> items = mItems;
+    mItems.clear();
+    mDrawComponent->UpdateTexture(PLATE_EMPTY_PATH);
+    return items;
 }

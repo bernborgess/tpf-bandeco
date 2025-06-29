@@ -6,6 +6,7 @@
 #include <SDL2/SDL_scancode.h>
 
 #include "../Game.h"
+#include "../Level.h"
 #include "Actor.h"
 #include "Item.h"
 
@@ -47,7 +48,7 @@ class Player : public Actor {
     FaceDirection mFaceDirection;
 
     Item* mHandItem;
-    std::tuple<LevelDataEntry, int, int> GetFocusBlock();
+    std::pair<LevelTile, Block*> GetFocusBlock();
     void HandlePickUp();
     void HandlePutDown();
     void HandleChop();

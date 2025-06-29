@@ -5,27 +5,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Actors/Block.h"
 #include "AudioSystem.h"
+#include "Blocks/Block.h"
+#include "Level.h"
 #include "Math.h"
-
-enum class LevelDataEntry {
-    TileNothing = -1,
-    TileWall = 1,
-    TileFoodBread = 2,
-    TileFoodLettuce = 3,
-    TileFoodMeat = 4,
-    TileFoodTomato = 5,
-    TileTable = 6,
-    TileTableCut = 7,
-    TileTrash = 8,
-    TileSink = 9,
-    TileDeliver = 10,
-    TilePlayerBStart = 11,
-    TilePlayerDStart = 12,
-    TileStove = 13,
-    TileTablePlate = 14
-};
+#include "OrderManager.h"
 
 class Game {
    public:
@@ -60,12 +44,6 @@ class Game {
     void ProcessInputActors();
     void HandleKeyPressActors(const int key, const bool isPressed);
 
-    // Level functions
-    void LoadMainMenu();
-    void LoadLevel(const std::string &levelName, const int levelWidth,
-                   const int levelHeight);
-
-    Block *GetBlockAt(int x, int y);
     std::vector<class AABBColliderComponent *> GetNearbyColliders(
         const Vector2 &position, const int range = 2);
 
@@ -103,7 +81,12 @@ class Game {
     // Game-specific
     const class Player *GetPlayerB() { return mPlayerB; }
     const class Player *GetPlayerD() { return mPlayerD; }
-    LevelDataEntry **mLevelData;
+    OrderManager &GetOrderManager() { return mOrderManager; }
+    std::pair<LevelTile, Block *> GetLevelTileAt(int x, int y) {
+        return mLevelManager.GetLevelTileAt(x, y);
+    }
+    void GivePoints(int points) { mLevelPoints += points; }
+    int GetPoints() { return mLevelPoints; }
 
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
@@ -124,10 +107,8 @@ class Game {
     void UpdateLevelTime(float deltaTime);
 
     // Load the level from a CSV file as a 2D array
-    LevelDataEntry **ReadLevelData(const std::string &fileName, int width,
-                                   int height);
-    void BuildLevel(LevelDataEntry **levelData, int width, int height);
-    std::vector<Block *> mLevelBlocks;
+    friend class Level;
+    Level mLevelManager;
 
     // Spatial Hashing for collision detection
     class SpatialHashing *mSpatialHashing;
@@ -164,12 +145,14 @@ class Game {
     // Game-specific
     class Player *mPlayerB;
     class Player *mPlayerD;
+    OrderManager mOrderManager;
 
     class HUD *mHUD;
     SoundHandle mMusicHandle;
 
     float mGameTimer;
     int mGameTimeLimit;
+    int mLevelPoints;
 
     SDL_Texture *mBackgroundTexture;
     Vector2 mBackgroundSize;

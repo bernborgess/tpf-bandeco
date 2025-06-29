@@ -1,16 +1,16 @@
 #include "Player.h"
 
+#include "../Blocks/Block.h"
+#include "../Blocks/Deliver.h"
+#include "../Blocks/FoodBox.h"
+#include "../Blocks/Stove.h"
+#include "../Blocks/Table.h"
+#include "../Blocks/TableCut.h"
+#include "../Blocks/Trash.h"
 #include "../Components/DrawComponents/DrawAnimatedComponent.h"
 #include "../Components/DrawComponents/DrawPolygonComponent.h"
 #include "../Game.h"
-#include "Block.h"
-#include "Deliver.h"
-#include "FoodBox.h"
 #include "Item.h"
-#include "Stove.h"
-#include "Table.h"
-#include "TableCut.h"
-#include "Trash.h"
 
 Player::Player(Game *game, const PlayerType playerType,
                const float forwardSpeed, const float jumpSpeed)
@@ -94,7 +94,7 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
     }
 }
 
-std::tuple<LevelDataEntry, int, int> Player::GetFocusBlock() {
+std::pair<LevelTile, Block *> Player::GetFocusBlock() {
     // Calculate which block this player faces
     auto [px, py] = mPosition;
     int pxg = (px + 16) / 64;
@@ -117,15 +117,13 @@ std::tuple<LevelDataEntry, int, int> Player::GetFocusBlock() {
     }
 
     // We look at the level data
-    LevelDataEntry levelEntry = mGame->mLevelData[pyg][pxg];
-    return {levelEntry, pxg, pyg};
+    return mGame->GetLevelTileAt(pxg, pyg);
 }
 
 // Assumes player has empty hand
 void Player::HandlePickUp() {
     if (mHandItem != nullptr) return;
-    auto [levelEntry, pxg, pyg] = GetFocusBlock();
-    Block *block = mGame->GetBlockAt(pxg, pyg);
+    auto [levelEntry, block] = GetFocusBlock();
     if (block == nullptr) {
         SDL_Log("Expected a table, didn't find it!");
         return;
@@ -139,8 +137,7 @@ void Player::HandlePickUp() {
 // Assumes player has item in hand
 void Player::HandlePutDown() {
     if (mHandItem == nullptr) return;
-    const auto [levelEntry, pxg, pyg] = GetFocusBlock();
-    Block *block = mGame->GetBlockAt(pxg, pyg);
+    const auto [levelEntry, block] = GetFocusBlock();
     if (block == nullptr) {  // Expected a block, didn't find it!
         return;
     }
@@ -150,9 +147,8 @@ void Player::HandlePutDown() {
 // If it's a TableCut and there's food on it, will chop
 void Player::HandleChop() {
     if (mHandItem != nullptr) return;
-    const auto [levelEntry, pxg, pyg] = GetFocusBlock();
-    if (levelEntry != LevelDataEntry::TileTableCut) return;
-    Block *block = mGame->GetBlockAt(pxg, pyg);
+    const auto [levelEntry, block] = GetFocusBlock();
+    if (levelEntry != LevelTile::TileTableCut) return;
     if (block == nullptr) {
         SDL_Log("Expected a tableCut, didn't find it!");
         return;

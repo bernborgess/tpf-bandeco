@@ -2,8 +2,11 @@
 
 #include <SDL.h>
 
+#include "../Actors/Plate.h"
 #include "../Game.h"
-#include "Plate.h"
+
+const std::string Stove::STOVE_FRONT_PATH = "../Assets/Prototype/Stove.png";
+const std::string Stove::STOVE_RIGHT_PATH = "../Assets/Prototype/Stove.png";
 
 Stove::Stove(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
@@ -12,6 +15,15 @@ Stove::Stove(Game* game, const std::string& texturePath,
     Pot* pot = Pot::NewPot(mGame);
     pot->SetPosition(GetPosition() + Vector2(16, 24));
     mPotOnTop = pot;
+}
+
+Stove* Stove::NewStove(Game* game, LevelTile tile,
+                       std::pair<int, int> gridPos) {
+    switch (tile) {
+        case LevelTile::TileStove:
+            return new Stove(game, STOVE_FRONT_PATH, gridPos);
+    }
+    return nullptr;
 }
 
 Item* Stove::PickItemOnTop() {
@@ -44,22 +56,21 @@ Item* Stove::SetItemOnTop(Item* item) {
                 return plate;
             }
 
+            // From plate to the pot
+            if (plate->HasFood()) {
+                return mPotOnTop->PutItem(plate);
+            }
+
             // Transfer food to the plate if accepts
 
             // Get what's in the pot
-            Item* foodOfPot = mPotOnTop->PickItem();
-
-            // Try put what's in the pot in the plate
-            foodOfPot = plate->PutItem(foodOfPot);
+            auto foodOfPot = mPotOnTop->PickItem();
 
             if (foodOfPot) {
-                // Plate rejected the item
-                SDL_Log("Plate rejected the item");
-                mPotOnTop->PutItem(foodOfPot);
-            } else {
-                // Plate accepted the item
-                SDL_Log("Plate accepted the item");
-                mPotOnTop->PutItem(foodOfPot);
+                auto refusedItem = plate->PutItem(*foodOfPot);
+
+                // Give back to pot, in case it was rejected by the plate
+                if (refusedItem) mPotOnTop->ReturnItem(*refusedItem);
             }
 
             return plate;

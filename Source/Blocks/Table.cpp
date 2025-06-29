@@ -2,12 +2,30 @@
 
 #include <SDL.h>
 
-#include "Plate.h"
-#include "Pot.h"
+#include "../Actors/Plate.h"
+#include "../Actors/Pot.h"
+
+const std::string Table::TABLE_FRONT_PATH = "../Assets/Prototype/Table.png";
 
 Table::Table(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
     : Block(game, texturePath, gridPos), mItemOnTop(nullptr) {}
+
+Table* Table::NewTable(Game* game, LevelTile tile,
+                       std::pair<int, int> gridPos) {
+    switch (tile) {
+        case LevelTile::TileTable: {
+            return new Table(game, TABLE_FRONT_PATH, gridPos);
+        }
+        case LevelTile::TileTablePlate: {
+            Table* table = new Table(game, TABLE_FRONT_PATH, gridPos);
+            Plate* plate = Plate::NewPlate(game);
+            table->SetItemOnTop(plate);
+            return table;
+        }
+    }
+    return nullptr;
+}
 
 Item* Table::PickItemOnTop() {
     if (!mItemOnTop) return nullptr;
@@ -29,8 +47,11 @@ Item* Table::SetItemOnTop(Item* item) {
             if (item->GetItemType() == ItemType::Plate) {
                 Plate* plate = (Plate*)item;
                 // Will move food from pot to plate, if plate accepts
-                Item* itemInside = pot->PickItem();
-                pot->PutItem(plate->PutItem(itemInside));
+                auto itemInside = pot->PickItem();
+                if (itemInside) {
+                    auto rejected = plate->PutItem(*itemInside);
+                    if (rejected) pot->ReturnItem(*rejected);
+                }
                 return plate;
             }
             return pot->PutItem(item);
@@ -40,8 +61,11 @@ Item* Table::SetItemOnTop(Item* item) {
             // Check if player has a Pot on his hand
             if (item->GetItemType() == ItemType::Pot) {
                 Pot* pot = (Pot*)item;
-                Item* itemInside = pot->PickItem();
-                pot->PutItem(plate->PutItem(itemInside));
+                auto itemInside = pot->PickItem();
+                if (itemInside) {
+                    auto rejected = plate->PutItem(*itemInside);
+                    if (rejected) pot->ReturnItem(*rejected);
+                }
                 return pot;
             }
             return plate->PutItem(item);
