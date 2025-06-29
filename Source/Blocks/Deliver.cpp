@@ -7,15 +7,21 @@
 
 const std::string Deliver::DELIVER_FRONT_PATH =
     "../Assets/Prototype/Deliver.png";
+const std::string Deliver::DELIVER_DOWN_LEFT_PATH =
+    "../Assets/Prototype/DeliverDownLeft.png";
+const std::string Deliver::DELIVER_DOWN_RIGHT_PATH =
+    "../Assets/Prototype/DeliverDownRight.png";
 
 Deliver* Deliver::NewDeliver(Game* game, LevelTile tile,
                              std::pair<int, int> gridPos) {
-    switch (tile) {
-        case LevelTile::TileDeliver: {
-            return new Deliver(game, DELIVER_FRONT_PATH, gridPos);
-        }
-    }
-    return nullptr;
+    const std::map<LevelTile, const std::string> tileMap = {
+        {LevelTile::TileDeliver, DELIVER_FRONT_PATH},
+        {LevelTile::TileDeliverDownLeft, DELIVER_DOWN_LEFT_PATH},
+        {LevelTile::TileDeliverDownRight, DELIVER_DOWN_RIGHT_PATH},
+    };
+    auto it = tileMap.find(tile);
+    if (it == tileMap.end()) return nullptr;
+    return new Deliver(game, it->second, gridPos);
 }
 
 Item* Deliver::SetItemOnTop(Item* item) {

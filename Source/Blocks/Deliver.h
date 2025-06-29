@@ -20,4 +20,6 @@ class Deliver : public Block {
         : Block(game, texturePath, gridPos) {}
 
     static const std::string DELIVER_FRONT_PATH;
+    static const std::string DELIVER_DOWN_LEFT_PATH;
+    static const std::string DELIVER_DOWN_RIGHT_PATH;
 };

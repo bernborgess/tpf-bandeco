@@ -129,7 +129,9 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             mLevelBlocks.push_back(trash);
             return;
         }
-        case LevelTile::TileDeliver: {
+        case LevelTile::TileDeliver:
+        case LevelTile::TileDeliverDownRight:
+        case LevelTile::TileDeliverDownLeft: {
             Deliver *deliver = Deliver::NewDeliver(mGame, tile, {x, y});
             mLevelBlocks.push_back(deliver);
             return;
