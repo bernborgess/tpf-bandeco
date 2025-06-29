@@ -1,6 +1,81 @@
 {
     "frames": [
         {
+            "filename": "IdleBack.png",
+            "frame": {
+                "x": 0,
+                "y": 75,
+                "w": 17,
+                "h": 23
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 1,
+                "y": 1,
+                "w": 17,
+                "h": 23
+            },
+            "sourceSize": {
+                "w": 20,
+                "h": 25
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "IdleFront.png",
+            "frame": {
+                "x": 17,
+                "y": 48,
+                "w": 17,
+                "h": 23
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 1,
+                "y": 1,
+                "w": 17,
+                "h": 23
+            },
+            "sourceSize": {
+                "w": 20,
+                "h": 25
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "IdleRight.png",
+            "frame": {
+                "x": 17,
+                "y": 0,
+                "w": 19,
+                "h": 23
+            },
+            "rotated": false,
+            "trimmed": true,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 1,
+                "w": 19,
+                "h": 23
+            },
+            "sourceSize": {
+                "w": 20,
+                "h": 25
+            },
+            "pivot": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
             "filename": "WalkBack1.png",
             "frame": {
                 "x": 0,
@@ -40,31 +115,6 @@
                 "y": 0,
                 "w": 17,
                 "h": 25
-            },
-            "sourceSize": {
-                "w": 20,
-                "h": 25
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "IdleRight.png",
-            "frame": {
-                "x": 17,
-                "y": 0,
-                "w": 19,
-                "h": 23
-            },
-            "rotated": false,
-            "trimmed": true,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 1,
-                "w": 19,
-                "h": 23
             },
             "sourceSize": {
                 "w": 20,
@@ -140,56 +190,6 @@
                 "y": 1,
                 "w": 19,
                 "h": 24
-            },
-            "sourceSize": {
-                "w": 20,
-                "h": 25
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "IdleBack.png",
-            "frame": {
-                "x": 0,
-                "y": 75,
-                "w": 17,
-                "h": 23
-            },
-            "rotated": false,
-            "trimmed": true,
-            "spriteSourceSize": {
-                "x": 1,
-                "y": 1,
-                "w": 17,
-                "h": 23
-            },
-            "sourceSize": {
-                "w": 20,
-                "h": 25
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
-        },
-        {
-            "filename": "IdleFront.png",
-            "frame": {
-                "x": 17,
-                "y": 48,
-                "w": 17,
-                "h": 23
-            },
-            "rotated": false,
-            "trimmed": true,
-            "spriteSourceSize": {
-                "x": 1,
-                "y": 1,
-                "w": 17,
-                "h": 23
             },
             "sourceSize": {
                 "w": 20,
