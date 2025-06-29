@@ -13,7 +13,7 @@ Plate::Plate(Game* game, const std::string& texturePath)
            /* width = */ 32,
            /* height = */ 32,
            /* drawOrder = */ 200) {
-     mItems.clear();
+    mItems.clear();
 }
 
 // Public Constructor that handles choosing the textures
@@ -47,5 +47,6 @@ Item* Plate::PutItem(Item* item) {
 std::set<ItemType> Plate::PickItems() {
     std::set<ItemType> items = mItems;
     mItems.clear();
+    mDrawComponent->UpdateTexture(PLATE_EMPTY_PATH);
     return items;
 }
