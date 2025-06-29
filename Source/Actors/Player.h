@@ -6,6 +6,7 @@
 #include <SDL2/SDL_scancode.h>
 
 #include "../Game.h"
+#include "../Level.h"
 #include "Actor.h"
 #include "Item.h"
 
