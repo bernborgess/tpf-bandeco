@@ -2,8 +2,8 @@
 
 #include <SDL.h>
 
+#include "../Actors/Plate.h"
 #include "../Game.h"
-#include "Plate.h"
 
 const std::string Deliver::DELIVER_FRONT_PATH =
     "../Assets/Prototype/Deliver.png";

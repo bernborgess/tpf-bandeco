@@ -1,16 +1,16 @@
 #include "Player.h"
 
+#include "../Blocks/Block.h"
+#include "../Blocks/Deliver.h"
+#include "../Blocks/FoodBox.h"
+#include "../Blocks/Stove.h"
+#include "../Blocks/Table.h"
+#include "../Blocks/TableCut.h"
+#include "../Blocks/Trash.h"
 #include "../Components/DrawComponents/DrawAnimatedComponent.h"
 #include "../Components/DrawComponents/DrawPolygonComponent.h"
 #include "../Game.h"
-#include "Block.h"
-#include "Deliver.h"
-#include "FoodBox.h"
 #include "Item.h"
-#include "Stove.h"
-#include "Table.h"
-#include "TableCut.h"
-#include "Trash.h"
 
 Player::Player(Game *game, const PlayerType playerType,
                const float forwardSpeed, const float jumpSpeed)

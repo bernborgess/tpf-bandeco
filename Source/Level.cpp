@@ -3,16 +3,16 @@
 #include <fstream>
 
 // Blocks
-#include "Actors/Block.h"
-#include "Actors/Deliver.h"
-#include "Actors/FoodBox.h"
-#include "Actors/Plate.h"
-#include "Actors/Stove.h"
-#include "Actors/Table.h"
-#include "Actors/TableCut.h"
-#include "Actors/Trash.h"
+#include "Blocks/Block.h"
+#include "Blocks/Deliver.h"
+#include "Blocks/FoodBox.h"
+#include "Blocks/Stove.h"
+#include "Blocks/Table.h"
+#include "Blocks/TableCut.h"
+#include "Blocks/Trash.h"
 
 // Player
+#include "Actors/Plate.h"
 #include "Actors/Player.h"
 #include "CSV.h"
 #include "Game.h"

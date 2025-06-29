@@ -1,7 +1,7 @@
 #include "Trash.h"
 
-#include "Plate.h"
-#include "Pot.h"
+#include "../Actors/Plate.h"
+#include "../Actors/Pot.h"
 
 const std::string Trash::TRASH_PATH = "../Assets/Prototype/Trash.png";
 

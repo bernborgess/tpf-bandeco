@@ -2,8 +2,8 @@
 
 #include <SDL.h>
 
+#include "../Actors/Plate.h"
 #include "../Game.h"
-#include "Plate.h"
 
 const std::string Stove::STOVE_FRONT_PATH = "../Assets/Prototype/Stove.png";
 const std::string Stove::STOVE_RIGHT_PATH = "../Assets/Prototype/Stove.png";

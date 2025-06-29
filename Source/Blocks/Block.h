@@ -6,8 +6,8 @@
 
 #include <string>
 
-#include "Actor.h"
-#include "Item.h"
+#include "../Actors/Actor.h"
+#include "../Actors/Item.h"
 
 class Block : public Actor {
    public:

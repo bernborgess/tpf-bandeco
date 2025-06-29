@@ -2,8 +2,8 @@
 
 #include <string>
 
+#include "../Actors/Item.h"
 #include "Block.h"
-#include "Item.h"
 
 class Trash : public Block {
    public:

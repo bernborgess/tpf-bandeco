@@ -2,9 +2,9 @@
 
 #include <string>
 
+#include "../Actors/Item.h"
 #include "../Level.h"
 #include "Block.h"
-#include "Item.h"
 
 class Table : public Block {
    public:

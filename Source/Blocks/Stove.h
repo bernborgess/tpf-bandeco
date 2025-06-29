@@ -2,9 +2,9 @@
 
 #include <string>
 
+#include "../Actors/Pot.h"
 #include "../Level.h"
 #include "Block.h"
-#include "Pot.h"
 
 class Stove : public Block {
    public:
