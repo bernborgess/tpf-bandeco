@@ -5,7 +5,8 @@
 #include "../Actors/Plate.h"
 #include "../Actors/Pot.h"
 
-const std::string Table::TABLE_CENTER_PATH = "../Assets/Prototype/Table.png";
+const std::string Table::TABLE_CENTER_PATH =
+    "../Assets/Prototype/TableCenter.png";
 const std::string Table::TABLE_FRONT_PATH = "../Assets/Prototype/Table.png";
 const std::string Table::TABLE_LEFT_PATH = "../Assets/Prototype/TableLeft.png";
 const std::string Table::TABLE_PLAIN_PATH =
@@ -21,7 +22,7 @@ Table* Table::NewTable(Game* game, LevelTile tile,
                        std::pair<int, int> gridPos) {
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileTable, TABLE_FRONT_PATH},
-        {LevelTile::TileTablePlate, TABLE_FRONT_PATH},
+        {LevelTile::TileTablePlate, TABLE_CENTER_PATH},
         {LevelTile::TileTableLeft, TABLE_LEFT_PATH},
         {LevelTile::TileTableRight, TABLE_RIGHT_PATH},
         {LevelTile::TileTableCenter, TABLE_CENTER_PATH},
