@@ -70,10 +70,6 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
     // TODO: Rethink where these paths should be
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
-        {LevelTile::TileFoodBread, "../Assets/Prototype/FoodBread.png"},
-        {LevelTile::TileFoodLettuce, "../Assets/Prototype/FoodLettuce.png"},
-        {LevelTile::TileFoodMeat, "../Assets/Prototype/FoodMeat.png"},
-        {LevelTile::TileFoodTomato, "../Assets/Prototype/FoodTomato.png"},
         {LevelTile::TileTable, "../Assets/Prototype/Table.png"},
         {LevelTile::TileTableCut, "../Assets/Prototype/TableCut.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
@@ -102,13 +98,10 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
             }
 
             if (tile == LevelTile::TileFoodTomato) {  // FoodTomato
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    // Tomato Box
-                    FoodBox *fBblock = new FoodBox(mGame, it->second,
-                                                   ItemType::Tomato, {x, y});
-                    mLevelBlocks.push_back(fBblock);
-                }
+                // Tomato Box
+                FoodBox *fBblock =
+                    FoodBox::NewFoodBox(mGame, ItemType::Tomato, {x, y});
+                mLevelBlocks.push_back(fBblock);
                 continue;
             }
             // Empty Table
