@@ -5,9 +5,27 @@
 #include "Plate.h"
 #include "Pot.h"
 
+const std::string Table::TABLE_FRONT_PATH = "../Assets/Prototype/Table.png";
+
 Table::Table(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
     : Block(game, texturePath, gridPos), mItemOnTop(nullptr) {}
+
+Table* Table::NewTable(Game* game, LevelTile tile,
+                       std::pair<int, int> gridPos) {
+    switch (tile) {
+        case LevelTile::TileTable: {
+            return new Table(game, TABLE_FRONT_PATH, gridPos);
+        }
+        case LevelTile::TileTablePlate: {
+            Table* table = new Table(game, TABLE_FRONT_PATH, gridPos);
+            Plate* plate = Plate::NewPlate(game);
+            table->SetItemOnTop(plate);
+            return table;
+        }
+    }
+    return nullptr;
+}
 
 Item* Table::PickItemOnTop() {
     if (!mItemOnTop) return nullptr;

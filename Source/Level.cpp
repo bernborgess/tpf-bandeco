@@ -70,7 +70,6 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
     // TODO: Rethink where these paths should be
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
-        {LevelTile::TileTable, "../Assets/Prototype/Table.png"},
         {LevelTile::TileTableCut, "../Assets/Prototype/TableCut.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
         {LevelTile::TileDeliver, "../Assets/Prototype/Deliver.png"},
@@ -106,24 +105,16 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
             }
             // Empty Table
             if (tile == LevelTile::TileTable) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Table *table = new Table(mGame, it->second, {x, y});
-                    mLevelBlocks.push_back(table);
-                }
+                Table *table = Table::NewTable(mGame, tile, {x, y});
+                mLevelBlocks.push_back(table);
+                levelData[y][x] = LevelTile::TileTable;
             }
 
             // Table with Plate
             if (tile == LevelTile::TileTablePlate) {
-                auto it = tileMap.find(LevelTile::TileTable);
-                if (it != tileMap.end()) {
-                    Table *table = new Table(mGame, it->second, {x, y});
-                    mLevelBlocks.push_back(table);
-                    // Create Plate on Top of table
-                    Plate *plate = Plate::NewPlate(mGame);
-                    table->SetItemOnTop(plate);
-                    levelData[y][x] = LevelTile::TileTable;
-                }
+                Table *table = Table::NewTable(mGame, tile, {x, y});
+                mLevelBlocks.push_back(table);
+                levelData[y][x] = LevelTile::TileTable;
             }
 
             // Table Cut
