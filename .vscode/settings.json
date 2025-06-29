@@ -98,4 +98,15 @@
         "text_encoding": "cpp",
         "thread": "cpp"
     },
+    "material-icon-theme.folders.associations": {
+        "Blocks": "webpack",
+        "ColliderComponents": "directive",
+        "DrawComponents": "custom",
+        "Levels": "routes",
+        "Prototype": "test",
+        "Sprites": "sandbox",
+        "UIElements": "ui",
+        "PlayerB": "android",
+        "PlayerD": "decorators"
+    }
 }
