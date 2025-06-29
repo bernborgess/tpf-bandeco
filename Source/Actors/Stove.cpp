@@ -59,19 +59,13 @@ Item* Stove::SetItemOnTop(Item* item) {
             // Transfer food to the plate if accepts
 
             // Get what's in the pot
-            Item* foodOfPot = mPotOnTop->PickItem();
-
-            // Try put what's in the pot in the plate
-            foodOfPot = plate->PutItem(foodOfPot);
+            auto foodOfPot = mPotOnTop->PickItem();
 
             if (foodOfPot) {
-                // Plate rejected the item
-                SDL_Log("Plate rejected the item");
-                mPotOnTop->PutItem(foodOfPot);
-            } else {
-                // Plate accepted the item
-                SDL_Log("Plate accepted the item");
-                mPotOnTop->PutItem(foodOfPot);
+                auto refusedItem = plate->PutItem(*foodOfPot);
+
+                // Give back to pot, in case it was rejected by the plate
+                if (refusedItem) mPotOnTop->ReturnItem(*refusedItem);
             }
 
             return plate;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <string>
 
 #include "Actor.h"
@@ -8,14 +9,26 @@
 class Pot : public Item {
    public:
     static Pot* NewPot(Game* game);
+
+    // Add items to the pot, return the item if rejected
     Item* PutItem(Item* item);
-    Item* PickItem();
+
+    // Transfer *done* food, to the plate
+    std::optional<ItemType> PickItem();
+
+    // Empties itself, like when interacted with Trash
+    void Clear();
+
+    // Only used when transfer to plate didn't work
+    void ReturnItem(ItemType item);
+
     void OnUpdate(float deltaTime) override;
+
     void OnCook(float deltaTime);
 
    private:
     Pot(Game* game, const std::string& texturePath);
-    Item* mItemInside;
+    std::optional<ItemType> mItemInside;
     int mItemCounter;
     // Cook & Burn times are proportional to `mItemCounter`
     static constexpr float COOK_TIME_MAX = 5.0f;
@@ -23,4 +36,8 @@ class Pot : public Item {
     float mCookTime;
     bool mIsCooked;
     bool mIsBurnt;
+
+    static const std::string POT_EMPTY_PATH;
+    static const std::string POT_TOMATO_SOUP_PATH;
+    static const std::string POT_BURNT_PATH;
 };

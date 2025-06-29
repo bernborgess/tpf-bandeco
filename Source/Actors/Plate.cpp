@@ -7,6 +7,8 @@
 const std::string Plate::PLATE_EMPTY_PATH = "../Assets/Prototype/Plate.png";
 const std::string Plate::PLATE_TOMATO_SOUP_PATH =
     "../Assets/Prototype/PlateTomatoSoup.png";
+const std::string Plate::PLATE_TOMATO_CUT_PATH =
+    "../Assets/Protype/PlateTomatoCut.png";
 
 Plate::Plate(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Plate,
@@ -23,17 +25,17 @@ Item* Plate::PutItem(Item* item) {
     if (!item) return item;
 
     switch (item->GetItemType()) {
-        case ItemType::TomatoSoup: {
+        case ItemType::TomatoCut: {
             // Accepted the item if plate is empty
             if (mItems.empty()) {
                 // Change the item set
-                mItems.insert(ItemType::TomatoSoup);
+                mItems.insert(ItemType::TomatoCut);
 
-                // Destroy the tomato soup item
+                // Destroy the tomato cut item
                 item->SetState(ActorState::Destroy);
 
                 // Update the DrawComponent
-                mDrawComponent->UpdateTexture(PLATE_TOMATO_SOUP_PATH);
+                mDrawComponent->UpdateTexture(PLATE_TOMATO_CUT_PATH);
                 return nullptr;
             }
         }
@@ -42,6 +44,30 @@ Item* Plate::PutItem(Item* item) {
 
     // Can't use it, reject
     return item;
+}
+
+std::optional<ItemType> Plate::PutItem(ItemType itemType) {
+    switch (itemType) {
+        case ItemType::TomatoSoup: {
+            if (mItems.empty()) {
+                mItems.insert(itemType);
+                mDrawComponent->UpdateTexture(PLATE_TOMATO_SOUP_PATH);
+                return {};
+            }
+            // Can't put two soups in the same plate.
+            return itemType;
+        }
+        case ItemType::TomatoCut: {
+            // TODO: This will be part of hamburger recipe
+            if (mItems.empty()) {
+                mItems.insert(itemType);
+                mDrawComponent->UpdateTexture(PLATE_TOMATO_CUT_PATH);
+                return {};
+            }
+            return itemType;
+        }
+    }
+    return itemType;
 }
 
 std::set<ItemType> Plate::PickItems() {

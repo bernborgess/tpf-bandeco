@@ -16,8 +16,7 @@ Item* Item::NewItem(Game* game, ItemType itemType) {
     const std::map<ItemType, const std::string> texturePathMap = {
         {ItemType::Tomato, "../Assets/Prototype/Tomato.png"},
         {ItemType::TomatoCut, "../Assets/Prototype/TomatoCut.png"},
-        {ItemType::TomatoSoup, "../Assets/Prototype/TomatoSoup.png"},
-        {ItemType::TomatoBurn, "../Assets/Prototype/TomatoBurn.png"}};
+    };
 
     auto it = texturePathMap.find(itemType);
     if (it != texturePathMap.end()) {

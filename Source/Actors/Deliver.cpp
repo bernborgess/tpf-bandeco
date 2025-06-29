@@ -31,9 +31,10 @@ Item* Deliver::SetItemOnTop(Item* item) {
     if (points > 0) {
         // TODO
         // YES: Give points
-
+        SDL_Log("Got %d points", points);
     } else {
         // NO: Beep a sound of mistake
+        SDL_Log("Wrong recipe, 0 points");
     }
 
     return plate;

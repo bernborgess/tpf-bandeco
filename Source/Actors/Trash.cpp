@@ -13,10 +13,7 @@ Item* Trash::SetItemOnTop(Item* item) {
     switch (item->GetItemType()) {
         case ItemType::Pot: {
             Pot* pot = (Pot*)item;
-            Item* itemInside = pot->PickItem();
-            if (itemInside) {
-                itemInside->SetState(ActorState::Destroy);
-            }
+            pot->Clear();
             return pot;
         }
         case ItemType::Plate: {

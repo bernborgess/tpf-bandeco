@@ -47,8 +47,11 @@ Item* Table::SetItemOnTop(Item* item) {
             if (item->GetItemType() == ItemType::Plate) {
                 Plate* plate = (Plate*)item;
                 // Will move food from pot to plate, if plate accepts
-                Item* itemInside = pot->PickItem();
-                pot->PutItem(plate->PutItem(itemInside));
+                auto itemInside = pot->PickItem();
+                if (itemInside) {
+                    auto rejected = plate->PutItem(*itemInside);
+                    if (rejected) pot->ReturnItem(*rejected);
+                }
                 return plate;
             }
             return pot->PutItem(item);
@@ -58,8 +61,11 @@ Item* Table::SetItemOnTop(Item* item) {
             // Check if player has a Pot on his hand
             if (item->GetItemType() == ItemType::Pot) {
                 Pot* pot = (Pot*)item;
-                Item* itemInside = pot->PickItem();
-                pot->PutItem(plate->PutItem(itemInside));
+                auto itemInside = pot->PickItem();
+                if (itemInside) {
+                    auto rejected = plate->PutItem(*itemInside);
+                    if (rejected) pot->ReturnItem(*rejected);
+                }
                 return pot;
             }
             return plate->PutItem(item);
