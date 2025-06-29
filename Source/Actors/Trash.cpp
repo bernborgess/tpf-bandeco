@@ -3,6 +3,11 @@
 #include "Plate.h"
 #include "Pot.h"
 
+const std::string Trash::TRASH_PATH = "../Assets/Prototype/Trash.png";
+
+Trash::Trash(Game* game, std::pair<int, int> gridPos)
+    : Block(game, TRASH_PATH, gridPos) {}
+
 Item* Trash::SetItemOnTop(Item* item) {
     if (!item) return nullptr;
     switch (item->GetItemType()) {

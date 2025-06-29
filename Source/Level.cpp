@@ -76,7 +76,6 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
         {LevelTile::TileFoodTomato, "../Assets/Prototype/FoodTomato.png"},
         {LevelTile::TileTable, "../Assets/Prototype/Table.png"},
         {LevelTile::TileTableCut, "../Assets/Prototype/TableCut.png"},
-        {LevelTile::TileTrash, "../Assets/Prototype/Trash.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
         {LevelTile::TileDeliver, "../Assets/Prototype/Deliver.png"},
         {LevelTile::TilePlayerBStart, "../Assets/Prototype/PlayerB.png"},
@@ -158,11 +157,8 @@ void Level::BuildLevel(LevelTile **levelData, int width, int height) {
 
             // Trash
             if (tile == LevelTile::TileTrash) {
-                auto it = tileMap.find(tile);
-                if (it != tileMap.end()) {
-                    Trash *trash = new Trash(mGame, it->second, {x, y});
-                    mLevelBlocks.push_back(trash);
-                }
+                Trash *trash = new Trash(mGame, {x, y});
+                mLevelBlocks.push_back(trash);
             }
 
             // Deliver

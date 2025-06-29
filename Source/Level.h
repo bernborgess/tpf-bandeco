@@ -48,9 +48,3 @@ class Level {
     int LEVEL_HEIGHT;
     const int TILE_SIZE = 64;
 };
-
-// Defines LevelTile
-// LoadLevel
-// LoadMainMenu
-// ReadLevelData
-// BuildLevel
