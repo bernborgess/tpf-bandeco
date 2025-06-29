@@ -39,10 +39,11 @@ class Level {
    private:
     LevelTile** ReadLevelData(const std::string& fileName, int width,
                               int height);
-    void BuildLevel(LevelTile** levelData, int width, int height);
+    void BuildTile(LevelTile& tile, int x, int y);
+    void BuildLevel(int width, int height);
 
     // Helper to avoid hard coding paths in multiple places
-    Block* NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos);
+    void NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos);
 
     class Game* mGame;
     LevelTile** mLevelData;

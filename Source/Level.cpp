@@ -62,83 +62,82 @@ void Level::LoadLevel(const std::string &levelName, const int levelWidth,
     }
 
     // Instantiate level actors
-    BuildLevel(mLevelData, levelWidth, levelHeight);
+    BuildLevel(levelWidth, levelHeight);
 }
 
-Block *Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
+void Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
     const std::map<LevelTile, const std::string> tileMap = {
         {LevelTile::TileWall, "../Assets/Prototype/Wall.png"},
         {LevelTile::TileSink, "../Assets/Prototype/Sink.png"},
     };
 
-    // Blocks
     auto it = tileMap.find(tile);
     if (it != tileMap.end()) {
-        // Create a block actor
         Block *block = new Block(mGame, it->second, gridPos);
         mLevelBlocks.push_back(block);
     }
 }
 
-void Level::BuildLevel(LevelTile **levelData, int width, int height) {
+void Level::BuildTile(LevelTile &tile, int x, int y) {
+    switch (tile) {
+        case LevelTile::TilePlayerBStart: {
+            if (mGame->mPlayerB) return;
+            mGame->mPlayerB = new Player(mGame, PlayerType::PlayerB);
+            mGame->mPlayerB->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+            return;
+        }
+        case LevelTile::TilePlayerDStart: {
+            if (mGame->mPlayerD) return;
+            mGame->mPlayerD = new Player(mGame, PlayerType::PlayerD);
+            mGame->mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+            return;
+        }
+        case LevelTile::TileFoodTomato: {
+            FoodBox *fBblock =
+                FoodBox::NewFoodBox(mGame, ItemType::Tomato, {x, y});
+            mLevelBlocks.push_back(fBblock);
+            return;
+        }
+        case LevelTile::TileTable:
+        case LevelTile::TileTablePlate: {
+            Table *table = Table::NewTable(mGame, tile, {x, y});
+            mLevelBlocks.push_back(table);
+            tile = LevelTile::TileTable;
+            return;
+        }
+        case LevelTile::TileTableCut: {
+            TableCut *tableCut = TableCut::NewTableCut(mGame, tile, {x, y});
+            mLevelBlocks.push_back(tableCut);
+            tile = LevelTile ::TileTableCut;
+            return;
+        }
+        case LevelTile::TileStove: {
+            Stove *stove = Stove::NewStove(mGame, tile, {x, y});
+            mLevelBlocks.push_back(stove);
+            tile = LevelTile::TileStove;
+            return;
+        }
+        case LevelTile::TileTrash: {
+            Trash *trash = new Trash(mGame, {x, y});
+            mLevelBlocks.push_back(trash);
+            return;
+        }
+        case LevelTile::TileDeliver: {
+            Deliver *deliver = Deliver::NewDeliver(mGame, tile, {x, y});
+            mLevelBlocks.push_back(deliver);
+            return;
+        }
+        default: {
+            NewDecorativeBlock(tile, {x, y});
+        }
+    }
+}
+
+void Level::BuildLevel(int width, int height) {
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
-            LevelTile tile = levelData[y][x];
-            switch (tile) {
-                case LevelTile::TilePlayerBStart: {
-                    if (mGame->mPlayerB) break;
-                    mGame->mPlayerB = new Player(mGame, PlayerType::PlayerB);
-                    mGame->mPlayerB->SetPosition(
-                        Vector2(x * TILE_SIZE, y * TILE_SIZE));
-                    break;
-                }
-                case LevelTile::TilePlayerDStart: {
-                    if (mGame->mPlayerD) break;
-                    mGame->mPlayerD = new Player(mGame, PlayerType::PlayerD);
-                    mGame->mPlayerD->SetPosition(
-                        Vector2(x * TILE_SIZE, y * TILE_SIZE));
-                    break;
-                }
-                case LevelTile::TileFoodTomato: {
-                    FoodBox *fBblock =
-                        FoodBox::NewFoodBox(mGame, ItemType::Tomato, {x, y});
-                    mLevelBlocks.push_back(fBblock);
-                    break;
-                }
-                case LevelTile::TileTable:
-                case LevelTile::TileTablePlate: {
-                    Table *table = Table::NewTable(mGame, tile, {x, y});
-                    mLevelBlocks.push_back(table);
-                    levelData[y][x] = LevelTile::TileTable;
-                    break;
-                }
-                case LevelTile::TileTableCut: {
-                    TableCut *tableCut =
-                        TableCut::NewTableCut(mGame, tile, {x, y});
-                    mLevelBlocks.push_back(tableCut);
-                    levelData[y][x] = LevelTile ::TileTableCut;
-                    break;
-                }
-                case LevelTile::TileStove: {
-                    Stove *stove = Stove::NewStove(mGame, tile, {x, y});
-                    mLevelBlocks.push_back(stove);
-                    levelData[y][x] = LevelTile::TileStove;
-                    break;
-                }
-                case LevelTile::TileTrash: {
-                    Trash *trash = new Trash(mGame, {x, y});
-                    mLevelBlocks.push_back(trash);
-                    break;
-                }
-                case LevelTile::TileDeliver: {
-                    Deliver *deliver = Deliver::NewDeliver(mGame, tile, {x, y});
-                    mLevelBlocks.push_back(deliver);
-                    break;
-                }
-                default: {
-                    NewDecorativeBlock(tile, {x, y});
-                }
-            }
+            LevelTile &tile = mLevelData[y][x];
+            BuildTile(tile, x, y);
         }
     }
 }
