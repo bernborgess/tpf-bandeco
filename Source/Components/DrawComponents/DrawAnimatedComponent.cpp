@@ -57,7 +57,7 @@ void DrawAnimatedComponent::Draw(SDL_Renderer* renderer,
                                          mOwner->GetGame()->GetCameraPos().x),
                         static_cast<int>(mOwner->GetPosition().y -
                                          mOwner->GetGame()->GetCameraPos().y),
-                        srcRect->w, srcRect->h};
+                        srcRect->w * 4, srcRect->h * 4};
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     if (mOwner->GetRotation() == Math::Pi) {

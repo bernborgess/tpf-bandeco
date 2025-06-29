@@ -25,16 +25,20 @@ Player::Player(Game *game, const PlayerType playerType,
 
     mDrawComponent = mPlayerType == PlayerType::PlayerB
                          ? new DrawAnimatedComponent(
-                               this, "../Assets/Sprites/PlayerB/Player.png",
-                               "../Assets/Sprites/PlayerB/Player.json")
+                               this, "../Assets/Sprites/PlayerB/PlayerB.png",
+                               "../Assets/Sprites/PlayerB/PlayerB.json")
                          : new DrawAnimatedComponent(
-                               this, "../Assets/Sprites/PlayerD/Player.png",
-                               "../Assets/Sprites/PlayerD/Player.json");
+                               this, "../Assets/Sprites/PlayerD/PlayerD.png",
+                               "../Assets/Sprites/PlayerD/PlayerD.json");
+    // mDrawComponent =
+    //     new DrawAnimatedComponent(this,
+    //     "../Assets/Sprites/PlayerB/PlayerB.png",
+    //                               "../Assets/Sprites/PlayerB/PlayerB.json");
 
     mDrawComponent->AddAnimation("Dead", {0});
-    mDrawComponent->AddAnimation("idle", {1});
+    mDrawComponent->AddAnimation("idle", {7});
     mDrawComponent->AddAnimation("jump", {2});
-    mDrawComponent->AddAnimation("run", {3, 4, 5});
+    mDrawComponent->AddAnimation("run", {3, 7, 4});
     mDrawComponent->AddAnimation("win", {7});
 
     mDrawComponent->SetAnimation("idle");
