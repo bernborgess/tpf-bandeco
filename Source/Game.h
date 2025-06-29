@@ -85,6 +85,8 @@ class Game {
     std::pair<LevelTile, Block *> GetLevelTileAt(int x, int y) {
         return mLevelManager.GetLevelTileAt(x, y);
     }
+    void GivePoints(int points) { mLevelPoints += points; }
+    int GetPoints() { return mLevelPoints; }
 
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
@@ -150,6 +152,7 @@ class Game {
 
     float mGameTimer;
     int mGameTimeLimit;
+    int mLevelPoints;
 
     SDL_Texture *mBackgroundTexture;
     Vector2 mBackgroundSize;

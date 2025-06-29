@@ -141,6 +141,7 @@ void Game::ChangeScene() {
         mGameTimeLimit = 180;
         mHUD->SetTime(180);
         mHUD->SetLevelName("Cantina do ICEx");
+        mLevelPoints = 0;
 
         // TODO: Add level music
         // mMusicHandle = mAudio->PlaySound("MusicMain.ogg", true);
@@ -363,8 +364,8 @@ void Game::UpdateLevelTime(float deltaTime) {
         mGameTimeLimit -= 1;
         mHUD->SetTime(mGameTimeLimit);
         if (mGameTimeLimit <= 0) {
-            // TODO: Finish the level
-            mPlayerB->Kill();
+            // TODO
+            SDL_Log("LEVEL OVER WITH %d points.", mLevelPoints);
         }
         mOrderManager.TimeTick(mGameTimeLimit);
     }

@@ -32,6 +32,7 @@ Item* Deliver::SetItemOnTop(Item* item) {
         // TODO
         // YES: Give points
         SDL_Log("Got %d points", points);
+        mGame->GivePoints(points);
     } else {
         // NO: Beep a sound of mistake
         SDL_Log("Wrong recipe, 0 points");
