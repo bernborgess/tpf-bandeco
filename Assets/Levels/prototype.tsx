@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="prototype" tilewidth="64" tileheight="64" tilecount="18" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="prototype" tilewidth="64" tileheight="64" tilecount="19" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="1">
   <image source="../Prototype/Wall.png" width="64" height="64"/>
@@ -13,14 +13,8 @@
  <tile id="4">
   <image source="../Prototype/FoodMeat.png" width="64" height="64"/>
  </tile>
- <tile id="5">
-  <image source="../Prototype/FoodTomato.png" width="64" height="64"/>
- </tile>
  <tile id="6">
   <image source="../Prototype/Table.png" width="64" height="64"/>
- </tile>
- <tile id="7">
-  <image source="../Prototype/TableCut.png" width="64" height="64"/>
  </tile>
  <tile id="8">
   <image source="../Prototype/Trash.png" width="64" height="64"/>
@@ -37,9 +31,6 @@
  <tile id="12">
   <image source="../Prototype/PlayerD.png" width="64" height="64"/>
  </tile>
- <tile id="13">
-  <image source="../Prototype/Stove.png" width="64" height="64"/>
- </tile>
  <tile id="14">
   <image source="../Prototype/TablePlate.png" width="64" height="64"/>
  </tile>
@@ -54,5 +45,17 @@
  </tile>
  <tile id="18">
   <image source="../Prototype/TablePlain.png" width="64" height="64"/>
+ </tile>
+ <tile id="19">
+  <image source="../Prototype/StovePotTomatoSoup.png" width="64" height="64"/>
+ </tile>
+ <tile id="22">
+  <image source="../Prototype/StovePot.png" width="64" height="64"/>
+ </tile>
+ <tile id="23">
+  <image source="../Prototype/TableCut.png" width="64" height="64"/>
+ </tile>
+ <tile id="24">
+  <image source="../Prototype/FoodTomato.png" width="64" height="64"/>
  </tile>
 </tileset>
