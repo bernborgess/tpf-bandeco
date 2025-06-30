@@ -61,13 +61,20 @@ void Level::LoadMainMenu() {
 
 void Level::LoadHowToPlay() {
     auto howToPlayScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
-    howToPlayScreen->AddText("Como Jogar:", Vector2(400, 60), Vector2(800, 200),
-                             Color::Blue);
-    //  TODO
+
+    howToPlayScreen->AddImage("../Assets/Prototype/MainMenuBackground.png",
+                              Vector2::Zero, Vector2(1792, 1024));
+
+    howToPlayScreen->AddImage("../Assets/Sprites/ControlsTitle.png",
+                              Vector2(-10, -30), 1.0 * Vector2(1173, 171));
+
+    howToPlayScreen->AddImage("../Assets/Sprites/Controls.png",
+                              Vector2(400, 250), 1.5 * Vector2(518, 239));
+
     howToPlayScreen->AddButton(
-        "Voltar", Vector2(400, 600), Vector2(300, 160),
+        "Voltar", Vector2(640, 700), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
-        Color::Blue);
+        Color::Blue, 72, 1024, Vector2(0, 0), Vector2(200, 80), Color::White);
 }
 
 void Level::LoadLevelResult() {

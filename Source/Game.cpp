@@ -410,6 +410,8 @@ void Game::UpdateLevelTime(float deltaTime) {
             SDL_Log("LEVEL OVER WITH %d points.", mLevelPoints);
             mLevelOver = true;
             auto levelOver = new UIScreen(this, "../Assets/Fonts/Chewy.ttf");
+            levelOver->AddText("ACABOU!", Vector2(350, 350), Vector2(800, 200),
+                               Color::White);
             levelOver->AddText("ACABOU!", Vector2(360, 360), Vector2(800, 200),
                                Color::Blue);
         }

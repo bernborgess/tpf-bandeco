@@ -20,7 +20,7 @@ HUD::HUD(class Game *game, const std::string &fontName)
     AddImage("../Assets/Prototype/Coin.png", Vector2(60, 710),
              Vector2(200, 200));
     mPointsCounter =
-        AddText("  0", Vector2(100, 769), Vector2(100, 80), Color::Blue);
+        AddText("  0", Vector2(100, 769), Vector2(80, 80), Color::White);
 }
 
 HUD::~HUD() {}
