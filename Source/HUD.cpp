@@ -8,9 +8,10 @@
 
 HUD::HUD(class Game *game, const std::string &fontName)
     : UIScreen(game, fontName) {
-    // TODO: Coins counter
     mTimeText = AddText("", Vector2(1200, 760), Vector2(150, 80), Color::Blue);
     mLevelName = AddText("", Vector2(1000, 6), Vector2(360, 60), Color::Blue);
+    mPointsCounter =
+        AddText("  0", Vector2(100, 769), Vector2(100, 80), Color::Blue);
 }
 
 HUD::~HUD() {}
@@ -27,4 +28,11 @@ void HUD::SetTime(int time) {
 
 void HUD::SetLevelName(const std::string &levelName) {
     mLevelName->SetText(levelName);
+}
+
+void HUD::SetPoints(int points) {
+    std::stringstream ss;
+    ss << std::setw(3) << std::setfill(' ') << points;
+    std::string points_string = ss.str();
+    mPointsCounter->SetText(points_string);
 }

@@ -47,5 +47,5 @@ int OrderManager::DeliverOrder(std::set<ItemType> recipe) {
     mCurrentOrders.erase(it);
 
     // TODO: Calculate points in relation to time
-    return 100;
+    return 20;
 }
