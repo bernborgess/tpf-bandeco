@@ -1,5 +1,7 @@
 #include "Trash.h"
 
+#include <SDL.h>
+
 #include "../Actors/Plate.h"
 #include "../Actors/Pot.h"
 
@@ -13,6 +15,7 @@ Item* Trash::SetItemOnTop(Item* item) {
     switch (item->GetItemType()) {
         case ItemType::Pot: {
             Pot* pot = (Pot*)item;
+            SDL_Log("Trash with pot");
             pot->Clear();
             return pot;
         }

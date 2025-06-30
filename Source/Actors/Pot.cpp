@@ -123,7 +123,10 @@ std::optional<ItemType> Pot::PickItem() {
     return {};
 }
 
-void Pot::Clear() { mItemInside = {}; }
+void Pot::Clear() {
+    mItemInside = {};
+    mDrawComponent->UpdateTexture(POT_EMPTY_PATH);
+}
 
 void Pot::ReturnItem(ItemType item) {
     mItemInside = item;
