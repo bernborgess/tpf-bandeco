@@ -31,6 +31,9 @@ void Level::LoadMainMenu() {
     const Vector2 titlePos =
         Vector2(windowWidth / 2.0f - titleSize.x / 2.0f, 50.0f);
 
+    mainMenu->AddImage("../Assets/Prototype/MainMenuBackground.png",
+                       Vector2::Zero, Vector2(1792, 1024));
+
     mainMenu->AddImage("../Assets/Sprites/OvercookedLogo.png", Vector2(200, 40),
                        Vector2(1189, 270));
 
