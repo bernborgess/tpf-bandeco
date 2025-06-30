@@ -368,13 +368,23 @@ void Game::UpdateLevelTime(float deltaTime) {
     if (mGameTimer >= 1.0) {
         mGameTimer = 0.0f;
         mGameTimeLimit -= 1;
-        mHUD->SetTime(mGameTimeLimit);
+
+        if (mGameTimeLimit >= 0) mHUD->SetTime(mGameTimeLimit);
+
         if (mGameTimeLimit <= 0 && !mLevelOver) {
             // TODO: Show TIME'S UP ui and change the scene
             SDL_Log("LEVEL OVER WITH %d points.", mLevelPoints);
             mLevelOver = true;
+            auto levelOver = new UIScreen(this, "../Assets/Fonts/Chewy.ttf");
+            levelOver->AddText("ACABOU!", Vector2(360, 360), Vector2(800, 200),
+                               Color::Blue);
         }
         mOrderManager.TimeTick(mGameTimeLimit);
+        if (mGameTimeLimit <= -5) {
+            // TODO: Got to change scene somehow
+            // SetGameScene(GameScene::MainMenu);
+            // This is not working (Segfault)
+        }
     }
 }
 
