@@ -5,7 +5,7 @@
 #include "../Actors/Plate.h"
 #include "../Game.h"
 
-const Vector2 Stove::POT_OFFSET = Vector2(0, -14);
+const Vector2 Stove::POT_OFFSET = Vector2(0, -20);
 
 const std::string Stove::STOVE_FRONT_PATH = "../Assets/Prototype/Stove.png";
 const std::string Stove::STOVE_RIGHT_PATH = "../Assets/Prototype/Stove.png";

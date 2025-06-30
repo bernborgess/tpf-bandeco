@@ -145,7 +145,7 @@ void Game::ChangeScene() {
         mLevelOver = false;
 
         // Add level music
-        mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
+        // mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
 
         // Set background color
         mBackgroundColor.Set(250.0f, 175.0f, 72.0f);

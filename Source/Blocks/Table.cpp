@@ -94,6 +94,10 @@ Item* Table::SetItemOnTop(Item* item) {
     }
     // Accepted the item, returns nothing
     mItemOnTop = item;
-    mItemOnTop->SetPosition(GetPosition());
+    Vector2 offset = Vector2(16, 16);
+    if (item->GetItemType() == ItemType::Pot) offset = Vector2(0, -16);
+    if (item->GetItemType() == ItemType::Plate) offset = Vector2(6, 6);
+
+    mItemOnTop->SetPosition(GetPosition() + offset);
     return nullptr;
 }
