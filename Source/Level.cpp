@@ -81,6 +81,17 @@ void Level::LoadLevelResult() {
     resultsScreen->AddText("pontos", Vector2(800, 300), Vector2(400, 160),
                            Color::Blue);
 
+    if (points < 100) {
+        resultsScreen->AddText(
+            "Você precisa de pelo menos 100 pontos para progredir.",
+            Vector2(400, 500), Vector2(800, 100));
+        // TODO: Sons de derrota
+    } else {
+        resultsScreen->AddText("Parabéns! Você venceu o primeiro desafio!",
+                               Vector2(400, 500), Vector2(800, 100));
+        // TODO: Sons de vitoria
+    }
+
     resultsScreen->AddButton(
         "Continuar", Vector2(400, 600), Vector2(300, 160),
         [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
