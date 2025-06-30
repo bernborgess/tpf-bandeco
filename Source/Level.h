@@ -32,8 +32,8 @@ enum class LevelTile {
     TileDeliverDownLeft = 26,
     TileCeil = 27,
     TileCeilCorner = 28,
-    TileCeilRotate = 29
-
+    TileCeilRotate = 29,
+    TileDishDrainer = 31
 };
 
 class Level {
