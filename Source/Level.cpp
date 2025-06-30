@@ -31,11 +31,9 @@ void Level::LoadMainMenu() {
     const Vector2 titlePos =
         Vector2(windowWidth / 2.0f - titleSize.x / 2.0f, 50.0f);
 
-    // TODO: Main menu
-    // mainMenu->AddImage("../Assets/Sprites/Logo.png", titlePos, titleSize);
+    mainMenu->AddImage("../Assets/Sprites/OvercookedLogo.png", Vector2(200, 40),
+                       Vector2(1189, 270));
 
-    mainMenu->AddText("Overcooked!", Vector2(400, 60), Vector2(800, 200),
-                      Color::Blue);
     mainMenu->AddText("Pesadelo no Bandeco!", Vector2(600, 225),
                       Vector2(600, 100));
 
