@@ -4,21 +4,21 @@
             "filename": "IdleBack.png",
             "frame": {
                 "x": 0,
-                "y": 75,
-                "w": 17,
-                "h": 23
+                "y": 0,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
-                "x": 1,
-                "y": 1,
-                "w": 17,
-                "h": 23
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -28,22 +28,22 @@
         {
             "filename": "IdleFront.png",
             "frame": {
-                "x": 17,
-                "y": 48,
-                "w": 17,
-                "h": 23
+                "x": 0,
+                "y": 32,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
-                "x": 1,
-                "y": 1,
-                "w": 17,
-                "h": 23
+                "x": 0,
+                "y": 0,
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -53,22 +53,22 @@
         {
             "filename": "IdleRight.png",
             "frame": {
-                "x": 17,
+                "x": 32,
                 "y": 0,
-                "w": 19,
-                "h": 23
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
                 "x": 0,
-                "y": 1,
-                "w": 19,
-                "h": 23
+                "y": 0,
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -79,21 +79,21 @@
             "filename": "WalkBack1.png",
             "frame": {
                 "x": 0,
-                "y": 0,
-                "w": 17,
-                "h": 25
+                "y": 64,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
-                "x": 1,
+                "x": 0,
                 "y": 0,
-                "w": 17,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -103,22 +103,22 @@
         {
             "filename": "WalkBack2.png",
             "frame": {
-                "x": 0,
-                "y": 25,
-                "w": 17,
-                "h": 25
+                "x": 32,
+                "y": 32,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
-                "x": 1,
+                "x": 0,
                 "y": 0,
-                "w": 17,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -128,22 +128,22 @@
         {
             "filename": "WalkFront1.png",
             "frame": {
-                "x": 0,
-                "y": 50,
-                "w": 17,
-                "h": 25
+                "x": 64,
+                "y": 0,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
-                "x": 1,
+                "x": 0,
                 "y": 0,
-                "w": 17,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -153,22 +153,22 @@
         {
             "filename": "WalkFront2.png",
             "frame": {
-                "x": 17,
-                "y": 23,
-                "w": 17,
-                "h": 25
+                "x": 0,
+                "y": 96,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
-                "x": 1,
+                "x": 0,
                 "y": 0,
-                "w": 17,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -178,22 +178,22 @@
         {
             "filename": "WalkRight1.png",
             "frame": {
-                "x": 36,
-                "y": 0,
-                "w": 19,
-                "h": 24
+                "x": 32,
+                "y": 64,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
                 "x": 0,
-                "y": 1,
-                "w": 19,
-                "h": 24
+                "y": 0,
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -203,22 +203,22 @@
         {
             "filename": "WalkRight2.png",
             "frame": {
-                "x": 55,
-                "y": 0,
-                "w": 19,
-                "h": 23
+                "x": 64,
+                "y": 32,
+                "w": 32,
+                "h": 32
             },
             "rotated": false,
-            "trimmed": true,
+            "trimmed": false,
             "spriteSourceSize": {
                 "x": 0,
-                "y": 1,
-                "w": 19,
-                "h": 23
+                "y": 0,
+                "w": 32,
+                "h": 32
             },
             "sourceSize": {
-                "w": 20,
-                "h": 25
+                "w": 32,
+                "h": 32
             },
             "pivot": {
                 "x": 0.5,
@@ -229,11 +229,11 @@
     "meta": {
         "app": "http://free-tex-packer.com",
         "version": "0.6.7",
-        "image": "texture.png",
+        "image": "PlayerB.png",
         "format": "RGBA8888",
         "size": {
-            "w": 74,
-            "h": 98
+            "w": 96,
+            "h": 128
         },
         "scale": 1
     }
