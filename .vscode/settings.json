@@ -4,7 +4,13 @@
     "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4 }",
     "C_Cpp.errorSquiggles": "enabled",
     "cSpell.words": [
-        "bandeco"
+        "AABB",
+        "bandeco",
+        "LALT",
+        "LCTRL",
+        "LSHIFT",
+        "RALT",
+        "RCTRL"
     ],
     "editor.detectIndentation": false,
     "files.associations": {
@@ -72,6 +78,35 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "hash_map": "cpp",
+        "bitset": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "condition_variable": "cpp",
+        "list": "cpp",
+        "unordered_set": "cpp",
+        "source_location": "cpp",
+        "format": "cpp",
+        "future": "cpp",
+        "mutex": "cpp",
+        "queue": "cpp",
+        "semaphore": "cpp",
+        "stack": "cpp",
+        "stdfloat": "cpp",
+        "stop_token": "cpp",
+        "text_encoding": "cpp",
+        "thread": "cpp"
     },
+    "material-icon-theme.folders.associations": {
+        "Blocks": "webpack",
+        "ColliderComponents": "directive",
+        "DrawComponents": "custom",
+        "Levels": "routes",
+        "Prototype": "test",
+        "Sprites": "sandbox",
+        "UIElements": "ui",
+        "PlayerB": "android",
+        "PlayerD": "decorators"
+    }
 }

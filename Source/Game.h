@@ -6,17 +6,19 @@
 #include <vector>
 
 #include "AudioSystem.h"
+#include "Blocks/Block.h"
+#include "Level.h"
 #include "Math.h"
+#include "OrderManager.h"
 
 class Game {
    public:
     static const int LEVEL_WIDTH = 25;
     static const int LEVEL_HEIGHT = 14;
     static const int TILE_SIZE = 64;
-    static const int SPAWN_DISTANCE = 700;
     static const int TRANSITION_TIME = 1;
 
-    enum class GameScene { MainMenu, Level1, Level2 };
+    enum class GameScene { MainMenu, HowToPlay, Level1, Level2, LevelResult };
 
     enum class SceneManagerState { None, Entering, Active, Exiting };
 
@@ -42,13 +44,6 @@ class Game {
     void ProcessInputActors();
     void HandleKeyPressActors(const int key, const bool isPressed);
 
-    // Level functions
-    void LoadMainMenu();
-    void LoadLevel(const std::string &levelName, const int levelWidth,
-                   const int levelHeight);
-
-    std::vector<Actor *> GetNearbyActors(const Vector2 &position,
-                                         const int range = 1);
     std::vector<class AABBColliderComponent *> GetNearbyColliders(
         const Vector2 &position, const int range = 2);
 
@@ -84,7 +79,15 @@ class Game {
     void TogglePause();
 
     // Game-specific
-    const class Player *GetPlayer() { return mPlayer; }
+    const class Player *GetPlayerB() { return mPlayerB; }
+    const class Player *GetPlayerD() { return mPlayerD; }
+    OrderManager &GetOrderManager() { return mOrderManager; }
+    std::pair<LevelTile, Block *> GetLevelTileAt(int x, int y) {
+        return mLevelManager.GetLevelTileAt(x, y);
+    }
+    void GivePoints(int points);
+
+    int GetPoints() { return mLevelPoints; }
 
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
@@ -105,8 +108,8 @@ class Game {
     void UpdateLevelTime(float deltaTime);
 
     // Load the level from a CSV file as a 2D array
-    int **ReadLevelData(const std::string &fileName, int width, int height);
-    void BuildLevel(int **levelData, int width, int height);
+    friend class Level;
+    Level mLevelManager;
 
     // Spatial Hashing for collision detection
     class SpatialHashing *mSpatialHashing;
@@ -141,12 +144,17 @@ class Game {
     Vector2 mCameraPos;
 
     // Game-specific
-    class Player *mPlayer;
+    class Player *mPlayerB;
+    class Player *mPlayerD;
+    OrderManager mOrderManager;
+
     class HUD *mHUD;
     SoundHandle mMusicHandle;
 
     float mGameTimer;
     int mGameTimeLimit;
+    int mLevelPoints;
+    bool mLevelOver;
 
     SDL_Texture *mBackgroundTexture;
     Vector2 mBackgroundSize;

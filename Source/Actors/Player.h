@@ -3,15 +3,23 @@
 //
 
 #pragma once
+#include <SDL2/SDL_scancode.h>
+
+#include "../Game.h"
+#include "../Level.h"
 #include "Actor.h"
+#include "Item.h"
+
+enum class PlayerType { PlayerB, PlayerD };
+enum class FaceDirection { North, East, South, West };
 
 class Player : public Actor {
    public:
     static const int PLAYER_WIDTH = 28;
     static const int PLAYER_HEIGHT = 32;
 
-    explicit Player(Game* game, float forwardSpeed = 1500.0f,
-                    float jumpSpeed = -750.0f);
+    explicit Player(Game* game, PlayerType playerType,
+                    float forwardSpeed = 1500.0f, float jumpSpeed = -750.0f);
 
     void OnProcessInput(const Uint8* keyState) override;
     void OnUpdate(float deltaTime) override;
@@ -22,21 +30,28 @@ class Player : public Actor {
     void OnVerticalCollision(const float minOverlap,
                              AABBColliderComponent* other) override;
 
-    void Kill() override;
-    void Win(AABBColliderComponent* poleCollider);
-
    private:
-    static const int POLE_SLIDE_TIME =
-        1;  // Time in seconds to slide down the pole
-
     void ManageAnimations();
 
+    PlayerType mPlayerType;
+    // Manage different players
+    SDL_Scancode GetDownCode();
+    SDL_Scancode GetLeftCode();
+    SDL_Scancode GetRightCode();
+    SDL_Scancode GetUpCode();
+    SDL_Scancode GetPickUpCode();
+    SDL_Scancode GetChopCode();
+    SDL_Scancode GetDashCode();
+
     float mForwardSpeed;
-    float mJumpSpeed;
-    float mPoleSlideTimer;
     bool mIsRunning;
-    bool mIsOnPole;
-    bool mIsDying;
+    FaceDirection mFaceDirection;
+
+    Item* mHandItem;
+    std::pair<LevelTile, Block*> GetFocusBlock();
+    void HandlePickUp();
+    void HandlePutDown();
+    void HandleChop();
 
     class RigidBodyComponent* mRigidBodyComponent;
     class DrawAnimatedComponent* mDrawComponent;

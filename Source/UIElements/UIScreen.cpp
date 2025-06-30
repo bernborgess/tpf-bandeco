@@ -34,6 +34,10 @@ UIScreen::~UIScreen() {
 void UIScreen::Update(float deltaTime) {}
 
 void UIScreen::Draw(SDL_Renderer *renderer) {
+    for (auto &image : mImages) {
+        image->Draw(renderer, mPos);
+    }
+
     for (auto &text : mTexts) {
         text->Draw(renderer, mPos);
     }
@@ -41,33 +45,32 @@ void UIScreen::Draw(SDL_Renderer *renderer) {
     for (auto &button : mButtons) {
         button->Draw(renderer, mPos);
     }
-
-    for (auto &image : mImages) {
-        image->Draw(renderer, mPos);
-    }
 }
 
 void UIScreen::ProcessInput(const uint8_t *keys) {}
 
-void UIScreen::HandleKeyPress(int key) {
+void UIScreen::HandleKeyPress(int scanCode) {
     size_t n = mButtons.size();
     if (n < 1) return;
-    switch (key) {
-        case SDLK_w: {
+    switch (scanCode) {
+        case SDL_SCANCODE_UP:
+        case SDL_SCANCODE_W: {
             mButtons[mSelectedButtonIndex]->SetHighlighted(false);
             mSelectedButtonIndex += n - 1;
             mSelectedButtonIndex %= n;
             mButtons[mSelectedButtonIndex]->SetHighlighted(true);
             break;
         }
-        case SDLK_s: {
+        case SDL_SCANCODE_DOWN:
+        case SDL_SCANCODE_S: {
             mButtons[mSelectedButtonIndex]->SetHighlighted(false);
             mSelectedButtonIndex += 1;
             mSelectedButtonIndex %= n;
             mButtons[mSelectedButtonIndex]->SetHighlighted(true);
             break;
         }
-        case SDLK_RETURN: {
+        case SDL_SCANCODE_SPACE:
+        case SDL_SCANCODE_RETURN: {
             if (mSelectedButtonIndex < 0 || mSelectedButtonIndex >= n) return;
             mButtons[mSelectedButtonIndex]->OnClick();
             break;
@@ -78,18 +81,24 @@ void UIScreen::HandleKeyPress(int key) {
 void UIScreen::Close() { mState = UIState::Closing; }
 
 UIText *UIScreen::AddText(const std::string &name, const Vector2 &pos,
-                          const Vector2 &dims, const int pointSize,
-                          const int unsigned wrapLength) {
-    UIText *t = new UIText(name, mFont, pointSize, wrapLength, pos, dims);
+                          const Vector2 &dims, const Vector3 &color,
+                          const int pointSize, const int unsigned wrapLength) {
+    UIText *t =
+        new UIText(name, mFont, pointSize, wrapLength, pos, dims, color);
     mTexts.push_back(t);
     return t;
 }
 
 UIButton *UIScreen::AddButton(const std::string &name, const Vector2 &pos,
                               const Vector2 &dims,
-                              std::function<void()> onClick) {
-    Vector3 orange = Vector3(200, 100, 0);
-    UIButton *b = new UIButton(name, mFont, onClick, pos, dims, orange);
+                              std::function<void()> onClick,
+                              const Vector3 &backgroundColor, int pointSize,
+                              int wrapLength, const Vector2 &textPos,
+                              const Vector2 &textSize,
+                              const Vector3 &textColor) {
+    UIButton *b =
+        new UIButton(name, mFont, onClick, pos, dims, backgroundColor,
+                     pointSize, wrapLength, textPos, textSize, textColor);
     mButtons.push_back(b);
 
     if (mButtons.size() == 1) {

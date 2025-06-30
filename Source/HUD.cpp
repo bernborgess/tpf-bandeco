@@ -1,7 +1,3 @@
-//
-// Created by Lucas N. Ferreira on 08/12/23.
-//
-
 #include "HUD.h"
 
 #include <iomanip>
@@ -12,26 +8,40 @@
 
 HUD::HUD(class Game *game, const std::string &fontName)
     : UIScreen(game, fontName) {
-    Vector2 cw = Vector2(LETTER_WIDTH, 0), wh = Vector2(0, WORD_HEIGHT),
-            right = Vector2(game->GetWindowWidth(), HUD_POS_Y),
-            left = Vector2(0, HUD_POS_Y);
-    AddText("Time", right - 8 * cw, 4 * cw + wh);
-    mTimeText = AddText("400", right - 7 * cw + wh, 3 * cw + wh);
-    AddText("World", right - 16 * cw, 5 * cw + wh);
-    mLevelName = AddText("1-1", right - 15 * cw + wh, 3 * cw + wh);
-    AddText("Player", left + 2 * cw, 5 * cw + wh);
-    AddText("000000", left + 2 * cw + wh, 6 * cw + wh);
+    // Level Time
+    AddImage("../Assets/Prototype/Time.png", Vector2(1170, 690),
+             Vector2(200, 200));
+    mTimeText = AddText("", Vector2(1200, 760), Vector2(150, 80), Color::Blue);
+
+    // Level Name
+    mLevelName = AddText("", Vector2(1000, 6), Vector2(360, 60), Color::Blue);
+
+    //  Points
+    AddImage("../Assets/Prototype/Coin.png", Vector2(60, 710),
+             Vector2(200, 200));
+    mPointsCounter =
+        AddText("  0", Vector2(100, 769), Vector2(80, 80), Color::White);
 }
 
 HUD::~HUD() {}
 
 void HUD::SetTime(int time) {
+    int minutes = time / 60;
+    int second = time % 60;
     std::stringstream ss;
-    ss << std::setw(3) << std::setfill('0') << time;
+    ss << std::setw(2) << std::setfill('0') << minutes << ':';
+    ss << std::setw(2) << std::setfill('0') << second;
     std::string time_string = ss.str();
     mTimeText->SetText(time_string);
 }
 
 void HUD::SetLevelName(const std::string &levelName) {
     mLevelName->SetText(levelName);
+}
+
+void HUD::SetPoints(int points) {
+    std::stringstream ss;
+    ss << std::setw(3) << std::setfill(' ') << points;
+    std::string points_string = ss.str();
+    mPointsCounter->SetText(points_string);
 }

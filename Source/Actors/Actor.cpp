@@ -61,20 +61,20 @@ void Actor::ProcessInput(const Uint8* keyState) {
     }
 }
 
-void Actor::HandleKeyPress(const int key, const bool isPressed) {
+void Actor::HandleKeyPress(const int scanCode, const bool isPressed) {
     if (mState == ActorState::Active) {
         for (auto comp : mComponents) {
-            comp->HandleKeyPress(key, isPressed);
+            comp->HandleKeyPress(scanCode, isPressed);
         }
 
         // Call actor-specific key press handling
-        OnHandleKeyPress(key, isPressed);
+        OnHandleKeyPress(scanCode, isPressed);
     }
 }
 
 void Actor::OnProcessInput(const Uint8* keyState) {}
 
-void Actor::OnHandleKeyPress(const int key, const bool isPressed) {}
+void Actor::OnHandleKeyPress(const int scanCode, const bool isPressed) {}
 
 void Actor::AddComponent(Component* c) {
     mComponents.emplace_back(c);

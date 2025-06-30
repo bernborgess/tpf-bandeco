@@ -19,7 +19,7 @@ class Actor {
     // ProcessInput function called from Game (not overridable)
     void ProcessInput(const Uint8* keyState);
     // HandleKeyPress function called from Game (not overridable)
-    void HandleKeyPress(const int key, const bool isPressed);
+    void HandleKeyPress(const int scanCode, const bool isPressed);
 
     // Position getter/setter
     const Vector2& GetPosition() const { return mPosition; }
@@ -73,7 +73,7 @@ class Actor {
     // Any actor-specific update code (overridable)
     virtual void OnUpdate(float deltaTime);
     virtual void OnProcessInput(const Uint8* keyState);
-    virtual void OnHandleKeyPress(const int key, const bool isPressed);
+    virtual void OnHandleKeyPress(const int scanCode, const bool isPressed);
 
     // Actor's state
     ActorState mState;

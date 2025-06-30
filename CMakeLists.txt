@@ -15,14 +15,28 @@ add_executable(${PROJECT_NAME}
         Source/Main.cpp
         Source/Math.cpp
         Source/Actors/Actor.cpp
-        Source/Actors/Block.cpp
-        Source/Actors/Block.h
-        Source/Actors/Goomba.cpp
-        Source/Actors/Goomba.h
+        Source/Blocks/Block.cpp
+        Source/Blocks/Block.h
+        Source/Blocks/Deliver.cpp
+        Source/Blocks/Deliver.h
+        Source/Blocks/FoodBox.cpp
+        Source/Blocks/FoodBox.h
+        Source/Blocks/Stove.cpp
+        Source/Blocks/Stove.h
+        Source/Blocks/Table.cpp
+        Source/Blocks/Table.h
+        Source/Blocks/TableCut.cpp
+        Source/Blocks/TableCut.h
+        Source/Blocks/Trash.cpp
+        Source/Blocks/Trash.h
+        Source/Actors/Item.cpp
+        Source/Actors/Item.h
+        Source/Actors/Plate.cpp
+        Source/Actors/Plate.h
         Source/Actors/Player.cpp
         Source/Actors/Player.h
-        Source/Actors/Spawner.cpp
-        Source/Actors/Spawner.h
+        Source/Actors/Pot.cpp
+        Source/Actors/Pot.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
@@ -44,6 +58,10 @@ add_executable(${PROJECT_NAME}
         Source/Game.cpp
         Source/HUD.cpp
         Source/Json.h
+        Source/Level.cpp
+        Source/Level.h
+        Source/OrderManager.cpp
+        Source/OrderManager.h
         Source/Random.cpp
         Source/SpatialHashing.cpp
         Source/UIElements/UIButton.cpp
@@ -58,7 +76,6 @@ add_executable(${PROJECT_NAME}
         Source/UIElements/UIScreen.h
         Source/UIElements/UIText.cpp
         Source/UIElements/UIText.h
- 
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf SDL2_mixer::SDL2_mixer)

@@ -43,6 +43,11 @@ void DrawSpriteComponent::Draw(SDL_Renderer *renderer,
                            static_cast<Uint8>(modColor.y),
                            static_cast<Uint8>(modColor.z));
 
-    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &dstRect,
-                     mOwner->GetRotation(), nullptr, flip);
+    SDL_RenderCopyEx(renderer, mSpriteSheetSurface, nullptr, &dstRect, 0,
+                     nullptr, flip);
+}
+
+void DrawSpriteComponent::UpdateTexture(const std::string &texturePath) {
+    SDL_DestroyTexture(mSpriteSheetSurface);
+    mSpriteSheetSurface = mOwner->GetGame()->LoadTexture(texturePath);
 }

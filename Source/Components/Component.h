@@ -13,8 +13,8 @@ class Component {
     virtual void Update(float deltaTime);
     // Process input for this component (if needed)
     virtual void ProcessInput(const Uint8* keyState);
-    // Handle key press for this component (if needed)
-    virtual void HandleKeyPress(const int key, const bool isPressed);
+    // Handle scanCode press for this component (if needed)
+    virtual void HandleKeyPress(const int scanCode, const bool isPressed);
 
     int GetUpdateOrder() const { return mUpdateOrder; }
     class Actor* GetOwner() const { return mOwner; }

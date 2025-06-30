@@ -1,62 +1,50 @@
 # 🎮 Overcooked: Pesadelo no Bandeco
 
-## 📆 Cronograma de Desenvolvimento
+## Screenshots
+- O menu principal
+- Como jogar?
+- O começo da fase 1
+- Cortando tomates
+- Fazendo sopa de tomate
+- Entregando o pedido
+- Descartando a sopa queimada
+- Fim do tempo
+- Resultados da fase
 
-**Prazo total:**  
-- ⏱️ **7 semanas até o playtest**  
-- 🛠️ **+3 semanas para ajustes e entrega final**
 
----
+## Descrição
+<!-- TODO: 3 parágrafos -->
+<!-- TODO: objetivo, mecânicas básicas, condições de vitória e derrota -->
+ O jogo **Overcooked: Pesadelo no Bandeco** é inspirado em
+[Overcooked!](https://www.team17.com/games/overcooked) de team17, um jogo
+cooperativo de 2 jogadores baseado nas áreas de alimentação da UFMG, focado em
+cozinhar e entregar pratos sob pressão.
 
-## 🎯 Objetivos Principais
+Os jogadores são colocados em diferentes mapas onde devem cozinhar os pedidos o
+mais rápido possível, superando condições adversas e comunicando-se para
+conseguir coordenar e dividir tarefas.  Na primeira fase os jogadores tem a receita de sopa de tomate, que envolve pegar tomates da caixa, cortar tomates sobre a bancada e adicionar 3 tomates cortados a panela. O cozimento deve ser feito com atenção, pois se passar muito do tempo a sopa irá queimar e o prato tem que ser descartado.
 
-### ✅ Antes do Playtest (7 semanas)
-- Implementar 1–2 fases completas e jogáveis
-- Suporte a multiplayer local (2 jogadores)
-- Sistema funcional de:
-  - Pedidos com tempo
-  - Ingredientes e estações (corte, cozimento, entrega)
-  - Pontuação e HUD
-- Arte e áudio provisórios (foco em funcionalidade)
+Para vencer a fase os
+jogadores deve ser capazes de entregar uma quantidade satisfatória de pratos.
+Caso isso não ocorra os jogadores deverão tentar novamente. Caso consigam, podem
+prosseguir para novos restaurantes.
 
-### ✅ Após o Playtest (3 semanas)
-- Ajustes baseados no feedback dos testes
-- Polimento visual e sonoro
-- Conteúdo extra (fase especial, música final)
-- Preparação e entrega final do projeto
+## Funcionalidades a serem testadas
+<!-- TODO: Lista de funcionalidades que os jogadores devem observar com atenção durante o Playtesting -->
+1. Aprender os controles e objetivo do jogo, pela tela `Como Jogar?`
+1. Iniciar uma nova fase
+1. Pegar ingredientes na caixa de tomates
+1. Cortar tomates na tábua de corte
+1. Fazer uma sopa na panela com três tomates cortados
+1. Pegar uma sopa pronta da panela com um prato
+1. Entregar um prato aos clientes no block das "setas"
+1. Deixar uma sopa queimar por ficar muito tempo no fogo
+1. Descartar a sopa queimada na lixeira
 
----
 
-## 📅 Cronograma Semanal
+## Créditos
+<!-- TODO: Mais detalhes -->
+- Bernardo Borges - Programação da Lógica de Items e de Blocos
+- Daniele Cassia - Design e Criação dos Blocos e sprites
 
-### 🧪 Fase 1: Pré-Playtest
-
-| Semana | Tarefas | Entregáveis |
-|--------|---------|-------------|
-| **1** | - Setup (SDL2 + C++) <br> - Estrutura inicial do projeto <br> - Movimento básico (1 jogador) | Projeto base funcional |
-| **2** | - Implementar multiplayer local <br> - Colisão simples <br> - Estações de corte e ingredientes | Dois jogadores controláveis |
-| **3** | - Fogão e cozimento com timer <br> - Inventário de itens (1 por vez) <br> - Montagem de prato simples | Protótipo jogável |
-| **4** | - HUD com pedidos e tempo <br> - Estação de entrega <br> - Sistema de pontuação | Loop básico funcional |
-| **5** | - Sistema de vitória/derrota <br> - Primeira fase completa <br> - Testes internos | Fase 1 jogável |
-| **6** | - Segunda fase com variação <br> - SFX e trilha base <br> - Balanceamento inicial | Fase 2 funcional |
-| **7** | - Playtest externo <br> - Coleta de feedback | Demo testável |
-
----
-
-### 🛠️ Fase 2: Pós-Playtest
-
-| Semana | Tarefas | Entregáveis |
-|--------|---------|-------------|
-| **8** | - Correções de bugs <br> - Ajuste de tempo e dificuldade <br> - Aplicar feedback | Jogabilidade refinada |
-| **9** | - Polimento visual <br> - Trilha sonora final <br> - Eventos únicos (ex: cachorro) | Versão quase final |
-| **10** | - Menu, créditos e seleção de fases <br> - Empacotamento final <br> - Apresentação/documentação | Entrega oficial |
-
----
-
-## 🔻 Escopo Reduzido Recomendado
-
-- ✅ Apenas **2 fases no playtest**, máximo de 4 no total
-- 🖼️ Priorizar uso de **assets prontos** (OpenGameArt, itch.io)
-- 🕹️ Foco total em versão **desktop local**
-- 🐶 Eventos especiais (ex: cachorro) são *bônus* opcionais
 

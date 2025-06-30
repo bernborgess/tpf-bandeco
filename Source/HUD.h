@@ -24,10 +24,11 @@ class HUD : public UIScreen {
 
     void SetLevelName(const std::string& levelName);
 
+    void SetPoints(int points);
+
    private:
     // HUD elements
-    UIText* mScoreCounter;
+    UIText* mPointsCounter;
     UIText* mLevelName;
-    UIText* mLivesCount;
     UIText* mTimeText;
 };
