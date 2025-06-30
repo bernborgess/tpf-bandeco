@@ -17,7 +17,7 @@ void OrderManager::TimeTick(int time) {
     if (mPlannedOrders.empty()) return;
     Order firstOrder = mPlannedOrders.top();
     if (firstOrder.startTime >= time) {
-        SDL_Log("New order now at %d seconds", time);
+        // SDL_Log("New order now at %d seconds", time);
         // Move this one
         mPlannedOrders.pop();
         // Maybe add some animation to this transition
