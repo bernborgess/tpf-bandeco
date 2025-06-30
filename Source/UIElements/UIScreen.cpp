@@ -53,6 +53,7 @@ void UIScreen::HandleKeyPress(int scanCode) {
     size_t n = mButtons.size();
     if (n < 1) return;
     switch (scanCode) {
+        case SDL_SCANCODE_UP:
         case SDL_SCANCODE_W: {
             mButtons[mSelectedButtonIndex]->SetHighlighted(false);
             mSelectedButtonIndex += n - 1;
@@ -60,6 +61,7 @@ void UIScreen::HandleKeyPress(int scanCode) {
             mButtons[mSelectedButtonIndex]->SetHighlighted(true);
             break;
         }
+        case SDL_SCANCODE_DOWN:
         case SDL_SCANCODE_S: {
             mButtons[mSelectedButtonIndex]->SetHighlighted(false);
             mSelectedButtonIndex += 1;
@@ -67,6 +69,7 @@ void UIScreen::HandleKeyPress(int scanCode) {
             mButtons[mSelectedButtonIndex]->SetHighlighted(true);
             break;
         }
+        case SDL_SCANCODE_SPACE:
         case SDL_SCANCODE_RETURN: {
             if (mSelectedButtonIndex < 0 || mSelectedButtonIndex >= n) return;
             mButtons[mSelectedButtonIndex]->OnClick();

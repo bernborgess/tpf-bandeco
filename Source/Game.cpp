@@ -127,70 +127,88 @@ void Game::ChangeScene() {
     mSpatialHashing = new SpatialHashing(
         TILE_SIZE * 4.0f, LEVEL_WIDTH * TILE_SIZE, LEVEL_HEIGHT * TILE_SIZE);
 
-    // Scene Manager FSM: using if/else instead of switch
-    if (mNextScene == GameScene::MainMenu) {
-        // Set background color
-        mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
-        SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
-                               mBackgroundColor.y, mBackgroundColor.z, 255);
+    // Scene Manager FSM
+    switch (mNextScene) {
+        case GameScene::MainMenu: {
+            // Set background color
+            mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+            SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                                   mBackgroundColor.y, mBackgroundColor.z, 255);
 
-        // Initialize main menu actors
-        mLevelManager.LoadMainMenu();
-    } else if (mNextScene == GameScene::Level1) {
-        mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-        mGameTimeLimit = 1;
-        mHUD->SetTime(180);
-        mHUD->SetLevelName("Cantina do ICEx");
-        mLevelPoints = 0;
-        mLevelOver = false;
-
-        // Add level music
-        // mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
-
-        // Set background color
-        mBackgroundColor.Set(250.0f, 175.0f, 72.0f);
-        SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
-                               mBackgroundColor.y, mBackgroundColor.z, 255);
-
-        // TODO: Set background image
-        // SetBackgroundImage("../Assets/Sprites/Background.png",
-        //                    Vector2(TILE_SIZE, 0), Vector2(6784, 448));
-
-        // Adding all the planned orders for this level
-        mOrderManager.Clear();
-        std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
-                                              90,  70,  50,  30,  10};
-        for (int startTime : soupStartTimes) {
-            mOrderManager.AddOrder(
-                {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
+            // Initialize main menu actors
+            mLevelManager.LoadMainMenu();
+            break;
         }
+        case GameScene::HowToPlay: {
+            // Set background color
+            mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+            SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                                   mBackgroundColor.y, mBackgroundColor.z, 255);
 
-        // Initialize actors
-        mLevelManager.LoadLevel("../Assets/Levels/level1-1.csv", LEVEL_WIDTH,
-                                LEVEL_HEIGHT);
-    } else if (mNextScene == GameScene::Level2) {
-        mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
-        mGameTimeLimit = 400;
-        mHUD->SetTime(400);
-        mHUD->SetLevelName("1-2");
+            mLevelManager.LoadHowToPlay();
+            break;
+        }
+        case GameScene::Level1: {
+            mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
+            mGameTimeLimit = 1;
+            mHUD->SetTime(180);
+            mHUD->SetLevelName("Cantina do ICEx");
+            mLevelPoints = 0;
+            mLevelOver = false;
 
-        // TODO: Add level music
-        // mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
+            // Add level music
+            // mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
 
-        // Set background color
-        mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
+            // Set background color
+            mBackgroundColor.Set(250.0f, 175.0f, 72.0f);
+            SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                                   mBackgroundColor.y, mBackgroundColor.z, 255);
 
-        // Initialize actors
-        mLevelManager.LoadLevel("../Assets/Levels/level1-2.csv", LEVEL_WIDTH,
-                                LEVEL_HEIGHT);
-    } else if (mNextScene == GameScene::LevelResult) {
-        // Set background color
-        mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
-        SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
-                               mBackgroundColor.y, mBackgroundColor.z, 255);
+            // TODO: Set background image
+            // SetBackgroundImage("../Assets/Sprites/Background.png",
+            //                    Vector2(TILE_SIZE, 0), Vector2(6784, 448));
 
-        // Initialize main menu actors
-        mLevelManager.LoadLevelResult();
+            // Adding all the planned orders for this level
+            mOrderManager.Clear();
+            std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
+                                                  90,  70,  50,  30,  10};
+            for (int startTime : soupStartTimes) {
+                mOrderManager.AddOrder(
+                    {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
+            }
+
+            // Initialize actors
+            mLevelManager.LoadLevel("../Assets/Levels/level1-1.csv",
+                                    LEVEL_WIDTH, LEVEL_HEIGHT);
+            break;
+        }
+        case GameScene::Level2: {
+            mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
+            mGameTimeLimit = 400;
+            mHUD->SetTime(400);
+            mHUD->SetLevelName("1-2");
+
+            // TODO: Add level music
+            // mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
+
+            // Set background color
+            mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
+
+            // Initialize actors
+            mLevelManager.LoadLevel("../Assets/Levels/level1-2.csv",
+                                    LEVEL_WIDTH, LEVEL_HEIGHT);
+            break;
+        }
+        case GameScene::LevelResult: {
+            // Set background color
+            mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+            SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                                   mBackgroundColor.y, mBackgroundColor.z, 255);
+
+            // Initialize main menu actors
+            mLevelManager.LoadLevelResult();
+            break;
+        }
     }
 
     // Set new scene

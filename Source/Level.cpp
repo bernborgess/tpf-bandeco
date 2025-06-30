@@ -49,8 +49,19 @@ void Level::LoadMainMenu() {
 
     auto button2 = mainMenu->AddButton(
         "Como Jogar?", Vector2(600, 500), Vector2(60 * 6, 90),
-        [this]() { SDL_Log("TODO: How to play"); }, Color::Black, 72, 1024,
-        Vector2::Zero, Vector2(200, 80), Color::White);
+        [this]() { mGame->SetGameScene(Game::GameScene::HowToPlay); },
+        Color::Black, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+}
+
+void Level::LoadHowToPlay() {
+    auto howToPlayScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
+    howToPlayScreen->AddText("Como Jogar:", Vector2(400, 60), Vector2(800, 200),
+                             Color::Blue);
+    //  TODO
+    howToPlayScreen->AddButton(
+        "Voltar", Vector2(400, 600), Vector2(300, 160),
+        [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
+        Color::Blue);
 }
 
 void Level::LoadLevelResult() {

@@ -42,13 +42,15 @@ class Level {
 
     void LoadMainMenu();
 
+    void LoadHowToPlay();
+
+    // Shows how the player performed
+    void LoadLevelResult();
+
     // Loads the level, populating the tiles and returns a pair with the
     // instances for both players
     void LoadLevel(const std::string& levelName, const int levelWidth,
                    const int levelHeight);
-
-    // Shows how the player performed
-    void LoadLevelResult();
 
     std::pair<LevelTile, Block*> GetLevelTileAt(int x, int y);
 
