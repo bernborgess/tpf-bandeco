@@ -36,6 +36,10 @@ SDL_Texture *UIFont::RenderText(const std::string &text,
                                 const Vector3 &color /*= Color::White*/,
                                 int pointSize /*= 24*/,
                                 unsigned wrapLength /*= 900*/) {
+    if (text.length() <= 0) {
+        // Invalid text
+        return nullptr;
+    }
     if (!mRenderer) {
         SDL_Log("Renderer is null. Can't Render Text!");
         return nullptr;

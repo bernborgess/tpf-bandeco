@@ -150,8 +150,8 @@ void Game::ChangeScene() {
         }
         case GameScene::Level1: {
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 1;
-            mHUD->SetTime(180);
+            mGameTimeLimit = 20;
+            mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Cantina do ICEx");
             mLevelPoints = 0;
             mLevelOver = false;
@@ -263,7 +263,7 @@ void Game::ProcessInput() {
 }
 
 void Game::ProcessInputActors() {
-    if (mGamePlayState == GamePlayState::Playing) {
+    if (mGamePlayState == GamePlayState::Playing && !mLevelOver) {
         // Get actors on camera
         std::vector<Actor *> actorsOnCamera = mSpatialHashing->QueryOnCamera(
             mCameraPos, mWindowWidth, mWindowHeight);
