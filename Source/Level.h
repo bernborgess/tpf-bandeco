@@ -47,6 +47,9 @@ class Level {
     void LoadLevel(const std::string& levelName, const int levelWidth,
                    const int levelHeight);
 
+    // Shows how the player performed
+    void LoadLevelResult();
+
     std::pair<LevelTile, Block*> GetLevelTileAt(int x, int y);
 
    private:

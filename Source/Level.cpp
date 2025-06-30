@@ -1,6 +1,8 @@
 #include "Level.h"
 
 #include <fstream>
+#include <iomanip>
+#include <sstream>
 
 // Blocks
 #include "Blocks/Block.h"
@@ -49,6 +51,31 @@ void Level::LoadMainMenu() {
         "Como Jogar?", Vector2(600, 500), Vector2(60 * 6, 90),
         [this]() { SDL_Log("TODO: How to play"); }, Color::Black, 72, 1024,
         Vector2::Zero, Vector2(200, 80), Color::White);
+}
+
+void Level::LoadLevelResult() {
+    auto resultsScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
+
+    // TODO
+    resultsScreen->AddText("Resultados:", Vector2(400, 60), Vector2(800, 200),
+                           Color::Blue);
+
+    int points = mGame->GetPoints();
+    UIText *pointsText = resultsScreen->AddText("  0", Vector2(400, 300),
+                                                Vector2(200, 160), Color::Blue);
+    std::stringstream ss;
+    ss << std::setw(3) << std::setfill(' ') << points;
+    pointsText->SetText(ss.str());
+
+    resultsScreen->AddText("pontos", Vector2(800, 300), Vector2(400, 160),
+                           Color::Blue);
+
+    resultsScreen->AddButton(
+        "Continuar", Vector2(400, 600), Vector2(300, 160),
+        [this]() { /* Will go to main menu */
+                   ;
+        },
+        Color::Blue);
 }
 
 void Level::LoadLevel(const std::string &levelName, const int levelWidth,

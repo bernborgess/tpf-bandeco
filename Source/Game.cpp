@@ -138,7 +138,7 @@ void Game::ChangeScene() {
         mLevelManager.LoadMainMenu();
     } else if (mNextScene == GameScene::Level1) {
         mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-        mGameTimeLimit = 180;
+        mGameTimeLimit = 1;
         mHUD->SetTime(180);
         mHUD->SetLevelName("Cantina do ICEx");
         mLevelPoints = 0;
@@ -183,6 +183,14 @@ void Game::ChangeScene() {
         // Initialize actors
         mLevelManager.LoadLevel("../Assets/Levels/level1-2.csv", LEVEL_WIDTH,
                                 LEVEL_HEIGHT);
+    } else if (mNextScene == GameScene::LevelResult) {
+        // Set background color
+        mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+        SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                               mBackgroundColor.y, mBackgroundColor.z, 255);
+
+        // Initialize main menu actors
+        mLevelManager.LoadLevelResult();
     }
 
     // Set new scene
@@ -340,7 +348,7 @@ void Game::UpdateGame() {
 
     UpdateSceneManager(deltaTime);
 
-    if (mGameScene != GameScene::MainMenu &&
+    if ((mGameScene == GameScene::Level1 || mGameScene == GameScene::Level2) &&
         mGamePlayState == GamePlayState::Playing) {
         UpdateLevelTime(deltaTime);
     }
@@ -382,9 +390,10 @@ void Game::UpdateLevelTime(float deltaTime) {
         }
         mOrderManager.TimeTick(mGameTimeLimit);
         if (mGameTimeLimit <= -5) {
-            // TODO: Got to change scene somehow
-            // SetGameScene(GameScene::MainMenu);
-            // This is not working (Segfault)
+            mPlayerB->SetState(ActorState::Destroy);
+            mPlayerD->SetState(ActorState::Destroy);
+            SetGameScene(GameScene::LevelResult);
+            SetGamePlayState(GamePlayState::GameOver);
         }
     }
 }

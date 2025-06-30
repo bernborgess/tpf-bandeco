@@ -167,10 +167,6 @@ void Player::HandleChop() {
 }
 
 void Player::OnUpdate(float deltaTime) {
-    // TODO: Check win and set the game scene to Level 2
-    // mState = ActorState::Destroy;
-    // mGame->SetGameScene(Game::GameScene::Level2, 3.5f);
-
     // Hand Item follows player
     if (mHandItem != nullptr) {
         Vector2 offset;
