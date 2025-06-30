@@ -8,8 +8,17 @@
 
 HUD::HUD(class Game *game, const std::string &fontName)
     : UIScreen(game, fontName) {
+    // Level Time
+    AddImage("../Assets/Prototype/Time.png", Vector2(1170, 690),
+             Vector2(200, 200));
     mTimeText = AddText("", Vector2(1200, 760), Vector2(150, 80), Color::Blue);
+
+    // Level Name
     mLevelName = AddText("", Vector2(1000, 6), Vector2(360, 60), Color::Blue);
+
+    //  Points
+    AddImage("../Assets/Prototype/Coin.png", Vector2(60, 710),
+             Vector2(200, 200));
     mPointsCounter =
         AddText("  0", Vector2(100, 769), Vector2(100, 80), Color::Blue);
 }

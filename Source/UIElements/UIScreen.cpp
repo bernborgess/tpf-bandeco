@@ -34,16 +34,16 @@ UIScreen::~UIScreen() {
 void UIScreen::Update(float deltaTime) {}
 
 void UIScreen::Draw(SDL_Renderer *renderer) {
+    for (auto &image : mImages) {
+        image->Draw(renderer, mPos);
+    }
+
     for (auto &text : mTexts) {
         text->Draw(renderer, mPos);
     }
 
     for (auto &button : mButtons) {
         button->Draw(renderer, mPos);
-    }
-
-    for (auto &image : mImages) {
-        image->Draw(renderer, mPos);
     }
 }
 
