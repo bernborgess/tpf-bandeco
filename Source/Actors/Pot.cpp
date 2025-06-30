@@ -18,7 +18,6 @@ Pot::Pot(Game* game, const std::string& texturePath)
            /* drawOrder = */ 200),
       mItemCounter(0) {
     mItemInside = {};
-    AddItem(ItemType::TomatoSoup);
 }
 
 // Public Constructor that handles choosing the textures

@@ -53,7 +53,7 @@ bool Game::Initialize() {
 
     mWindow = SDL_CreateWindow(
         "Pesadelo no Bandeco!", 500, 0, mWindowWidth, mWindowHeight, 0
-        // TODO: SDL_WINDOW_FULLSCREEN);
+        // SDL_WINDOW_FULLSCREEN
     );
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
@@ -157,16 +157,16 @@ void Game::ChangeScene() {
             mLevelOver = false;
 
             // Add level music
-            // mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
+            mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
 
             // Set background color
             mBackgroundColor.Set(250.0f, 175.0f, 72.0f);
             SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
                                    mBackgroundColor.y, mBackgroundColor.z, 255);
 
-            // TODO: Set background image
-            // SetBackgroundImage("../Assets/Sprites/Background.png",
-            //                    Vector2(TILE_SIZE, 0), Vector2(6784, 448));
+            // Set background image
+            SetBackgroundImage("../Assets/Prototype/BackgroundLevel1.png",
+                               Vector2(0, 0), Vector2(1600, 900));
 
             // Adding all the planned orders for this level
             mOrderManager.Clear();
