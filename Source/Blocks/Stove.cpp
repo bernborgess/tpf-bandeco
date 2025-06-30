@@ -5,6 +5,8 @@
 #include "../Actors/Plate.h"
 #include "../Game.h"
 
+const Vector2 Stove::POT_OFFSET = Vector2(0, -14);
+
 const std::string Stove::STOVE_FRONT_PATH = "../Assets/Prototype/Stove.png";
 const std::string Stove::STOVE_RIGHT_PATH = "../Assets/Prototype/Stove.png";
 
@@ -13,7 +15,7 @@ Stove::Stove(Game* game, const std::string& texturePath,
     : Block(game, texturePath, gridPos), mPotOnTop(nullptr) {
     // Also create a Pot on top of it!
     Pot* pot = Pot::NewPot(mGame);
-    pot->SetPosition(GetPosition() + Vector2(16, 24));
+    pot->SetPosition(GetPosition() + POT_OFFSET);
     mPotOnTop = pot;
 }
 
@@ -48,7 +50,7 @@ Item* Stove::SetItemOnTop(Item* item) {
             }
             // Accept the pot
             mPotOnTop = pot;
-            mPotOnTop->SetPosition(GetPosition() + Vector2(16, 24));
+            mPotOnTop->SetPosition(GetPosition() + POT_OFFSET);
             return nullptr;
         }
         case ItemType::Plate: {

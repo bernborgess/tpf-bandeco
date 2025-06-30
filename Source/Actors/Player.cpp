@@ -18,30 +18,39 @@ Player::Player(Game *game, const PlayerType playerType,
       mIsRunning(false),
       mPlayerType(playerType),
       mForwardSpeed(forwardSpeed),
-      mHandItem(nullptr) {
+      mHandItem(nullptr),
+      mFaceDirection(FaceDirection::South) {
     mRigidBodyComponent = new RigidBodyComponent(this, 1.0f, 5.0f);
-    mColliderComponent = new AABBColliderComponent(
-        this, 0, 0, PLAYER_WIDTH, PLAYER_HEIGHT, ColliderLayer::Player);
 
-    mDrawComponent = mPlayerType == PlayerType::PlayerB
-                         ? new DrawAnimatedComponent(
-                               this, "../Assets/Sprites/PlayerB/PlayerB.png",
-                               "../Assets/Sprites/PlayerB/PlayerB.json")
-                         : new DrawAnimatedComponent(
-                               this, "../Assets/Sprites/PlayerD/PlayerD.png",
-                               "../Assets/Sprites/PlayerD/PlayerD.json");
-    // mDrawComponent =
-    //     new DrawAnimatedComponent(this,
-    //     "../Assets/Sprites/PlayerB/PlayerB.png",
-    //                               "../Assets/Sprites/PlayerB/PlayerB.json");
+    switch (mPlayerType) {
+        case PlayerType::PlayerB: {
+            mColliderComponent = new AABBColliderComponent(
+                this, 0, 0, 28, 40, ColliderLayer::Player);
 
-    mDrawComponent->AddAnimation("Dead", {0});
-    mDrawComponent->AddAnimation("idle", {7});
-    mDrawComponent->AddAnimation("jump", {2});
-    mDrawComponent->AddAnimation("run", {3, 7, 4});
-    mDrawComponent->AddAnimation("win", {7});
+            mDrawComponent = new DrawAnimatedComponent(
+                this, "../Assets/Sprites/PlayerB/PlayerB.png",
+                "../Assets/Sprites/PlayerB/PlayerB.json", 400);
+            break;
+        }
+        case PlayerType::PlayerD: {
+            mColliderComponent = new AABBColliderComponent(
+                this, 0, 0, 28, 28, ColliderLayer::Player);
 
-    mDrawComponent->SetAnimation("idle");
+            mDrawComponent = new DrawAnimatedComponent(
+                this, "../Assets/Sprites/PlayerD/PlayerD.png",
+                "../Assets/Sprites/PlayerD/PlayerD.json", 400);
+            break;
+        }
+    }
+
+    mDrawComponent->AddAnimation("IdleBack", {0});
+    mDrawComponent->AddAnimation("IdleFront", {1});
+    mDrawComponent->AddAnimation("IdleRight", {2});
+    mDrawComponent->AddAnimation("WalkBack", {3, 0, 4});
+    mDrawComponent->AddAnimation("WalkFront", {5, 1, 6});
+    mDrawComponent->AddAnimation("WalkRight", {7, 2, 8});
+
+    mDrawComponent->SetAnimation("IdleFront");
     mDrawComponent->SetAnimFPS(10.0f);
 }
 
@@ -164,17 +173,73 @@ void Player::OnUpdate(float deltaTime) {
 
     // Hand Item follows player
     if (mHandItem != nullptr) {
-        mHandItem->SetPosition(mPosition + Vector2(16, -16));
+        Vector2 offset;
+        switch (mPlayerType) {
+            case PlayerType::PlayerB: {
+                switch (mFaceDirection) {
+                    case FaceDirection::East: {
+                        offset = Vector2(16, -16);
+                        break;
+                    }
+                    case FaceDirection::West: {
+                        offset = Vector2(-48, -16);
+                        break;
+                    }
+                    case FaceDirection::South: {
+                        offset = Vector2(-16, 16);
+                        break;
+                    }
+                    case FaceDirection::North: {
+                        offset = Vector2(-16, -80);
+                        break;
+                    }
+                }
+                break;
+            }
+            case PlayerType::PlayerD: {
+                switch (mFaceDirection) {
+                    case FaceDirection::East: {
+                        offset = Vector2(16, -32);
+                        break;
+                    }
+                    case FaceDirection::West: {
+                        offset = Vector2(-48, -32);
+                        break;
+                    }
+                    case FaceDirection::South: {
+                        offset = Vector2(-16, 0);
+                        break;
+                    }
+                    case FaceDirection::North: {
+                        offset = Vector2(-16, -80);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        mHandItem->SetPosition(mPosition + offset);
     }
 
     ManageAnimations();
 }
 
 void Player::ManageAnimations() {
-    if (mIsRunning) {
-        mDrawComponent->SetAnimation("run");
-    } else {
-        mDrawComponent->SetAnimation("idle");
+    switch (mFaceDirection) {
+        case FaceDirection::East:
+        case FaceDirection::West: {
+            return mDrawComponent->SetAnimation(mIsRunning ? "WalkRight"
+                                                           : "IdleRight");
+        }
+        case FaceDirection::South: {
+            return mDrawComponent->SetAnimation(mIsRunning ? "WalkFront"
+                                                           : "IdleFront");
+        }
+        case FaceDirection::North: {
+            return mDrawComponent->SetAnimation(mIsRunning ? "WalkBack"
+                                                           : "IdleBack");
+        }
     }
 }
 

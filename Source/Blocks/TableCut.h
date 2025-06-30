@@ -23,6 +23,8 @@ class TableCut : public Table {
     static const int CUT_LEVEL_MAX = 5;
     int cutLevel;
 
+    static const Vector2 TOMATO_OFFSET;
+
     static const std::string TABLE_CUT_FRONT_PATH;
     static const std::string TABLE_CUT_RIGHT_PATH;
 };

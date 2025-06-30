@@ -10,8 +10,8 @@ const std::string Pot::POT_BURNT_PATH = "../Assets/Prototype/PotBurnt.png";
 
 Pot::Pot(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Pot,
-           /* width = */ 32,
-           /* height = */ 32,
+           /* width = */ 64,
+           /* height = */ 64,
            /* drawOrder = */ 200),
       mItemCounter(0) {
     mItemInside = {};

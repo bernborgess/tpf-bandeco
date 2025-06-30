@@ -53,11 +53,15 @@ void DrawAnimatedComponent::Draw(SDL_Renderer* renderer,
     int spriteIdx = mAnimations[mAnimName][static_cast<int>(mAnimTimer)];
     SDL_Rect* srcRect = mSpriteSheetData[spriteIdx];
 
-    SDL_Rect dstRect = {static_cast<int>(mOwner->GetPosition().x -
-                                         mOwner->GetGame()->GetCameraPos().x),
-                        static_cast<int>(mOwner->GetPosition().y -
-                                         mOwner->GetGame()->GetCameraPos().y),
-                        srcRect->w * 4, srcRect->h * 4};
+    int offsetX = 48;
+    int offsetY = 80;
+
+    SDL_Rect dstRect = {
+        static_cast<int>(mOwner->GetPosition().x -
+                         mOwner->GetGame()->GetCameraPos().x - offsetX),
+        static_cast<int>(mOwner->GetPosition().y -
+                         mOwner->GetGame()->GetCameraPos().y - offsetY),
+        srcRect->w * 4, srcRect->h * 4};
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     if (mOwner->GetRotation() == Math::Pi) {
