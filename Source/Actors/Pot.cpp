@@ -145,6 +145,7 @@ void Pot::OnUpdate(float deltaTime) {
                 // Swap the TomatoCut to TomatoSoup
                 mItemInside = ItemType::TomatoSoup;
                 mIsCooked = true;
+                mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
                 SDL_Log("SOUP IS COOKED!");
                 break;
             }
@@ -159,6 +160,7 @@ void Pot::OnUpdate(float deltaTime) {
                 // Swap the TomatoSoup to TomatoBurn
                 mItemInside = ItemType::TomatoBurn;
                 mIsBurnt = true;
+                mDrawComponent->UpdateTexture(POT_BURNT_PATH);
                 SDL_Log("SOUP JUST BURNT!");
                 break;
             }

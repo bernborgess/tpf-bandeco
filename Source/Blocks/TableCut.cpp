@@ -67,6 +67,7 @@ void TableCut::OnItemCut() {
     if (cutLevel == CUT_LEVEL_MAX) {
         // Now transforms into finished item
         if (mItemOnTop->GetItemType() == ItemType::Tomato) {
+            // TODO: let the cut tomato be bigger than 32x32
             Item* cutTomato = Item::NewItem(mGame, ItemType::TomatoCut);
             mItemOnTop->SetState(ActorState::Destroy);
             mItemOnTop = cutTomato;
