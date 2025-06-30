@@ -4,6 +4,9 @@
 #include "Plate.h"
 
 const std::string Pot::POT_EMPTY_PATH = "../Assets/Prototype/Pot.png";
+const std::string Pot::POT_TOMATO_1_PATH = "../Assets/Prototype/PotTomato1.png";
+const std::string Pot::POT_TOMATO_2_PATH = "../Assets/Prototype/PotTomato2.png";
+const std::string Pot::POT_TOMATO_3_PATH = "../Assets/Prototype/PotTomato3.png";
 const std::string Pot::POT_TOMATO_SOUP_PATH =
     "../Assets/Prototype/PotTomatoSoup.png";
 const std::string Pot::POT_BURNT_PATH = "../Assets/Prototype/PotBurnt.png";
@@ -28,7 +31,7 @@ bool Pot::AddItem(ItemType itemType) {
                 mItemCounter = 1;
                 mCookTime = 0.0f;
                 mIsCooked = mIsBurnt = false;
-                mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
+                mDrawComponent->UpdateTexture(POT_TOMATO_1_PATH);
                 return true;
             }
             // In case someone transfers soup
@@ -67,9 +70,12 @@ bool Pot::AddItem(ItemType itemType) {
             // At most 3
             if (mItemCounter >= 3) break;
             mItemCounter += 1;
-            // TODO: Show to the user that there are `mItemCounter`
-            // items inside the pot
-            SDL_Log("Another item in the pot, now there are %d", mItemCounter);
+            if (mItemCounter == 1)
+                mDrawComponent->UpdateTexture(POT_TOMATO_1_PATH);
+            if (mItemCounter == 2)
+                mDrawComponent->UpdateTexture(POT_TOMATO_2_PATH);
+            if (mItemCounter == 3)
+                mDrawComponent->UpdateTexture(POT_TOMATO_3_PATH);
             return true;
         }
     }
@@ -122,7 +128,14 @@ void Pot::Clear() { mItemInside = {}; }
 void Pot::ReturnItem(ItemType item) {
     mItemInside = item;
     switch (item) {
-        case ItemType::TomatoCut:
+        case ItemType::TomatoCut: {
+            if (mItemCounter == 1)
+                mDrawComponent->UpdateTexture(POT_TOMATO_1_PATH);
+            if (mItemCounter == 2)
+                mDrawComponent->UpdateTexture(POT_TOMATO_2_PATH);
+            if (mItemCounter == 3)
+                mDrawComponent->UpdateTexture(POT_TOMATO_3_PATH);
+        }
         case ItemType::TomatoSoup: {
             mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
             break;

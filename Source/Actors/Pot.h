@@ -42,6 +42,9 @@ class Pot : public Item {
     bool mIsBurnt;
 
     static const std::string POT_EMPTY_PATH;
+    static const std::string POT_TOMATO_1_PATH;
+    static const std::string POT_TOMATO_2_PATH;
+    static const std::string POT_TOMATO_3_PATH;
     static const std::string POT_TOMATO_SOUP_PATH;
     static const std::string POT_BURNT_PATH;
 };
