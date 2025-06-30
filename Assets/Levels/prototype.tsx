@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="prototype" tilewidth="64" tileheight="64" tilecount="24" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="prototype" tilewidth="64" tileheight="64" tilecount="25" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="1">
   <image source="../Prototype/Wall.png" width="64" height="64"/>
@@ -72,5 +72,8 @@
  </tile>
  <tile id="29">
   <image source="../Prototype/CeilRotate.png" width="64" height="64"/>
+ </tile>
+ <tile id="31">
+  <image source="../Prototype/DishDrainer.png" width="64" height="64"/>
  </tile>
 </tileset>
