@@ -72,9 +72,7 @@ void Level::LoadLevelResult() {
 
     resultsScreen->AddButton(
         "Continuar", Vector2(400, 600), Vector2(300, 160),
-        [this]() { /* Will go to main menu */
-                   ;
-        },
+        [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
         Color::Blue);
 }
 

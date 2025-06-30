@@ -218,8 +218,11 @@ void Game::ProcessInput() {
                     mUIStack.back()->HandleKeyPress(event.key.keysym.scancode);
                 }
 
-                HandleKeyPressActors(event.key.keysym.scancode,
-                                     event.key.repeat == 0);
+                if (mGameScene == GameScene::Level1 ||
+                    mGameScene == GameScene::Level2) {
+                    HandleKeyPressActors(event.key.keysym.scancode,
+                                         event.key.repeat == 0);
+                }
 
                 // Check if the P key has been pressed to pause/unpause the
                 // game
@@ -234,7 +237,9 @@ void Game::ProcessInput() {
         }
     }
 
-    ProcessInputActors();
+    if (mGameScene == GameScene::Level1 || mGameScene == GameScene::Level2) {
+        ProcessInputActors();
+    }
     const Uint8 *state = SDL_GetKeyboardState(nullptr);
     mAudio->ProcessInput(state);
 }
@@ -314,10 +319,12 @@ void Game::UpdateGame() {
 
     mTicksCount = SDL_GetTicks();
 
-    if (mGamePlayState != GamePlayState::Paused &&
-        mGamePlayState != GamePlayState::GameOver) {
-        // Reinsert all actors and pending actors
-        UpdateActors(deltaTime);
+    if (mGameScene == GameScene::Level1 || mGameScene == GameScene::Level2) {
+        if (mGamePlayState != GamePlayState::Paused &&
+            mGamePlayState != GamePlayState::GameOver) {
+            // Reinsert all actors and pending actors
+            UpdateActors(deltaTime);
+        }
     }
 
     // Reinsert audio system
@@ -390,8 +397,14 @@ void Game::UpdateLevelTime(float deltaTime) {
         }
         mOrderManager.TimeTick(mGameTimeLimit);
         if (mGameTimeLimit <= -5) {
-            mPlayerB->SetState(ActorState::Destroy);
-            mPlayerD->SetState(ActorState::Destroy);
+            if (mPlayerB) {
+                delete mPlayerB;
+                mPlayerB = nullptr;
+            }
+            if (mPlayerD) {
+                delete mPlayerD;
+                mPlayerD = nullptr;
+            }
             SetGameScene(GameScene::LevelResult);
             SetGamePlayState(GamePlayState::GameOver);
         }
@@ -471,29 +484,31 @@ void Game::GenerateOutput() {
         SDL_RenderCopy(mRenderer, mBackgroundTexture, nullptr, &dstRect);
     }
 
-    // Get actors on camera
-    std::vector<Actor *> actorsOnCamera =
-        mSpatialHashing->QueryOnCamera(mCameraPos, mWindowWidth, mWindowHeight);
+    if (mGameScene == GameScene::Level1 || mGameScene == GameScene::Level2) {
+        // Get actors on camera
+        std::vector<Actor *> actorsOnCamera = mSpatialHashing->QueryOnCamera(
+            mCameraPos, mWindowWidth, mWindowHeight);
 
-    // Get list of drawables in draw order
-    std::vector<DrawComponent *> drawables;
+        // Get list of drawables in draw order
+        std::vector<DrawComponent *> drawables;
 
-    for (auto actor : actorsOnCamera) {
-        auto drawable = actor->GetComponent<DrawComponent>();
-        if (drawable && drawable->IsVisible()) {
-            drawables.emplace_back(drawable);
+        for (auto actor : actorsOnCamera) {
+            auto drawable = actor->GetComponent<DrawComponent>();
+            if (drawable && drawable->IsVisible()) {
+                drawables.emplace_back(drawable);
+            }
         }
-    }
 
-    // Sort drawables by draw order
-    std::sort(drawables.begin(), drawables.end(),
-              [](const DrawComponent *a, const DrawComponent *b) {
-                  return a->GetDrawOrder() < b->GetDrawOrder();
-              });
+        // Sort drawables by draw order
+        std::sort(drawables.begin(), drawables.end(),
+                  [](const DrawComponent *a, const DrawComponent *b) {
+                      return a->GetDrawOrder() < b->GetDrawOrder();
+                  });
 
-    // Draw all drawables
-    for (auto drawable : drawables) {
-        drawable->Draw(mRenderer, mModColor);
+        // Draw all drawables
+        for (auto drawable : drawables) {
+            drawable->Draw(mRenderer, mModColor);
+        }
     }
 
     // Draw all UI screens
