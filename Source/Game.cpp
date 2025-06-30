@@ -292,7 +292,7 @@ void Game::TogglePause() {
 
 void Game::GivePoints(int points) {
     mLevelPoints += points;
-    mAudio->PlaySound("Coin.wav");
+    mAudio->PlaySound("Bell.wav");
     mHUD->SetPoints(mLevelPoints);
 }
 
