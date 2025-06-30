@@ -37,21 +37,26 @@ void Level::LoadMainMenu() {
     mainMenu->AddImage("../Assets/Sprites/OvercookedLogo.png", Vector2(200, 40),
                        Vector2(1189, 270));
 
-    mainMenu->AddText("Pesadelo no Bandeco!", Vector2(600, 225),
-                      Vector2(600, 100));
+    mainMenu->AddText("Pesadelo no Bandeco!", Vector2(625, 245),
+                      Vector2(600, 100), Color::Black);
 
-    mainMenu->AddText("Versão PlayTest", Vector2(400, 300), Vector2(300, 80),
+    mainMenu->AddText("Pesadelo no Bandeco!", Vector2(630, 250),
+                      Vector2(600, 100), Color::Yellow);
+
+    mainMenu->AddText("Versão PlayTest", Vector2(400, 320), Vector2(245, 65),
+                      Color::White);
+    mainMenu->AddText("Versão PlayTest", Vector2(395, 315), Vector2(245, 65),
                       Color::Red);
 
     auto button1 = mainMenu->AddButton(
-        "Começar", Vector2(600, 400), Vector2(60 * 6, 90),
-        [this]() { mGame->SetGameScene(Game::GameScene::Level1); },
-        Color::Black, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+        "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
+        [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
+        72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
     auto button2 = mainMenu->AddButton(
-        "Como Jogar?", Vector2(600, 500), Vector2(60 * 6, 90),
+        "Como Jogar?", Vector2(600, 600), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::HowToPlay); },
-        Color::Black, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+        Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 }
 
 void Level::LoadHowToPlay() {

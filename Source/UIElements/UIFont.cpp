@@ -49,9 +49,9 @@ SDL_Texture *UIFont::RenderText(const std::string &text,
     SDL_Color sdlColor;
 
     // Swap red and blue so we get RGBA instead of BGRA
-    sdlColor.r = static_cast<Uint8>(color.x * 255);
-    sdlColor.g = static_cast<Uint8>(color.y * 255);
-    sdlColor.b = static_cast<Uint8>(color.z * 255);
+    sdlColor.r = static_cast<Uint8>(color.x);
+    sdlColor.g = static_cast<Uint8>(color.y);
+    sdlColor.b = static_cast<Uint8>(color.z);
     sdlColor.a = 255;
 
     if (mFontData.count(pointSize) == 0) {

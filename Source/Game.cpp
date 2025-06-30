@@ -150,10 +150,10 @@ void Game::ChangeScene() {
         }
         case GameScene::Level1: {
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 180;
+            mGameTimeLimit = 10;  // debug: level time
             mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Cantina do ICEx");
-            mLevelPoints = 0;
+            mLevelPoints = 0;  // debug: raise point to win screen
             mLevelOver = false;
 
             // Add level music
