@@ -24,7 +24,11 @@ class DrawComponent : public Component {
 
     int GetDrawOrder() const { return mDrawOrder; }
 
+    void ResetAbove();
+    void SetAbove();
+
    protected:
     bool mIsVisible;
     int mDrawOrder;
+    bool mIsAbove;
 };

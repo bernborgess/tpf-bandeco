@@ -216,6 +216,10 @@ void Player::OnUpdate(float deltaTime) {
         }
 
         mHandItem->SetPosition(mPosition + offset);
+
+        // Set item in from of player
+        mHandItem->ResetAbove();
+        if (mFaceDirection == FaceDirection::South) mHandItem->SetAbove();
     }
 
     ManageAnimations();

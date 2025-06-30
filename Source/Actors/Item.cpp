@@ -24,3 +24,7 @@ Item* Item::NewItem(Game* game, ItemType itemType) {
     }
     return nullptr;
 }
+
+void Item::ResetAbove() { mDrawComponent->ResetAbove(); }
+
+void Item::SetAbove() { mDrawComponent->SetAbove(); }

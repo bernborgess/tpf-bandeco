@@ -150,7 +150,7 @@ void Game::ChangeScene() {
         }
         case GameScene::Level1: {
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 20;
+            mGameTimeLimit = 180;
             mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Cantina do ICEx");
             mLevelPoints = 0;
