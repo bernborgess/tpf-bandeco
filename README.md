@@ -15,7 +15,19 @@
 ## Descrição
 <!-- TODO: 3 parágrafos -->
 <!-- TODO: objetivo, mecânicas básicas, condições de vitória e derrota -->
-- O jogo **Overcooked: Pesadelo no Bandeco** ...
+ O jogo **Overcooked: Pesadelo no Bandeco** é inspirado em
+[Overcooked!](https://www.team17.com/games/overcooked) de team17, um jogo
+cooperativo de 2 jogadores baseado nas áreas de alimentação da UFMG, focado em
+cozinhar e entregar pratos sob pressão.
+
+Os jogadores são colocados em diferentes mapas onde devem cozinhar os pedidos o
+mais rápido possível, superando condições adversas e comunicando-se para
+conseguir coordenar e dividir tarefas.  Na primeira fase os jogadores tem a receita de sopa de tomate, que envolve pegar tomates da caixa, cortar tomates sobre a bancada e adicionar 3 tomates cortados a panela. O cozimento deve ser feito com atenção, pois se passar muito do tempo a sopa irá queimar e o prato tem que ser descartado.
+
+Para vencer a fase os
+jogadores deve ser capazes de entregar uma quantidade satisfatória de pratos.
+Caso isso não ocorra os jogadores deverão tentar novamente. Caso consigam, podem
+prosseguir para novos restaurantes.
 
 ## Funcionalidades a serem testadas
 <!-- TODO: Lista de funcionalidades que os jogadores devem observar com atenção durante o Playtesting -->
