@@ -74,34 +74,46 @@ void Level::LoadLevelResult() {
     auto resultsScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
 
     // TODO
-    resultsScreen->AddText("Resultados:", Vector2(400, 60), Vector2(800, 200),
-                           Color::Blue);
+
+    resultsScreen->AddImage("../Assets/Prototype/MainMenuBackground.png",
+                            Vector2::Zero, Vector2(1792, 1024));
+
+    resultsScreen->AddImage("../Assets/Prototype/WinLogo.png", Vector2(300, 10),
+                            0.5 * Vector2(1920, 321));
+
+    resultsScreen->AddImage("../Assets/Prototype/Coin.png", Vector2(470, 210),
+                            Vector2(250, 300));
 
     int points = mGame->GetPoints();
-    UIText *pointsText = resultsScreen->AddText("  0", Vector2(400, 300),
-                                                Vector2(200, 160), Color::Blue);
     std::stringstream ss;
-    ss << std::setw(3) << std::setfill(' ') << points;
-    pointsText->SetText(ss.str());
+    ss << std::setw(3) << std::setfill('0') << points;
 
-    resultsScreen->AddText("pontos", Vector2(800, 300), Vector2(400, 160),
+    resultsScreen->AddText(ss.str(), Vector2(508, 300), Vector2(160, 120),
+                           Color::Black);
+    resultsScreen->AddText(ss.str(), Vector2(514, 304), Vector2(160, 120),
+                           Color::White);
+
+    resultsScreen->AddText("PONTOS", Vector2(780, 300), Vector2(300, 120),
                            Color::Blue);
 
     if (points < 100) {
         resultsScreen->AddText(
             "Você precisa de pelo menos 100 pontos para progredir.",
-            Vector2(400, 500), Vector2(800, 100));
+            Vector2(405, 500), Vector2(900, 100), Color::Black);
+        resultsScreen->AddText(
+            "Você precisa de pelo menos 100 pontos para progredir.",
+            Vector2(400, 500), Vector2(900, 100));
         // TODO: Sons de derrota
     } else {
         resultsScreen->AddText("Parabéns! Você venceu o primeiro desafio!",
-                               Vector2(400, 500), Vector2(800, 100));
+                               Vector2(400, 500), Vector2(900, 100));
         // TODO: Sons de vitoria
     }
 
     resultsScreen->AddButton(
-        "Continuar", Vector2(400, 600), Vector2(300, 160),
+        "Continuar", Vector2(600, 660), Vector2(400, 100),
         [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
-        Color::Blue);
+        Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
 }
 
 void Level::LoadLevel(const std::string &levelName, const int levelWidth,
