@@ -2,14 +2,32 @@
 
 ## Screenshots
 - O menu principal
+![Screenshot 2025-06-30 11 47 55 PM](https://github.com/user-attachments/assets/650f0b39-89bd-4fe7-85de-45aca2850dcf)
+
 - Como jogar?
+ ![Screenshot 2025-06-30 11 48 09 PM](https://github.com/user-attachments/assets/b58ee511-74c6-4e83-abec-4a8765284ea6)
+
 - O começo da fase 1
+![Screenshot 2025-06-30 11 48 29 PM](https://github.com/user-attachments/assets/aab98215-18eb-4af6-bd50-c04057d31291)
+
 - Cortando tomates
+![Screenshot 2025-06-30 11 49 02 PM](https://github.com/user-attachments/assets/0396af6e-57b2-4c51-a0b6-fec4127fe055)
+
 - Fazendo sopa de tomate
+![Screenshot 2025-06-30 11 55 42 PM](https://github.com/user-attachments/assets/c9e34fc0-2fed-48d0-8bab-891c77c0f02c)
+
 - Entregando o pedido
+![Screenshot 2025-06-30 11 56 07 PM](https://github.com/user-attachments/assets/005b3aad-a99d-42b3-b8b2-9c6c0a447672)
+
 - Descartando a sopa queimada
+![Screenshot 2025-06-30 11 49 38 PM](https://github.com/user-attachments/assets/89da47c0-5721-497f-b08b-22c1efde2491)
+
 - Fim do tempo
+![Screenshot 2025-06-30 11 57 40 PM](https://github.com/user-attachments/assets/b17b75a9-6298-4cec-8bc8-11c5d837cc71)
+
 - Resultados da fase
+![Screenshot 2025-06-30 11 57 49 PM](https://github.com/user-attachments/assets/646fcc69-c5d4-44c3-b0ad-697dc96c4b0f)
+
 
 
 ## Descrição
