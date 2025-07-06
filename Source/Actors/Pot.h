@@ -5,6 +5,7 @@
 
 #include "Actor.h"
 #include "Item.h"
+#include "ProgressBar.h"
 
 class Pot : public Item {
    public:
@@ -35,8 +36,8 @@ class Pot : public Item {
     std::optional<ItemType> mItemInside;
     int mItemCounter;
     // Cook & Burn times are proportional to `mItemCounter`
-    static constexpr float COOK_TIME_MAX = 5.0f;
-    static constexpr float BURN_TIME_MAX = 10.0f;
+    static constexpr float COOK_TIME_MAX = 10.0f;
+    static constexpr float BURN_TIME_MAX = 20.0f;
     float mCookTime;
     bool mIsCooked;
     bool mIsBurnt;
@@ -47,4 +48,6 @@ class Pot : public Item {
     static const std::string POT_TOMATO_3_PATH;
     static const std::string POT_TOMATO_SOUP_PATH;
     static const std::string POT_BURNT_PATH;
+
+    ProgressBar* mProgressBar;
 };

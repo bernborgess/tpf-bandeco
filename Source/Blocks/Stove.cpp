@@ -13,9 +13,7 @@ const std::string Stove::STOVE_RIGHT_PATH = "../Assets/Prototype/Stove.png";
 
 Stove::Stove(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
-    : Block(game, texturePath, gridPos), mPotOnTop(nullptr) {
-    // Also create a Pot on top of it!
-}
+    : Block(game, texturePath, gridPos), mPotOnTop(nullptr) {}
 
 Stove* Stove::NewStove(Game* game, LevelTile tile,
                        std::pair<int, int> gridPos) {

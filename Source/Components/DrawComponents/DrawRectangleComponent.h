@@ -10,6 +10,7 @@ class DrawRectangleComponent : public DrawComponent {
 
     void SetLength(int length) { mLength = length; }
     void SetShow(bool show) { mShow = show; }
+    void SetColor(Vector3 color) { mColor = color; }
 
     static const int BAR_FULL_LENGTH = 32;
 
@@ -17,4 +18,5 @@ class DrawRectangleComponent : public DrawComponent {
     Vector2 mSize;
     int mLength;
     bool mShow;
+    Vector3 mColor;
 };

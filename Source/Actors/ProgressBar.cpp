@@ -2,8 +2,7 @@
 
 #include "../Math.h"
 
-ProgressBar::ProgressBar(Game* game, int length)
-    : Actor(game), mLength(length) {
+ProgressBar::ProgressBar(Game* game) : Actor(game) {
     mDrawComponent = new DrawRectangleComponent(this);
     mDrawComponent->SetLength(0);
 }

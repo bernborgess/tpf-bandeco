@@ -3,10 +3,11 @@
 #include "../../Actors/Actor.h"
 
 DrawRectangleComponent::DrawRectangleComponent(class Actor* owner)
-    : DrawComponent(owner, 200), mShow(false) {
-    mSize = Vector2(BAR_FULL_LENGTH, 8);
-    mLength = 0;
-}
+    : DrawComponent(owner, 350),
+      mShow(false),
+      mColor(Color::Green),
+      mSize(Vector2(BAR_FULL_LENGTH, 8)),
+      mLength(0) {}
 
 void DrawRectangleComponent::Draw(SDL_Renderer* renderer,
                                   const Vector3& modColor) {
@@ -25,7 +26,7 @@ void DrawRectangleComponent::Draw(SDL_Renderer* renderer,
 
     // Foreground rectangle
     {
-        auto [r, g, b] = Color::Green;
+        auto [r, g, b] = mColor;
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         const Vector2 pos = mOwner->GetPosition();
         const SDL_Rect rect = {
