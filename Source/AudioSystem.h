@@ -72,7 +72,7 @@ class AudioSystem {
     //       "Assets/Sounds/ChompLoop.wav".
     SoundHandle PlaySound(const std::string &soundName, bool looping = false);
 
-    // Stops the sound if it is currently playing
+        // Stops the sound if it is currently playing
     void StopSound(SoundHandle sound);
 
     // Pauses the sound if it is currently playing

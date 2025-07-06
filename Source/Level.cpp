@@ -43,11 +43,6 @@ void Level::LoadMainMenu() {
     mainMenu->AddText("Pesadelo no Bandeco!", Vector2(630, 250),
                       Vector2(600, 100), Color::Yellow);
 
-    mainMenu->AddText("Versão PlayTest", Vector2(400, 320), Vector2(245, 65),
-                      Color::White);
-    mainMenu->AddText("Versão PlayTest", Vector2(395, 315), Vector2(245, 65),
-                      Color::Red);
-
     auto button1 = mainMenu->AddButton(
         "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::Level2); }, Color::Blue,

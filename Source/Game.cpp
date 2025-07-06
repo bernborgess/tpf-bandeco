@@ -136,6 +136,9 @@ void Game::ChangeScene() {
             SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
                                    mBackgroundColor.y, mBackgroundColor.z, 255);
 
+            mAudio->StopSound(mMusicHandle);
+            mMusicHandle = mAudio->PlaySound("main_menu.ogg", true);
+
             // Initialize main menu actors
             mLevelManager.LoadMainMenu();
             break;
@@ -158,6 +161,7 @@ void Game::ChangeScene() {
             mLevelOver = false;
 
             // Add level music
+            mAudio->StopSound(mMusicHandle);
             mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
 
             // Set background color
@@ -192,8 +196,9 @@ void Game::ChangeScene() {
             mLevelPoints = 0;
             mLevelOver = false;
 
-            // TODO: Add level music
-            // mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
+            // Add level music
+            mAudio->StopSound(mMusicHandle);
+            mMusicHandle = mAudio->PlaySound("bruton.ogg", true);
 
             // Set background color
             mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
