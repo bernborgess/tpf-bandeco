@@ -11,6 +11,8 @@ class DrawRectangleComponent : public DrawComponent {
     void SetLength(int length) { mLength = length; }
     void SetShow(bool show) { mShow = show; }
 
+    static const int BAR_FULL_LENGTH = 32;
+
    protected:
     Vector2 mSize;
     int mLength;

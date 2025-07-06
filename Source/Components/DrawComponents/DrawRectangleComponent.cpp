@@ -3,8 +3,8 @@
 #include "../../Actors/Actor.h"
 
 DrawRectangleComponent::DrawRectangleComponent(class Actor* owner)
-    : DrawComponent(owner, 200) {
-    mSize = Vector2(32, 8);
+    : DrawComponent(owner, 200), mShow(false) {
+    mSize = Vector2(BAR_FULL_LENGTH, 8);
     mLength = 0;
 }
 
