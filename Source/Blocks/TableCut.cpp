@@ -14,7 +14,10 @@ const std::string TableCut::TABLE_CUT_RIGHT_PATH =
 
 TableCut::TableCut(Game* game, const std::string& texturePath,
                    std::pair<int, int> gridPos)
-    : Table(game, texturePath, gridPos) {}
+    : Table(game, texturePath, gridPos) {
+    mProgressBar = new ProgressBar(game, 32);
+    mProgressBar->SetPosition(GetPosition() + Vector2(20, 50));
+}
 
 TableCut* TableCut::NewTableCut(Game* game, LevelTile tile,
                                 std::pair<int, int> gridPos) {

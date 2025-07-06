@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "../Actors/ProgressBar.h"
 #include "Table.h"
 
 class TableCut : public Table {
@@ -27,4 +28,6 @@ class TableCut : public Table {
 
     static const std::string TABLE_CUT_FRONT_PATH;
     static const std::string TABLE_CUT_RIGHT_PATH;
+
+    ProgressBar* mProgressBar;
 };
