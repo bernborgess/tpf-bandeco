@@ -104,7 +104,7 @@ Item* Table::SetItemOnTop(Item* item) {
     }
     // Accepted the item, returns nothing
     mItemOnTop = item;
-    Vector2 offset = Vector2(16, 16);
+    Vector2 offset = Vector2(0, 0);
     if (item->GetItemType() == ItemType::Pot) offset = Vector2(0, -16);
     if (item->GetItemType() == ItemType::Plate) offset = Vector2(6, 6);
 

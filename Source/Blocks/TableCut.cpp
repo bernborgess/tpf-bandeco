@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <vector>
 
-const Vector2 TableCut::TOMATO_OFFSET = Vector2(16, 8);
+const Vector2 TableCut::TOMATO_OFFSET = Vector2(0, 0);
 
 const std::string TableCut::TABLE_CUT_FRONT_PATH =
     "../Assets/Prototype/TableCut.png";
