@@ -44,7 +44,8 @@ Item* TableCut::SetItemOnTop(Item* item) {
         return item;
     }
 
-    std::vector<ItemType> cuttableItems = {ItemType::Tomato, ItemType::Lettuce};
+    std::vector<ItemType> cuttableItems = {ItemType::Tomato, ItemType::Lettuce,
+                                           ItemType::Meat};
     // Check item is cuttable
     bool cuttable =
         std::find(std::begin(cuttableItems), std::end(cuttableItems),
@@ -79,5 +80,11 @@ void TableCut::OnItemCut() {
             mItemOnTop = cutLettuce;
             cutLettuce->SetPosition(GetPosition() + TOMATO_OFFSET);
         }
-     }
+        if (mItemOnTop->GetItemType() == ItemType::Meat) {
+            Item* cutMeat = Item::NewItem(mGame, ItemType::MeatCut);
+            mItemOnTop->SetState(ActorState::Destroy);
+            mItemOnTop = cutMeat;
+            cutMeat->SetPosition(GetPosition() + TOMATO_OFFSET);
+        }
+    }
 }

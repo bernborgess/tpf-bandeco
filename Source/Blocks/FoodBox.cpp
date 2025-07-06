@@ -22,6 +22,9 @@ FoodBox* FoodBox::NewFoodBox(Game* game, ItemType foodType,
         case ItemType::Lettuce: {
             return new FoodBox(game, FOOD_BOX_LETTUCE_PATH, foodType, gridPos);
         }
+        case ItemType::Meat: {
+            return new FoodBox(game, FOOD_BOX_MEAT_PATH, foodType, gridPos);
+        }
         case ItemType::Tomato: {
             return new FoodBox(game, FOOD_BOX_TOMATO_PATH, foodType, gridPos);
         }

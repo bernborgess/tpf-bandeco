@@ -180,6 +180,12 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             mLevelBlocks.push_back(fBblock);
             return;
         }
+        case LevelTile::TileFoodMeat: {
+            FoodBox *fBblock =
+                FoodBox::NewFoodBox(mGame, ItemType::Meat, {x, y});
+            mLevelBlocks.push_back(fBblock);
+            return;
+        }
         case LevelTile::TileFoodTomato: {
             FoodBox *fBblock =
                 FoodBox::NewFoodBox(mGame, ItemType::Tomato, {x, y});
