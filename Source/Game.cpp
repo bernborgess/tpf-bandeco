@@ -344,7 +344,7 @@ void Game::TogglePause() {
                                             delete mPlayerD;
                                             mPlayerD = nullptr;
                                         }
-                                        SetGameScene(GameScene::Level1);
+                                        ResetGameScene();
                                     });
 
         } else if (mGamePlayState == GamePlayState::Paused) {
