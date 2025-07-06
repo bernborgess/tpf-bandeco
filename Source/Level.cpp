@@ -50,7 +50,7 @@ void Level::LoadMainMenu() {
 
     auto button1 = mainMenu->AddButton(
         "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
-        [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
+        [this]() { mGame->SetGameScene(Game::GameScene::Level2); }, Color::Blue,
         72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
     auto button2 = mainMenu->AddButton(

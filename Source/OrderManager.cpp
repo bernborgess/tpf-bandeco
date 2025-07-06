@@ -12,6 +12,7 @@ void OrderManager::Clear() {
     while (!mPlannedOrders.empty()) {
         mPlannedOrders.pop();
     }
+    mOrderQueueScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
 }
 
 void OrderManager::AddOrder(Order order) { mPlannedOrders.push(order); }
@@ -23,12 +24,16 @@ void OrderManager::TimeTick(int time) {
         mPlannedOrders.pop();
         // Maybe add some animation to this transition
         // TODO: Play a sound?
+        SDL_Log("New order now");
         mCurrentOrders.push_back(firstOrder);
         mUIChanged = true;
     }
 
     // Shouldn't happen
-    if (!mOrderQueueScreen) return;
+    if (!mOrderQueueScreen) {
+        SDL_Log("No OrderQueueScreen found!");
+        return;
+    }
 
     // No need to redraw
     if (!mUIChanged) return;
@@ -36,11 +41,33 @@ void OrderManager::TimeTick(int time) {
     // Redraw the orders
     mOrderQueueScreen->mImages.clear();
     int i = 0;
+    SDL_Log("There are %d orders now", mCurrentOrders.size());
     for (auto& k : mCurrentOrders) {
-        mOrderQueueScreen->AddImage("../Assets/Recipes/TomatoSoup.png",
-                                    Vector2(16 + 144 * i, 16),
-                                    Vector2(128, 128));
+        std::string recipePath = "";
+        if (k.recipe == std::set<ItemType>{ItemType::TomatoSoup}) {
+            recipePath = "../Assets/Recipes/TomatoSoup.png";
+        }
+        if (k.recipe ==
+            std::set<ItemType>{ItemType::Bread, ItemType::MeatCook}) {
+            recipePath = "../Assets/Recipes/Burger.png";
+        }
+        if (k.recipe == std::set<ItemType>{ItemType::Bread, ItemType::MeatCook,
+                                           ItemType::LettuceCut}) {
+            recipePath = "../Assets/Recipes/BurgerLettuce.png";
+        }
+        if (k.recipe == std::set<ItemType>{ItemType::Bread, ItemType::MeatCook,
+                                           ItemType::LettuceCut,
+                                           ItemType::TomatoCut}) {
+            recipePath = "../Assets/Recipes/BurgerLettuceTomato.png";
+        }
 
+        if (recipePath == "") {
+            SDL_Log("No path found for this recipe");
+            continue;
+        }
+
+        mOrderQueueScreen->AddImage(recipePath, Vector2(16 + 144 * i, 16),
+                                    Vector2(128, 128));
         i++;
     }
     mUIChanged = false;
