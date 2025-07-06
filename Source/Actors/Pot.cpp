@@ -44,6 +44,7 @@ bool Pot::AddItem(ItemType itemType) {
                 mIsCooked = true;
                 mIsBurnt = false;
                 mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
+                mProgressBar->SetShow(true);
                 return true;
             }
             // In case someone transfers burnt food
@@ -89,15 +90,12 @@ bool Pot::AddItem(ItemType itemType) {
 Item* Pot::PutItem(Item* item) {
     if (!item) return item;
 
-    SDL_Log("POT PUT ITEM");
-
     bool accepted = AddItem(item->GetItemType());
 
     if (accepted) {
         item->SetState(ActorState::Destroy);
         return nullptr;
     } else if (item->GetItemType() == ItemType::Plate) {
-        SDL_Log("Adding plate to pot? Just pass the ingredients");
         Plate* plate = (Plate*)item;
         auto items = plate->PickItems();
         for (auto& itemType : items) {
