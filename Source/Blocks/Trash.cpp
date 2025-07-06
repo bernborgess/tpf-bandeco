@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "../Actors/Pan.h"
 #include "../Actors/Plate.h"
 #include "../Actors/Pot.h"
 
@@ -13,9 +14,13 @@ Trash::Trash(Game* game, std::pair<int, int> gridPos)
 Item* Trash::SetItemOnTop(Item* item) {
     if (!item) return nullptr;
     switch (item->GetItemType()) {
+        case ItemType::Pan: {
+            Pan* pan = (Pan*)item;
+            pan->Clear();
+            return pan;
+        }
         case ItemType::Pot: {
             Pot* pot = (Pot*)item;
-            SDL_Log("Trash with pot");
             pot->Clear();
             return pot;
         }

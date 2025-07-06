@@ -19,30 +19,44 @@ Pan::Pan(Game* game, const std::string& texturePath)
 Pan* Pan::NewPan(Game* game) { return new Pan(game, PAN_EMPTY_PATH); }
 
 bool Pan::AddItem(ItemType itemType) {
-    if (!mItemInside) {
-        switch (itemType) {
-            // TODO
+    // Only one item in the pan
+    if (mItemInside) return false;
+
+    switch (itemType) {
+        case ItemType::MeatCut: {
+            mItemInside = ItemType::MeatCut;
+            mItemCounter = 1;
+            mCookTime = 0.0f;
+            mIsCooked = mIsBurnt = false;
+            mDrawComponent->UpdateTexture(PAN_MEAT_CUT_PATH);
+            return true;
         }
-        // Not a supported item
-        return false;
+        case ItemType::MeatCook: {
+            mItemInside = ItemType::MeatCook;
+            mItemCounter = 1;
+            mCookTime = COOK_TIME_MAX;
+            mIsCooked = true;
+            mIsBurnt = false;
+            mDrawComponent->UpdateTexture(PAN_MEAT_COOK_PATH);
+            return true;
+        }
+        case ItemType::MeatBurn: {
+            mItemInside = ItemType::MeatBurn;
+            mItemCounter = 1;
+            mCookTime = BURN_TIME_MAX;
+            mIsBurnt = mIsCooked = true;
+            mDrawComponent->UpdateTexture(PAN_BURNT_PATH);
+            return true;
+        }
     }
 
-    // Only accept if it's the same type
-    if (*mItemInside != itemType) {
-        SDL_Log("Have to refuse,since types are different");
-        return false;
-    }
-
-    // Stacking more items
-    switch (*mItemInside) {
-        // TODO
-    }
-    // Can't use it
     return false;
 }
 
 Item* Pan::PutItem(Item* item) {
     if (!item) return item;
+
+    SDL_Log("PAN PUT ITEM");
 
     bool accepted = AddItem(item->GetItemType());
 
@@ -73,7 +87,7 @@ std::optional<ItemType> Pan::PickItem() {
         case ItemType::MeatCook: {
             mItemInside = {};
             mDrawComponent->UpdateTexture(PAN_EMPTY_PATH);
-            return ItemType::TomatoSoup;
+            return ItemType::MeatCook;
         }
     }
     // Not done or burnt.
@@ -88,7 +102,18 @@ void Pan::Clear() {
 void Pan::ReturnItem(ItemType item) {
     mItemInside = item;
     switch (item) {
-        // TODO
+        case ItemType::MeatCut: {
+            mDrawComponent->UpdateTexture(PAN_MEAT_CUT_PATH);
+            break;
+        }
+        case ItemType::MeatCook: {
+            mDrawComponent->UpdateTexture(PAN_MEAT_COOK_PATH);
+            break;
+        }
+        case ItemType::MeatBurn: {
+            mDrawComponent->UpdateTexture(PAN_BURNT_PATH);
+            break;
+        }
     }
 }
 

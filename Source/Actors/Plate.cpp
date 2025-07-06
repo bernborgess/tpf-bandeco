@@ -11,6 +11,8 @@ const std::string Plate::PLATE_TOMATO_CUT_PATH =
     "../Assets/Prototype/PlateTomatoCut.png";
 const std::string Plate::PLATE_BREAD_PATH =
     "../Assets/Prototype/PlateBread.png";
+const std::string Plate::PLATE_MEAT_COOK_PATH =
+    "../Assets/Prototype/PlateMeatCook.png";
 
 Plate::Plate(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Plate,
@@ -68,6 +70,15 @@ std::optional<ItemType> Plate::PutItem(ItemType itemType) {
             // Can't put two soups in the same plate.
             return itemType;
         }
+        case ItemType::MeatCook: {
+            if (mItems.empty()) {
+                mItems.insert(itemType);
+                mDrawComponent->UpdateTexture(PLATE_MEAT_COOK_PATH);
+                return {};
+            }
+            return itemType;
+        }
+
         case ItemType::TomatoCut: {
             if (mItems.empty()) {
                 mItems.insert(itemType);

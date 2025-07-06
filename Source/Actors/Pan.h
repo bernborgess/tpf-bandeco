@@ -12,26 +12,26 @@ class Pan : public Pot {
     static Pan* NewPan(Game* game);
 
     // Add items to the Pan, return the item if rejected
-    Item* PutItem(Item* item);
+    Item* PutItem(Item* item) override;
 
     // Transfer *done* food, to the plate
-    std::optional<ItemType> PickItem();
+    std::optional<ItemType> PickItem() override;
 
     // Empties itself, like when interacted with Trash
-    void Clear();
+    void Clear() override;
 
     // Only used when transfer to plate didn't work
-    void ReturnItem(ItemType item);
+    void ReturnItem(ItemType item) override;
 
     void OnUpdate(float deltaTime) override;
 
-    void OnCook(float deltaTime);
+    void OnCook(float deltaTime) override;
 
    private:
     Pan(Game* game, const std::string& texturePath);
 
     // Return true if item was accepted
-    bool AddItem(ItemType itemType);
+    bool AddItem(ItemType itemType) override;
 
     std::optional<ItemType> mItemInside;
     int mItemCounter;

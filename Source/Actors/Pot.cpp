@@ -86,6 +86,8 @@ bool Pot::AddItem(ItemType itemType) {
 Item* Pot::PutItem(Item* item) {
     if (!item) return item;
 
+    SDL_Log("POT PUT ITEM");
+
     bool accepted = AddItem(item->GetItemType());
 
     if (accepted) {
@@ -138,6 +140,7 @@ void Pot::ReturnItem(ItemType item) {
                 mDrawComponent->UpdateTexture(POT_TOMATO_2_PATH);
             if (mItemCounter == 3)
                 mDrawComponent->UpdateTexture(POT_TOMATO_3_PATH);
+            break;
         }
         case ItemType::TomatoSoup: {
             mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
