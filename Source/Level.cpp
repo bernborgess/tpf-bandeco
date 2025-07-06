@@ -168,6 +168,12 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             mGame->mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
             return;
         }
+        case LevelTile::TileFoodBread: {
+            FoodBox *fBblock =
+                FoodBox::NewFoodBox(mGame, ItemType::Bread, {x, y});
+            mLevelBlocks.push_back(fBblock);
+            return;
+        }
         case LevelTile::TileFoodLettuce: {
             FoodBox *fBblock =
                 FoodBox::NewFoodBox(mGame, ItemType::Lettuce, {x, y});

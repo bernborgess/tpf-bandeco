@@ -9,6 +9,8 @@ const std::string Plate::PLATE_TOMATO_SOUP_PATH =
     "../Assets/Prototype/PlateTomatoSoup.png";
 const std::string Plate::PLATE_TOMATO_CUT_PATH =
     "../Assets/Prototype/PlateTomatoCut.png";
+const std::string Plate::PLATE_BREAD_PATH =
+    "../Assets/Prototype/PlateBread.png";
 
 Plate::Plate(Game* game, const std::string& texturePath)
     : Item(game, texturePath, ItemType::Plate,
@@ -40,6 +42,15 @@ Item* Plate::PutItem(Item* item) {
             }
         }
             // Other food will accept on different rules
+        case ItemType::Bread: {
+            if (mItems.empty()) {
+                item->SetState(ActorState::Destroy);
+                mItems.insert(ItemType::Bread);
+                mDrawComponent->UpdateTexture(PLATE_BREAD_PATH);
+                return nullptr;
+            }
+            return item;
+        }
     }
 
     // Can't use it, reject
@@ -58,7 +69,6 @@ std::optional<ItemType> Plate::PutItem(ItemType itemType) {
             return itemType;
         }
         case ItemType::TomatoCut: {
-            // TODO: This will be part of hamburger recipe
             if (mItems.empty()) {
                 mItems.insert(itemType);
                 mDrawComponent->UpdateTexture(PLATE_TOMATO_CUT_PATH);

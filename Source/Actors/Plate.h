@@ -29,4 +29,5 @@ class Plate : public Item {
     static const std::string PLATE_EMPTY_PATH;
     static const std::string PLATE_TOMATO_SOUP_PATH;
     static const std::string PLATE_TOMATO_CUT_PATH;
+    static const std::string PLATE_BREAD_PATH;
 };
