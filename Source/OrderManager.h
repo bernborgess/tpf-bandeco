@@ -3,6 +3,7 @@
 #include <queue>
 
 #include "Actors/Item.h"
+#include "UIElements/UIScreen.h"
 
 struct Order {
     int startTime;  // in Seconds to the end of the level
@@ -14,7 +15,7 @@ struct Order {
 
 class OrderManager {
    public:
-    OrderManager() {};
+    OrderManager(class Game* game);
 
     // Clears the planned and current order lists
     void Clear();
@@ -32,10 +33,16 @@ class OrderManager {
     int DeliverOrder(std::set<ItemType> recipe);
 
    private:
+    class Game* mGame;
     std::list<Order> mCurrentOrders;
 
     // I need a data structure to hold the orders, sorted by start time
     // decreasing, so that I can pick the first one and move it to the
     // `mCurrentOrders` vector
     std::priority_queue<Order> mPlannedOrders;
+
+    UIScreen* mOrderQueueScreen;
+
+    // Helper to reduce redrawing
+    bool mUIChanged;
 };

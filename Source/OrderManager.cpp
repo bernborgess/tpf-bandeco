@@ -4,6 +4,9 @@
 
 #include <algorithm>
 
+OrderManager::OrderManager(Game* game)
+    : mGame(game), mOrderQueueScreen(nullptr), mUIChanged(false) {}
+
 void OrderManager::Clear() {
     mCurrentOrders.clear();
     while (!mPlannedOrders.empty()) {
@@ -17,13 +20,30 @@ void OrderManager::TimeTick(int time) {
     if (mPlannedOrders.empty()) return;
     Order firstOrder = mPlannedOrders.top();
     if (firstOrder.startTime >= time) {
-        // SDL_Log("New order now at %d seconds", time);
-        // Move this one
         mPlannedOrders.pop();
         // Maybe add some animation to this transition
-        // Play a sound?
+        // TODO: Play a sound?
         mCurrentOrders.push_back(firstOrder);
+        mUIChanged = true;
     }
+
+    // Shouldn't happen
+    if (!mOrderQueueScreen) return;
+
+    // No need to redraw
+    if (!mUIChanged) return;
+
+    // Redraw the orders
+    mOrderQueueScreen->mImages.clear();
+    int i = 0;
+    for (auto& k : mCurrentOrders) {
+        mOrderQueueScreen->AddImage("../Assets/Recipes/TomatoSoup.png",
+                                    Vector2(16 + 144 * i, 16),
+                                    Vector2(128, 128));
+
+        i++;
+    }
+    mUIChanged = false;
 }
 
 int OrderManager::DeliverOrder(std::set<ItemType> recipe) {
@@ -45,6 +65,7 @@ int OrderManager::DeliverOrder(std::set<ItemType> recipe) {
 
     // Remove it from the list
     mCurrentOrders.erase(it);
+    mUIChanged = true;
 
     // TODO: Calculate points in relation to time
     return 20;

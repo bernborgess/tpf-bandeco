@@ -43,7 +43,8 @@ Game::Game(int windowWidth, int windowHeight)
       mBackgroundTexture(nullptr),
       mBackgroundSize(Vector2::Zero),
       mBackgroundPosition(Vector2::Zero),
-      mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT) {}
+      mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT),
+      mOrderManager(this) {}
 
 bool Game::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -170,8 +171,11 @@ void Game::ChangeScene() {
 
             // Adding all the planned orders for this level
             mOrderManager.Clear();
-            std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
-                                                  90,  70,  50,  30,  10};
+            // std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
+            //                                       90,  70,  50,  30,  10};
+            std::array<int, 13> soupStartTimes = {180, 179, 178, 177, 177, 177,
+                                                  177, 177, 177, 177, 177};
+
             for (int startTime : soupStartTimes) {
                 mOrderManager.AddOrder(
                     {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
@@ -197,8 +201,11 @@ void Game::ChangeScene() {
             mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
 
             mOrderManager.Clear();
-            std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
-                                                  90,  70,  50,  30,  10};
+            // std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
+            //                                       90,  70,  50,  30,  10};
+            std::array<int, 13> soupStartTimes = {
+                180, 174, 171, 165, 160, 150, 120, 100, 90, 70, 50, 30, 10};
+
             for (int startTime : soupStartTimes) {
                 mOrderManager.AddOrder(
                     {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});

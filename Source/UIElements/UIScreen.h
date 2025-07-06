@@ -47,7 +47,6 @@ class UIScreen {
     UIImage *AddImage(const std::string &imagePath, const Vector2 &pos, const Vector2 &dims,
                       const Vector3 &color = Color::White);
 
-   protected:
     // Sets the mouse mode to relative or not
     class Game *mGame;
     class UIFont *mFont;
