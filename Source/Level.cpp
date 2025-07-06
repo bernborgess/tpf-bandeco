@@ -50,7 +50,7 @@ void Level::LoadMainMenu() {
 
     auto button1 = mainMenu->AddButton(
         "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
-        [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
+        [this]() { mGame->SetGameScene(Game::GameScene::Level2); }, Color::Blue,
         72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
     auto button2 = mainMenu->AddButton(
@@ -160,12 +160,14 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             if (mGame->mPlayerB) return;
             mGame->mPlayerB = new Player(mGame, PlayerType::PlayerB);
             mGame->mPlayerB->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+            SDL_Log("ADD PLAYER B");
             return;
         }
         case LevelTile::TilePlayerDStart: {
             if (mGame->mPlayerD) return;
             mGame->mPlayerD = new Player(mGame, PlayerType::PlayerD);
             mGame->mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+            SDL_Log("ADD PLAYER D");
             return;
         }
         case LevelTile::TileFoodTomato: {

@@ -178,15 +178,17 @@ void Game::ChangeScene() {
             }
 
             // Initialize actors
-            mLevelManager.LoadLevel("../Assets/Levels/level1-1.csv",
-                                    LEVEL_WIDTH, LEVEL_HEIGHT);
+            mLevelManager.LoadLevel("../Assets/Levels/level1.csv", LEVEL_WIDTH,
+                                    LEVEL_HEIGHT);
             break;
         }
         case GameScene::Level2: {
-            mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
+            mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
             mGameTimeLimit = 400;
-            mHUD->SetTime(400);
-            mHUD->SetLevelName("1-2");
+            mHUD->SetTime(mGameTimeLimit);
+            mHUD->SetLevelName("Bandeco");
+            mLevelPoints = 0;
+            mLevelOver = false;
 
             // TODO: Add level music
             // mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
@@ -194,9 +196,17 @@ void Game::ChangeScene() {
             // Set background color
             mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
 
+            mOrderManager.Clear();
+            std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
+                                                  90,  70,  50,  30,  10};
+            for (int startTime : soupStartTimes) {
+                mOrderManager.AddOrder(
+                    {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
+            }
+
             // Initialize actors
-            mLevelManager.LoadLevel("../Assets/Levels/level1-2.csv",
-                                    LEVEL_WIDTH, LEVEL_HEIGHT);
+            mLevelManager.LoadLevel("../Assets/Levels/level2.csv", LEVEL_WIDTH,
+                                    LEVEL_HEIGHT);
             break;
         }
         case GameScene::LevelResult: {
