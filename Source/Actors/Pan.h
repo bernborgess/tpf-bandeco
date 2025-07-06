@@ -5,12 +5,13 @@
 
 #include "Actor.h"
 #include "Item.h"
+#include "Pot.h"
 
-class Pot : public Item {
+class Pan : public Pot {
    public:
-    static Pot* NewPot(Game* game);
+    static Pan* NewPan(Game* game);
 
-    // Add items to the pot, return the item if rejected
+    // Add items to the Pan, return the item if rejected
     Item* PutItem(Item* item);
 
     // Transfer *done* food, to the plate
@@ -26,8 +27,8 @@ class Pot : public Item {
 
     void OnCook(float deltaTime);
 
-   protected:
-    Pot(Game* game, const std::string& texturePath);
+   private:
+    Pan(Game* game, const std::string& texturePath);
 
     // Return true if item was accepted
     bool AddItem(ItemType itemType);
@@ -41,10 +42,8 @@ class Pot : public Item {
     bool mIsCooked;
     bool mIsBurnt;
 
-    static const std::string POT_EMPTY_PATH;
-    static const std::string POT_TOMATO_1_PATH;
-    static const std::string POT_TOMATO_2_PATH;
-    static const std::string POT_TOMATO_3_PATH;
-    static const std::string POT_TOMATO_SOUP_PATH;
-    static const std::string POT_BURNT_PATH;
+    static const std::string PAN_EMPTY_PATH;
+    static const std::string PAN_MEAT_CUT_PATH;
+    static const std::string PAN_MEAT_COOK_PATH;
+    static const std::string PAN_BURNT_PATH;
 };

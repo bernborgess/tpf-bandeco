@@ -211,6 +211,7 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             return;
         }
         case LevelTile::TileStove:
+        case LevelTile::TileStovePan:
         case LevelTile::TileStovePotTomatoSoup:
         case LevelTile::TileStovePot: {
             Stove *stove = Stove::NewStove(mGame, tile, {x, y});

@@ -31,6 +31,8 @@ add_executable(${PROJECT_NAME}
         Source/Blocks/Trash.h
         Source/Actors/Item.cpp
         Source/Actors/Item.h
+        Source/Actors/Pan.cpp
+        Source/Actors/Pan.h
         Source/Actors/Plate.cpp
         Source/Actors/Plate.h
         Source/Actors/Player.cpp

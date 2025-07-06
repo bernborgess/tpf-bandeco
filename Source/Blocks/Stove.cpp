@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "../Actors/Pan.h"
 #include "../Actors/Plate.h"
 #include "../Game.h"
 
@@ -14,18 +15,29 @@ Stove::Stove(Game* game, const std::string& texturePath,
              std::pair<int, int> gridPos)
     : Block(game, texturePath, gridPos), mPotOnTop(nullptr) {
     // Also create a Pot on top of it!
-    Pot* pot = Pot::NewPot(mGame);
-    pot->SetPosition(GetPosition() + POT_OFFSET);
-    mPotOnTop = pot;
 }
 
 Stove* Stove::NewStove(Game* game, LevelTile tile,
                        std::pair<int, int> gridPos) {
     switch (tile) {
-        case LevelTile::TileStove:
-        case LevelTile::TileStovePotTomatoSoup:
-        case LevelTile::TileStovePot:
+        case LevelTile::TileStove: {
             return new Stove(game, STOVE_FRONT_PATH, gridPos);
+        }
+        case LevelTile::TileStovePotTomatoSoup:
+        case LevelTile::TileStovePot: {
+            auto stove = new Stove(game, STOVE_FRONT_PATH, gridPos);
+            Pot* pot = Pot::NewPot(game);
+            pot->SetPosition(stove->GetPosition() + POT_OFFSET);
+            stove->mPotOnTop = pot;
+            return stove;
+        }
+        case LevelTile::TileStovePan: {
+            auto stove = new Stove(game, STOVE_FRONT_PATH, gridPos);
+            Pan* pan = Pan::NewPan(game);
+            pan->SetPosition(stove->GetPosition() + POT_OFFSET);
+            stove->mPotOnTop = pan;
+            return stove;
+        }
     }
     return nullptr;
 }
@@ -53,6 +65,17 @@ Item* Stove::SetItemOnTop(Item* item) {
             mPotOnTop->SetPosition(GetPosition() + POT_OFFSET);
             return nullptr;
         }
+        case ItemType::Pan: {
+            Pan* pan = (Pan*)item;
+            if (mPotOnTop) {  // Reject, already got a pot
+                return pan;
+            }
+            // Accept the pot
+            mPotOnTop = pan;
+            mPotOnTop->SetPosition(GetPosition() + POT_OFFSET);
+            return nullptr;
+        }
+
         case ItemType::Plate: {
             Plate* plate = (Plate*)item;
 
