@@ -133,6 +133,7 @@ class Game {
     // Track actors state
     bool mIsRunning;
     GamePlayState mGamePlayState;
+    UIScreen *mPauseScreen;
 
     // Track level state
     GameScene mGameScene;

@@ -306,13 +306,39 @@ void Game::HandleKeyPressActors(const int scanCode, const bool isPressed) {
 }
 
 void Game::TogglePause() {
-    if (mGameScene != GameScene::MainMenu) {
+    if (mGameScene == GameScene::Level1 || mGameScene == GameScene::Level2) {
         if (mGamePlayState == GamePlayState::Playing) {
             mGamePlayState = GamePlayState::Paused;
 
             mAudio->PauseSound(mMusicHandle);
             mAudio->PlaySound("Coin.wav");
+
+            // Show interface
+            // TODO: Make beautiful
+            mPauseScreen = new UIScreen(this, "../Assets/Fonts/Chewy.ttf");
+
+            mPauseScreen->AddText("PAUSE", Vector2(600, 180), Vector2(360, 90),
+                                  Color::White);
+
+            mPauseScreen->AddButton("CONTINUE", Vector2(600, 280),
+                                    Vector2(360, 90),
+                                    [this]() { TogglePause(); });
+
+            mPauseScreen->AddButton("RESET", Vector2(600, 480),
+                                    Vector2(360, 90), [this]() {
+                                        if (mPlayerB) {
+                                            delete mPlayerB;
+                                            mPlayerB = nullptr;
+                                        }
+                                        if (mPlayerD) {
+                                            delete mPlayerD;
+                                            mPlayerD = nullptr;
+                                        }
+                                        SetGameScene(GameScene::Level1);
+                                    });
+
         } else if (mGamePlayState == GamePlayState::Paused) {
+            mPauseScreen->Close();
             mGamePlayState = GamePlayState::Playing;
 
             mAudio->ResumeSound(mMusicHandle);
