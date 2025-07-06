@@ -160,14 +160,18 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             if (mGame->mPlayerB) return;
             mGame->mPlayerB = new Player(mGame, PlayerType::PlayerB);
             mGame->mPlayerB->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-            SDL_Log("ADD PLAYER B");
             return;
         }
         case LevelTile::TilePlayerDStart: {
             if (mGame->mPlayerD) return;
             mGame->mPlayerD = new Player(mGame, PlayerType::PlayerD);
             mGame->mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
-            SDL_Log("ADD PLAYER D");
+            return;
+        }
+        case LevelTile::TileFoodLettuce: {
+            FoodBox *fBblock =
+                FoodBox::NewFoodBox(mGame, ItemType::Lettuce, {x, y});
+            mLevelBlocks.push_back(fBblock);
             return;
         }
         case LevelTile::TileFoodTomato: {

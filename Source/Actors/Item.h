@@ -10,7 +10,9 @@ enum class ItemType {
     TomatoCut,
     TomatoSoup,
     TomatoBurn,
-    Pot
+    Pot,
+    Lettuce,
+    LettuceCut
 };
 
 class Item : public Actor {
