@@ -45,20 +45,20 @@ void OrderManager::TimeTick(int time) {
     for (auto& k : mCurrentOrders) {
         std::string recipePath = "";
         if (k.recipe == std::set<ItemType>{ItemType::TomatoSoup}) {
-            recipePath = "../Assets/Recipes/TomatoSoup.png";
+            recipePath = "../Assets/Sprites/Recipes/TomatoSoup.png";
         }
         if (k.recipe ==
             std::set<ItemType>{ItemType::Bread, ItemType::MeatCook}) {
-            recipePath = "../Assets/Recipes/Burger.png";
+            recipePath = "../Assets/Sprites/Recipes/Burger.png";
         }
         if (k.recipe == std::set<ItemType>{ItemType::Bread, ItemType::MeatCook,
                                            ItemType::LettuceCut}) {
-            recipePath = "../Assets/Recipes/BurgerLettuce.png";
+            recipePath = "../Assets/Sprites/Recipes/BurgerLettuce.png";
         }
         if (k.recipe == std::set<ItemType>{ItemType::Bread, ItemType::MeatCook,
                                            ItemType::LettuceCut,
                                            ItemType::TomatoCut}) {
-            recipePath = "../Assets/Recipes/BurgerLettuceTomato.png";
+            recipePath = "../Assets/Sprites/Recipes/BurgerLettuceTomato.png";
         }
 
         if (recipePath == "") {
