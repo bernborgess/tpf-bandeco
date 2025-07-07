@@ -4,11 +4,10 @@
 #include "../Game.h"
 
 // Paths to the plate variants
-const std::string Plate::PLATE_EMPTY_PATH = "../Assets/Prototype/Plate.png";
+const std::string Plate::PLATE_EMPTY_PATH =
+    "../Assets/Sprites/Plates/Empty.png";
 const std::string Plate::PLATE_TOMATO_SOUP_PATH =
-    "../Assets/Prototype/PlateTomatoSoup.png";
-const std::string Plate::PLATE_TOMATO_CUT_PATH =
-    "../Assets/Prototype/PlateTomatoCut.png";
+    "../Assets/Sprites/Plates/TomatoSoup.png";
 const std::string Plate::PLATE_T_PATH = "../Assets/Sprites/Plates/PlateT.png";
 const std::string Plate::PLATE_M_PATH = "../Assets/Sprites/Plates/PlateM.png";
 const std::string Plate::PLATE_MT_PATH = "../Assets/Sprites/Plates/PlateMT.png";
