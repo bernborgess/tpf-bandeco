@@ -345,7 +345,7 @@ void Game::TogglePause() {
             mGamePlayState = GamePlayState::Paused;
 
             mAudio->PauseSound(mMusicHandle);
-            mAudio->PlaySound("Coin.wav");
+            mAudio->PlaySound("gheu.ogg");
 
             // Show interface
             // TODO: Make beautiful
@@ -376,7 +376,7 @@ void Game::TogglePause() {
             mGamePlayState = GamePlayState::Playing;
 
             mAudio->ResumeSound(mMusicHandle);
-            mAudio->PlaySound("Coin.wav");
+            mAudio->PlaySound("gheu.ogg");
         }
     }
 }

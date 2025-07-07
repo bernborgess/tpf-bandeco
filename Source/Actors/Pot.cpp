@@ -1,6 +1,7 @@
 #include "Pot.h"
 
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
+#include "../Game.h"
 #include "Plate.h"
 
 const std::string Pot::POT_EMPTY_PATH = "../Assets/Prototype/Pot.png";
@@ -185,6 +186,7 @@ void Pot::OnUpdate(float deltaTime) {
                 mIsBurnt = true;
                 mDrawComponent->UpdateTexture(POT_BURNT_PATH);
                 SDL_Log("SOUP JUST BURNT!");
+                mGame->GetAudio()->PlaySound("burnout.ogg");
                 mProgressBar->SetShow(false);
                 break;
             }

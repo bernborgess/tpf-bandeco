@@ -1,6 +1,7 @@
 #include "Pan.h"
 
 #include "../Components/DrawComponents/DrawSpriteComponent.h"
+#include "../Game.h"
 #include "Plate.h"
 
 const std::string Pan::PAN_EMPTY_PATH = "../Assets/Prototype/Pan.png";
@@ -142,6 +143,7 @@ void Pan::OnUpdate(float deltaTime) {
             case ItemType::MeatCut:
             case ItemType::MeatCook: {
                 // Swap the TomatoSoup to TomatoBurn
+                mGame->GetAudio()->PlaySound("burnout.ogg");
                 mItemInside = ItemType::MeatBurn;
                 mIsBurnt = true;
                 mDrawComponent->UpdateTexture(PAN_BURNT_PATH);
