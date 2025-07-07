@@ -27,11 +27,12 @@ class Sink : public Table {
 
     static const int WASH_LEVEL_MAX = 5;
     int washLevel;
-    int dirtyPlateCount;
+    int mDirtyPlateCount;
     int cleanPlateCount;
 
     static const std::string SINK_PATH;
-    static const std::string DRAINER_PATH;
+    static const std::string SINK_PLATE_PATH;
+    static const std::string SINK_PLATES_PATH;
 
     ProgressBar* mProgressBar;
 };
