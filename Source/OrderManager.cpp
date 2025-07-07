@@ -82,7 +82,7 @@ void OrderManager::TimeTick(int time) {
             continue;
         }
 
-        mOrderQueueScreen->AddImage(recipePath, Vector2(16 + 144 * i, 16),
+        mOrderQueueScreen->AddImage(recipePath, Vector2(16 + 144 * i, 2),
                                     Vector2(128, 128));
         i++;
     }
