@@ -108,19 +108,35 @@ void Level::LoadLevelResult() {
         resultsScreen->AddText(
             "Você precisa de pelo menos 100 pontos para progredir.",
             Vector2(400, 500), Vector2(900, 100));
-        // TODO: Sons de derrota
+
+        // Sons de derrota
+        mGame->GetAudio()->StopSound(mGame->mMusicHandle);
+        mGame->mMusicHandle =
+            mGame->GetAudio()->PlaySound("evil_morty.mp3", false);
+
         resultsScreen->AddButton(
             "Continuar", Vector2(600, 660), Vector2(400, 100),
             [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
             Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
 
-    } else {
+    } else if (mGame->mMaxLevel == 1) {
         resultsScreen->AddText("Parabéns! Você venceu o primeiro desafio!",
                                Vector2(400, 500), Vector2(900, 100));
-        // TODO: Sons de vitoria
+        // Sons de vitoria
+        mGame->mAudio->PlaySound("clapping.mp3");
+
         resultsScreen->AddButton(
             "Continuar", Vector2(600, 660), Vector2(400, 100),
             [this]() { mGame->SetGameScene(Game::GameScene::Level2); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+    } else if (mGame->mMaxLevel == 2) {
+        resultsScreen->AddText("Parabéns! Você venceu o jogo!",
+                               Vector2(400, 500), Vector2(900, 100));
+        // Sons de vitoria
+        mGame->mAudio->PlaySound("clapping.mp3");
+        resultsScreen->AddButton(
+            "Finalizar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
             Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
     }
 }

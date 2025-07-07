@@ -151,11 +151,12 @@ void Game::ChangeScene() {
             break;
         }
         case GameScene::Level1: {
+            mMaxLevel = std::max(mMaxLevel, 1);
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 180;  // debug: level time
+            mGameTimeLimit = 10;  // debug: level time
             mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Cantina do ICEx");
-            mLevelPoints = 0;  // debug: raise point to win screen
+            mLevelPoints = 10;  // debug: raise point to win screen
             mLevelOver = false;
 
             // Add level music
@@ -187,11 +188,12 @@ void Game::ChangeScene() {
             break;
         }
         case GameScene::Level2: {
+            mMaxLevel = std::max(mMaxLevel, 2);
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 180;
+            mGameTimeLimit = 10;
             mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Bandeco");
-            mLevelPoints = 0;
+            mLevelPoints = 100;
             mLevelOver = false;
 
             // Add level music

@@ -93,6 +93,7 @@ class Game {
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
 
     Level mLevelManager;
+    int mMaxLevel;
 
    private:
     void ProcessInput();
