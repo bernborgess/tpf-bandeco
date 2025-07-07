@@ -347,28 +347,33 @@ void Game::TogglePause() {
             mAudio->PlaySound("gheu.ogg");
 
             // Show interface
-            // TODO: Make beautiful
             mPauseScreen = new UIScreen(this, "../Assets/Fonts/Chewy.ttf");
 
-            mPauseScreen->AddText("PAUSE", Vector2(600, 180), Vector2(360, 90),
+            mPauseScreen->AddText("PAUSE", Vector2(598, 200), Vector2(360, 120),
+                                  Color::Black);
+            mPauseScreen->AddText("PAUSE", Vector2(604, 204), Vector2(360, 120),
                                   Color::White);
 
-            mPauseScreen->AddButton("CONTINUE", Vector2(600, 280),
-                                    Vector2(360, 90),
-                                    [this]() { TogglePause(); });
+            auto button1 = mPauseScreen->AddButton(
+                "CONTINUAR", Vector2(600, 380), Vector2(60 * 6, 90),
+                [this]() { TogglePause(); }, Color::Blue, 72, 1024,
+                Vector2::Zero, Vector2(260, 80), Color::White);
 
-            mPauseScreen->AddButton("RESET", Vector2(600, 480),
-                                    Vector2(360, 90), [this]() {
-                                        if (mPlayerB) {
-                                            delete mPlayerB;
-                                            mPlayerB = nullptr;
-                                        }
-                                        if (mPlayerD) {
-                                            delete mPlayerD;
-                                            mPlayerD = nullptr;
-                                        }
-                                        ResetGameScene();
-                                    });
+            auto button2 = mPauseScreen->AddButton(
+                "RESTART", Vector2(600, 500), Vector2(60 * 6, 90),
+                [this]() {
+                    if (mPlayerB) {
+                        delete mPlayerB;
+                        mPlayerB = nullptr;
+                    }
+                    if (mPlayerD) {
+                        delete mPlayerD;
+                        mPlayerD = nullptr;
+                    }
+                    ResetGameScene();
+                },
+                Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80),
+                Color::White);
 
         } else if (mGamePlayState == GamePlayState::Paused) {
             mPauseScreen->Close();

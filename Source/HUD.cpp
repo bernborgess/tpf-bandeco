@@ -16,6 +16,8 @@ HUD::HUD(class Game *game, const std::string &fontName)
     mTimeText = AddText("", Vector2(1200, 760), Vector2(150, 80), Color::Blue);
 
     // Level Name
+    mLevelNameAux =
+        AddText("", Vector2(998, 2), Vector2(360, 60), Color::White);
     mLevelName = AddText("", Vector2(1000, 6), Vector2(360, 60), Color::Blue);
 
     //  Points
@@ -41,6 +43,7 @@ void HUD::SetTime(int time) {
 }
 
 void HUD::SetLevelName(const std::string &levelName) {
+    mLevelNameAux->SetText(levelName);
     mLevelName->SetText(levelName);
 }
 
