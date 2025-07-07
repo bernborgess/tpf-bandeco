@@ -16,6 +16,15 @@ FoodBox::FoodBox(Game* game, const std::string& texturePath, ItemType foodType,
 FoodBox* FoodBox::NewFoodBox(Game* game, ItemType foodType,
                              std::pair<int, int> gridPos) {
     switch (foodType) {
+        case ItemType::Bread: {
+            return new FoodBox(game, FOOD_BOX_BREAD_PATH, foodType, gridPos);
+        }
+        case ItemType::Lettuce: {
+            return new FoodBox(game, FOOD_BOX_LETTUCE_PATH, foodType, gridPos);
+        }
+        case ItemType::Meat: {
+            return new FoodBox(game, FOOD_BOX_MEAT_PATH, foodType, gridPos);
+        }
         case ItemType::Tomato: {
             return new FoodBox(game, FOOD_BOX_TOMATO_PATH, foodType, gridPos);
         }

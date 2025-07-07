@@ -15,12 +15,30 @@ add_executable(${PROJECT_NAME}
         Source/Main.cpp
         Source/Math.cpp
         Source/Actors/Actor.cpp
+        Source/Actors/Item.cpp
+        Source/Actors/Item.h
+        Source/Actors/Pan.cpp
+        Source/Actors/Pan.h
+        Source/Actors/Plate.cpp
+        Source/Actors/Plate.h
+        Source/Actors/Player.cpp
+        Source/Actors/Player.h
+        Source/Actors/Pot.cpp
+        Source/Actors/Pot.h
+        Source/Actors/ProgressBar.cpp
+        Source/Actors/ProgressBar.h
         Source/Blocks/Block.cpp
         Source/Blocks/Block.h
+        Source/Blocks/Cabinet.cpp
+        Source/Blocks/Cabinet.h
         Source/Blocks/Deliver.cpp
         Source/Blocks/Deliver.h
+        Source/Blocks/Drainer.cpp
+        Source/Blocks/Drainer.h
         Source/Blocks/FoodBox.cpp
         Source/Blocks/FoodBox.h
+        Source/Blocks/Sink.cpp
+        Source/Blocks/Sink.h
         Source/Blocks/Stove.cpp
         Source/Blocks/Stove.h
         Source/Blocks/Table.cpp
@@ -29,14 +47,6 @@ add_executable(${PROJECT_NAME}
         Source/Blocks/TableCut.h
         Source/Blocks/Trash.cpp
         Source/Blocks/Trash.h
-        Source/Actors/Item.cpp
-        Source/Actors/Item.h
-        Source/Actors/Plate.cpp
-        Source/Actors/Plate.h
-        Source/Actors/Player.cpp
-        Source/Actors/Player.h
-        Source/Actors/Pot.cpp
-        Source/Actors/Pot.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
@@ -50,6 +60,8 @@ add_executable(${PROJECT_NAME}
         Source/Components/DrawComponents/DrawComponent.h
         Source/Components/DrawComponents/DrawPolygonComponent.cpp
         Source/Components/DrawComponents/DrawPolygonComponent.h
+        Source/Components/DrawComponents/DrawRectangleComponent.cpp
+        Source/Components/DrawComponents/DrawRectangleComponent.h
         Source/Components/DrawComponents/DrawSpriteComponent.cpp
         Source/Components/DrawComponents/DrawSpriteComponent.h
         Source/Components/RigidBodyComponent.cpp

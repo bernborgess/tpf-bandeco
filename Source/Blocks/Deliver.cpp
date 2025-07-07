@@ -33,18 +33,16 @@ Item* Deliver::SetItemOnTop(Item* item) {
     std::set<ItemType> recipe = plate->PickItems();
 
     // Are the items are a wanted dish?
-
-    // TODO: After orders are shown, enable this validation
-    mGame->GivePoints(20);
-    // int points = mGame->GetOrderManager().DeliverOrder(recipe);
-    // if (points > 0) {
-    //     // YES: Give points
-    //     SDL_Log("Got %d points", points);
-    //     mGame->GivePoints(points);
-    // } else {
-    //     // NO: Beep a sound of mistake
-    //     SDL_Log("Wrong recipe, 0 points");
-    // }
-
-    return plate;
+    int points = mGame->GetOrderManager().DeliverOrder(recipe);
+    if (points > 0) {
+        // YES: Give points
+        SDL_Log("Got %d points", points);
+        mGame->GivePoints(points);
+        plate->SetState(ActorState::Destroy);
+        return nullptr;
+    } else {
+        // TODO NO: Beep a sound of mistake
+        SDL_Log("Wrong recipe, 0 points");
+        return plate;
+    }
 }

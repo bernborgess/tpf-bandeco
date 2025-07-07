@@ -18,7 +18,14 @@ class Game {
     static const int TILE_SIZE = 64;
     static const int TRANSITION_TIME = 1;
 
-    enum class GameScene { MainMenu, HowToPlay, Level1, Level2, LevelResult };
+    enum class GameScene {
+        MainMenu,
+        HowToPlay,
+        Credits,
+        Level1,
+        Level2,
+        LevelResult
+    };
 
     enum class SceneManagerState { None, Entering, Active, Exiting };
 
@@ -92,6 +99,9 @@ class Game {
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
 
+    Level mLevelManager;
+    int mMaxLevel;
+
    private:
     void ProcessInput();
     void UpdateGame();
@@ -109,7 +119,6 @@ class Game {
 
     // Load the level from a CSV file as a 2D array
     friend class Level;
-    Level mLevelManager;
 
     // Spatial Hashing for collision detection
     class SpatialHashing *mSpatialHashing;
@@ -133,6 +142,7 @@ class Game {
     // Track actors state
     bool mIsRunning;
     GamePlayState mGamePlayState;
+    UIScreen *mPauseScreen;
 
     // Track level state
     GameScene mGameScene;

@@ -6,8 +6,11 @@
 
 // Blocks
 #include "Blocks/Block.h"
+#include "Blocks/Cabinet.h"
 #include "Blocks/Deliver.h"
+#include "Blocks/Drainer.h"
 #include "Blocks/FoodBox.h"
+#include "Blocks/Sink.h"
 #include "Blocks/Stove.h"
 #include "Blocks/Table.h"
 #include "Blocks/TableCut.h"
@@ -43,19 +46,19 @@ void Level::LoadMainMenu() {
     mainMenu->AddText("Pesadelo no Bandeco!", Vector2(630, 250),
                       Vector2(600, 100), Color::Yellow);
 
-    mainMenu->AddText("Versão PlayTest", Vector2(400, 320), Vector2(245, 65),
-                      Color::White);
-    mainMenu->AddText("Versão PlayTest", Vector2(395, 315), Vector2(245, 65),
-                      Color::Red);
-
-    auto button1 = mainMenu->AddButton(
-        "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
+    mainMenu->AddButton(
+        "Começar", Vector2(600, 380), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
         72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
-    auto button2 = mainMenu->AddButton(
-        "Como Jogar?", Vector2(600, 600), Vector2(60 * 6, 90),
+    mainMenu->AddButton(
+        "Como Jogar?", Vector2(600, 500), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::HowToPlay); },
+        Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+
+    mainMenu->AddButton(
+        "Créditos", Vector2(600, 620), Vector2(60 * 6, 90),
+        [this]() { mGame->SetGameScene(Game::GameScene::Credits); },
         Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 }
 
@@ -72,6 +75,42 @@ void Level::LoadHowToPlay() {
                               Vector2(400, 250), 1.5 * Vector2(518, 239));
 
     howToPlayScreen->AddButton(
+        "Voltar", Vector2(640, 700), Vector2(60 * 6, 90),
+        [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
+        Color::Blue, 72, 1024, Vector2(0, 0), Vector2(200, 80), Color::White);
+}
+
+void Level::LoadCredits() {
+    auto creditsScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
+
+    creditsScreen->AddImage("../Assets/Prototype/MainMenuBackground.png",
+                            Vector2::Zero, Vector2(1792, 1024));
+
+    creditsScreen->AddText("Créditos", Vector2(526, 56), Vector2(600, 100),
+                           Color::Blue);
+    creditsScreen->AddText("Créditos", Vector2(530, 60), Vector2(600, 100));
+
+    creditsScreen->AddText("Game Artist: Daniele Cássia", Vector2(522, 222),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Game Artist: Daniele Cássia", Vector2(526, 226),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddText("Programmer: Bernardo Borges", Vector2(522, 322),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Programmer: Bernardo Borges", Vector2(526, 326),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddText("Music: Lucas José Vieira", Vector2(522, 422),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Music: Lucas José Vieira", Vector2(526, 426),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddText("Music: Ernesto Borges", Vector2(522, 522),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Music: Ernesto Borges", Vector2(526, 526),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddButton(
         "Voltar", Vector2(640, 700), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
         Color::Blue, 72, 1024, Vector2(0, 0), Vector2(200, 80), Color::White);
@@ -106,21 +145,41 @@ void Level::LoadLevelResult() {
     if (points < 100) {
         resultsScreen->AddText(
             "Você precisa de pelo menos 100 pontos para progredir.",
-            Vector2(405, 500), Vector2(900, 100), Color::Black);
+            Vector2(405, 498), Vector2(900, 100), Color::Black);
         resultsScreen->AddText(
             "Você precisa de pelo menos 100 pontos para progredir.",
             Vector2(400, 500), Vector2(900, 100));
-        // TODO: Sons de derrota
-    } else {
+
+        // Sons de derrota
+        mGame->GetAudio()->StopSound(mGame->mMusicHandle);
+        mGame->mMusicHandle =
+            mGame->GetAudio()->PlaySound("evil_morty.mp3", false);
+
+        resultsScreen->AddButton(
+            "Continuar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+
+    } else if (mGame->mMaxLevel == 1) {
         resultsScreen->AddText("Parabéns! Você venceu o primeiro desafio!",
                                Vector2(400, 500), Vector2(900, 100));
-        // TODO: Sons de vitoria
-    }
+        // Sons de vitoria
+        mGame->mAudio->PlaySound("clapping.mp3");
 
-    resultsScreen->AddButton(
-        "Continuar", Vector2(600, 660), Vector2(400, 100),
-        [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
-        Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+        resultsScreen->AddButton(
+            "Continuar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::Level2); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+    } else if (mGame->mMaxLevel == 2) {
+        resultsScreen->AddText("Parabéns! Você venceu o jogo!",
+                               Vector2(400, 500), Vector2(900, 100));
+        // Sons de vitoria
+        mGame->mAudio->PlaySound("clapping.mp3");
+        resultsScreen->AddButton(
+            "Finalizar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+    }
 }
 
 void Level::LoadLevel(const std::string &levelName, const int levelWidth,
@@ -154,7 +213,7 @@ void Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
     }
 }
 
-void Level::BuildTile(LevelTile &tile, int x, int y) {
+void Level::BuildTile(LevelTile &tile, int x, int y, Sink *&theSink) {
     switch (tile) {
         case LevelTile::TilePlayerBStart: {
             if (mGame->mPlayerB) return;
@@ -166,6 +225,24 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             if (mGame->mPlayerD) return;
             mGame->mPlayerD = new Player(mGame, PlayerType::PlayerD);
             mGame->mPlayerD->SetPosition(Vector2(x * TILE_SIZE, y * TILE_SIZE));
+            return;
+        }
+        case LevelTile::TileFoodBread: {
+            FoodBox *fBblock =
+                FoodBox::NewFoodBox(mGame, ItemType::Bread, {x, y});
+            mLevelBlocks.push_back(fBblock);
+            return;
+        }
+        case LevelTile::TileFoodLettuce: {
+            FoodBox *fBblock =
+                FoodBox::NewFoodBox(mGame, ItemType::Lettuce, {x, y});
+            mLevelBlocks.push_back(fBblock);
+            return;
+        }
+        case LevelTile::TileFoodMeat: {
+            FoodBox *fBblock =
+                FoodBox::NewFoodBox(mGame, ItemType::Meat, {x, y});
+            mLevelBlocks.push_back(fBblock);
             return;
         }
         case LevelTile::TileFoodTomato: {
@@ -193,6 +270,7 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             return;
         }
         case LevelTile::TileStove:
+        case LevelTile::TileStovePan:
         case LevelTile::TileStovePotTomatoSoup:
         case LevelTile::TileStovePot: {
             Stove *stove = Stove::NewStove(mGame, tile, {x, y});
@@ -212,6 +290,25 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             mLevelBlocks.push_back(deliver);
             return;
         }
+        case LevelTile::TileSink: {
+            theSink = Sink::NewSink(mGame, tile, {x, y});
+            return;
+        }
+        case LevelTile::TileDishDrainer: {
+            Drainer *drainer = new Drainer(mGame, {x, y});
+            // Bind to the sink
+            if (theSink) {
+                theSink->mDrainer = drainer;
+            }
+            mLevelBlocks.push_back(drainer);
+            return;
+        }
+        case LevelTile::TileCabinet: {
+            Cabinet *cabinet = new Cabinet(mGame, {x, y});
+            mLevelBlocks.push_back(cabinet);
+            mGame->mOrderManager.mCabinet = cabinet;
+            return;
+        }
         default: {
             NewDecorativeBlock(tile, {x, y});
         }
@@ -219,10 +316,11 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
 }
 
 void Level::BuildLevel(int width, int height) {
+    Sink *theSink = nullptr;
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             LevelTile &tile = mLevelData[y][x];
-            BuildTile(tile, x, y);
+            BuildTile(tile, x, y, theSink);
         }
     }
 }

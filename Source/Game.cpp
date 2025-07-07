@@ -43,7 +43,8 @@ Game::Game(int windowWidth, int windowHeight)
       mBackgroundTexture(nullptr),
       mBackgroundSize(Vector2::Zero),
       mBackgroundPosition(Vector2::Zero),
-      mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT) {}
+      mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT),
+      mOrderManager(this) {}
 
 bool Game::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -51,10 +52,10 @@ bool Game::Initialize() {
         return false;
     }
 
-    mWindow = SDL_CreateWindow(
-        "Pesadelo no Bandeco!", 500, 0, mWindowWidth, mWindowHeight, 0
-        // SDL_WINDOW_FULLSCREEN
-    );
+    mWindow = SDL_CreateWindow("Pesadelo no Bandeco!", SDL_WINDOWPOS_CENTERED,
+                               SDL_WINDOWPOS_CENTERED, 0, 0,
+                               SDL_WINDOW_FULLSCREEN_DESKTOP);
+
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
@@ -66,6 +67,8 @@ bool Game::Initialize() {
         SDL_Log("Failed to create renderer: %s", SDL_GetError());
         return false;
     }
+
+    SDL_RenderSetLogicalSize(mRenderer, mWindowWidth, mWindowHeight);
 
     if (IMG_Init(IMG_INIT_PNG) == 0) {
         SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
@@ -135,6 +138,9 @@ void Game::ChangeScene() {
             SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
                                    mBackgroundColor.y, mBackgroundColor.z, 255);
 
+            mAudio->StopSound(mMusicHandle);
+            mMusicHandle = mAudio->PlaySound("main_menu.ogg", true);
+
             // Initialize main menu actors
             mLevelManager.LoadMainMenu();
             break;
@@ -148,7 +154,17 @@ void Game::ChangeScene() {
             mLevelManager.LoadHowToPlay();
             break;
         }
+        case GameScene::Credits: {
+            // Set background color
+            mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+            SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                                   mBackgroundColor.y, mBackgroundColor.z, 255);
+
+            mLevelManager.LoadCredits();
+            break;
+        }
         case GameScene::Level1: {
+            mMaxLevel = std::max(mMaxLevel, 1);
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
             mGameTimeLimit = 180;  // debug: level time
             mHUD->SetTime(mGameTimeLimit);
@@ -157,6 +173,7 @@ void Game::ChangeScene() {
             mLevelOver = false;
 
             // Add level music
+            mAudio->StopSound(mMusicHandle);
             mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
 
             // Set background color
@@ -172,31 +189,62 @@ void Game::ChangeScene() {
             mOrderManager.Clear();
             std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
                                                   90,  70,  50,  30,  10};
+
             for (int startTime : soupStartTimes) {
                 mOrderManager.AddOrder(
                     {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
             }
 
             // Initialize actors
-            mLevelManager.LoadLevel("../Assets/Levels/level1-1.csv",
-                                    LEVEL_WIDTH, LEVEL_HEIGHT);
+            mLevelManager.LoadLevel("../Assets/Levels/level1.csv", LEVEL_WIDTH,
+                                    LEVEL_HEIGHT);
             break;
         }
         case GameScene::Level2: {
-            mHUD = new HUD(this, "../Assets/Fonts/SMB.ttf");
-            mGameTimeLimit = 400;
-            mHUD->SetTime(400);
-            mHUD->SetLevelName("1-2");
+            mMaxLevel = std::max(mMaxLevel, 2);
+            mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
+            mGameTimeLimit = 180;
+            mHUD->SetTime(mGameTimeLimit);
+            mHUD->SetLevelName("Bandeco");
+            mLevelPoints = 0;
+            mLevelOver = false;
 
-            // TODO: Add level music
-            // mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
+            // Add level music
+            mAudio->StopSound(mMusicHandle);
+            mMusicHandle = mAudio->PlaySound("bruton.ogg", true);
 
-            // Set background color
-            mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
+            // Set background image
+            SetBackgroundImage("../Assets/Prototype/BackgroundLevel2.png",
+                               Vector2(0, 0), Vector2(1600, 900));
+
+            mOrderManager.Clear();
+
+            // Burger
+            for (int burgerTime : {180, 140, 85, 65}) {
+                mOrderManager.AddOrder(
+                    {.startTime = burgerTime,
+                     .recipe = std::set<ItemType>{ItemType::Bread,
+                                                  ItemType::MeatCook}});
+            }
+            // Burger Lettuce
+            for (int burgerTime : {155, 115, 55}) {
+                mOrderManager.AddOrder({.startTime = burgerTime,
+                                        .recipe = std::set<ItemType>{
+                                            ItemType::Bread, ItemType::MeatCook,
+                                            ItemType::LettuceCut}});
+            }
+            // Burger Lettuce Tomato
+            for (int burgerTime : {145, 125, 100, 25}) {
+                mOrderManager.AddOrder(
+                    {.startTime = burgerTime,
+                     .recipe = std::set<ItemType>{
+                         ItemType::Bread, ItemType::MeatCook,
+                         ItemType::LettuceCut, ItemType::TomatoCut}});
+            }
 
             // Initialize actors
-            mLevelManager.LoadLevel("../Assets/Levels/level1-2.csv",
-                                    LEVEL_WIDTH, LEVEL_HEIGHT);
+            mLevelManager.LoadLevel("../Assets/Levels/level2.csv", LEVEL_WIDTH,
+                                    LEVEL_HEIGHT);
             break;
         }
         case GameScene::LevelResult: {
@@ -306,17 +354,48 @@ void Game::HandleKeyPressActors(const int scanCode, const bool isPressed) {
 }
 
 void Game::TogglePause() {
-    if (mGameScene != GameScene::MainMenu) {
+    if (mGameScene == GameScene::Level1 || mGameScene == GameScene::Level2) {
         if (mGamePlayState == GamePlayState::Playing) {
             mGamePlayState = GamePlayState::Paused;
 
             mAudio->PauseSound(mMusicHandle);
-            mAudio->PlaySound("Coin.wav");
+            mAudio->PlaySound("gheu.ogg");
+
+            // Show interface
+            mPauseScreen = new UIScreen(this, "../Assets/Fonts/Chewy.ttf");
+
+            mPauseScreen->AddText("PAUSE", Vector2(598, 200), Vector2(360, 120),
+                                  Color::Black);
+            mPauseScreen->AddText("PAUSE", Vector2(604, 204), Vector2(360, 120),
+                                  Color::White);
+
+            auto button1 = mPauseScreen->AddButton(
+                "CONTINUAR", Vector2(600, 380), Vector2(60 * 6, 90),
+                [this]() { TogglePause(); }, Color::Blue, 72, 1024,
+                Vector2::Zero, Vector2(260, 80), Color::White);
+
+            auto button2 = mPauseScreen->AddButton(
+                "RESTART", Vector2(600, 500), Vector2(60 * 6, 90),
+                [this]() {
+                    if (mPlayerB) {
+                        delete mPlayerB;
+                        mPlayerB = nullptr;
+                    }
+                    if (mPlayerD) {
+                        delete mPlayerD;
+                        mPlayerD = nullptr;
+                    }
+                    ResetGameScene();
+                },
+                Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80),
+                Color::White);
+
         } else if (mGamePlayState == GamePlayState::Paused) {
+            mPauseScreen->Close();
             mGamePlayState = GamePlayState::Playing;
 
             mAudio->ResumeSound(mMusicHandle);
-            mAudio->PlaySound("Coin.wav");
+            mAudio->PlaySound("gheu.ogg");
         }
     }
 }

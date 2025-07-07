@@ -29,6 +29,9 @@ class HUD : public UIScreen {
    private:
     // HUD elements
     UIText* mPointsCounter;
+    UIText* mPointsCounterAux;
     UIText* mLevelName;
+    UIText* mLevelNameAux;
     UIText* mTimeText;
+    UIText* mTimeTextAux;
 };

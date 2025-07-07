@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "../Actors/Pan.h"
 #include "../Actors/Plate.h"
 #include "../Actors/Pot.h"
 
@@ -76,6 +77,15 @@ Item* Table::SetItemOnTop(Item* item) {
         }
         if (mItemOnTop->GetItemType() == ItemType::Plate) {
             Plate* plate = (Plate*)mItemOnTop;
+            if (item->GetItemType() == ItemType::Pan) {
+                Pan* pan = (Pan*)item;
+                auto itemInside = pan->PickItem();
+                if (itemInside) {
+                    auto rejected = plate->PutItem(*itemInside);
+                    if (rejected) pan->ReturnItem(*rejected);
+                }
+                return pan;
+            }
             // Check if player has a Pot on his hand
             if (item->GetItemType() == ItemType::Pot) {
                 Pot* pot = (Pot*)item;
@@ -94,7 +104,7 @@ Item* Table::SetItemOnTop(Item* item) {
     }
     // Accepted the item, returns nothing
     mItemOnTop = item;
-    Vector2 offset = Vector2(16, 16);
+    Vector2 offset = Vector2(0, 0);
     if (item->GetItemType() == ItemType::Pot) offset = Vector2(0, -16);
     if (item->GetItemType() == ItemType::Plate) offset = Vector2(6, 6);
 

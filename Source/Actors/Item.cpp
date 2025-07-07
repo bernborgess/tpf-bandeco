@@ -16,6 +16,12 @@ Item* Item::NewItem(Game* game, ItemType itemType) {
     const std::map<ItemType, const std::string> texturePathMap = {
         {ItemType::Tomato, "../Assets/Prototype/Tomato.png"},
         {ItemType::TomatoCut, "../Assets/Prototype/TomatoCut.png"},
+        {ItemType::Lettuce, "../Assets/Prototype/Lettuce.png"},
+        {ItemType::LettuceCut, "../Assets/Prototype/LettuceCut.png"},
+        {ItemType::Bread, "../Assets/Prototype/Bread.png"},
+        {ItemType::Meat, "../Assets/Prototype/Meat.png"},
+        {ItemType::MeatCut, "../Assets/Prototype/MeatCut.png"},
+        {ItemType::PlateDirty, "../Assets/Sprites/Plates/Dirty.png"},
     };
 
     auto it = texturePathMap.find(itemType);

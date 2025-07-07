@@ -5,38 +5,39 @@
 
 #include "Actor.h"
 #include "Item.h"
+#include "ProgressBar.h"
 
 class Pot : public Item {
    public:
     static Pot* NewPot(Game* game);
 
     // Add items to the pot, return the item if rejected
-    Item* PutItem(Item* item);
+    virtual Item* PutItem(Item* item);
 
     // Transfer *done* food, to the plate
-    std::optional<ItemType> PickItem();
+    virtual std::optional<ItemType> PickItem();
 
     // Empties itself, like when interacted with Trash
-    void Clear();
+    virtual void Clear();
 
     // Only used when transfer to plate didn't work
-    void ReturnItem(ItemType item);
+    virtual void ReturnItem(ItemType item);
 
     void OnUpdate(float deltaTime) override;
 
-    void OnCook(float deltaTime);
+    virtual void OnCook(float deltaTime);
 
-   private:
+   protected:
     Pot(Game* game, const std::string& texturePath);
 
     // Return true if item was accepted
-    bool AddItem(ItemType itemType);
+    virtual bool AddItem(ItemType itemType);
 
     std::optional<ItemType> mItemInside;
     int mItemCounter;
     // Cook & Burn times are proportional to `mItemCounter`
-    static constexpr float COOK_TIME_MAX = 5.0f;
-    static constexpr float BURN_TIME_MAX = 10.0f;
+    static constexpr float COOK_TIME_MAX = 10.0f;
+    static constexpr float BURN_TIME_MAX = 20.0f;
     float mCookTime;
     bool mIsCooked;
     bool mIsBurnt;
@@ -47,4 +48,6 @@ class Pot : public Item {
     static const std::string POT_TOMATO_3_PATH;
     static const std::string POT_TOMATO_SOUP_PATH;
     static const std::string POT_BURNT_PATH;
+
+    ProgressBar* mProgressBar;
 };

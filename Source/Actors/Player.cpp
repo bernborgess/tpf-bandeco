@@ -3,6 +3,7 @@
 #include "../Blocks/Block.h"
 #include "../Blocks/Deliver.h"
 #include "../Blocks/FoodBox.h"
+#include "../Blocks/Sink.h"
 #include "../Blocks/Stove.h"
 #include "../Blocks/Table.h"
 #include "../Blocks/TableCut.h"
@@ -96,7 +97,7 @@ void Player::OnHandleKeyPress(const int scanCode, const bool isPressed) {
         }
     }
     if (scanCode == GetChopCode()) {
-        HandleChop();
+        HandleWork();
     }
     if (scanCode == GetDashCode()) {
         SDL_Log("Player %d DASH", (int)mPlayerType);
@@ -154,16 +155,23 @@ void Player::HandlePutDown() {
 }
 
 // If it's a TableCut and there's food on it, will chop
-void Player::HandleChop() {
+void Player::HandleWork() {
     if (mHandItem != nullptr) return;
     const auto [levelEntry, block] = GetFocusBlock();
-    if (levelEntry != LevelTile::TileTableCut) return;
+    if (levelEntry != LevelTile::TileTableCut &&
+        levelEntry != LevelTile::TileSink)
+        return;
     if (block == nullptr) {
-        SDL_Log("Expected a tableCut, didn't find it!");
+        SDL_Log("Expected a tableCut or sink, didn't find it!");
         return;
     }
-    TableCut *tableCut = (TableCut *)block;
-    tableCut->OnItemCut();
+    if (levelEntry == LevelTile::TileTableCut) {
+        TableCut *tableCut = (TableCut *)block;
+        tableCut->OnItemCut();
+    } else if (levelEntry == LevelTile::TileSink) {
+        Sink *sink = (Sink *)block;
+        sink->OnItemWash();
+    }
 }
 
 void Player::OnUpdate(float deltaTime) {
