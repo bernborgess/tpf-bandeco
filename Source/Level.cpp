@@ -6,8 +6,11 @@
 
 // Blocks
 #include "Blocks/Block.h"
+#include "Blocks/Cabinet.h"
 #include "Blocks/Deliver.h"
+#include "Blocks/Drainer.h"
 #include "Blocks/FoodBox.h"
+#include "Blocks/Sink.h"
 #include "Blocks/Stove.h"
 #include "Blocks/Table.h"
 #include "Blocks/TableCut.h"
@@ -45,7 +48,7 @@ void Level::LoadMainMenu() {
 
     auto button1 = mainMenu->AddButton(
         "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
-        [this]() { mGame->SetGameScene(Game::GameScene::Level2); }, Color::Blue,
+        [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
         72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
     auto button2 = mainMenu->AddButton(
@@ -106,16 +109,20 @@ void Level::LoadLevelResult() {
             "Você precisa de pelo menos 100 pontos para progredir.",
             Vector2(400, 500), Vector2(900, 100));
         // TODO: Sons de derrota
+        resultsScreen->AddButton(
+            "Continuar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+
     } else {
         resultsScreen->AddText("Parabéns! Você venceu o primeiro desafio!",
                                Vector2(400, 500), Vector2(900, 100));
         // TODO: Sons de vitoria
+        resultsScreen->AddButton(
+            "Continuar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::Level2); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
     }
-
-    resultsScreen->AddButton(
-        "Continuar", Vector2(600, 660), Vector2(400, 100),
-        [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
-        Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
 }
 
 void Level::LoadLevel(const std::string &levelName, const int levelWidth,
@@ -149,7 +156,7 @@ void Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
     }
 }
 
-void Level::BuildTile(LevelTile &tile, int x, int y) {
+void Level::BuildTile(LevelTile &tile, int x, int y, Sink *&theSink) {
     switch (tile) {
         case LevelTile::TilePlayerBStart: {
             if (mGame->mPlayerB) return;
@@ -226,6 +233,25 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             mLevelBlocks.push_back(deliver);
             return;
         }
+        case LevelTile::TileSink: {
+            theSink = Sink::NewSink(mGame, tile, {x, y});
+            return;
+        }
+        case LevelTile::TileDishDrainer: {
+            Drainer *drainer = new Drainer(mGame, {x, y});
+            // Bind to the sink
+            if (theSink) {
+                theSink->mDrainer = drainer;
+            }
+            mLevelBlocks.push_back(drainer);
+            return;
+        }
+        case LevelTile::TileCabinet: {
+            Cabinet *cabinet = new Cabinet(mGame, {x, y});
+            mLevelBlocks.push_back(cabinet);
+            mGame->mOrderManager.mCabinet = cabinet;
+            return;
+        }
         default: {
             NewDecorativeBlock(tile, {x, y});
         }
@@ -233,10 +259,11 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
 }
 
 void Level::BuildLevel(int width, int height) {
+    Sink *theSink = nullptr;
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             LevelTile &tile = mLevelData[y][x];
-            BuildTile(tile, x, y);
+            BuildTile(tile, x, y, theSink);
         }
     }
 }

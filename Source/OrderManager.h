@@ -3,6 +3,7 @@
 #include <queue>
 
 #include "Actors/Item.h"
+#include "Blocks/Cabinet.h"
 #include "UIElements/UIScreen.h"
 
 struct Order {
@@ -32,7 +33,10 @@ class OrderManager {
     // If it doesn't exits, returns zero points for the failure.
     int DeliverOrder(std::set<ItemType> recipe);
 
+    Cabinet* mCabinet;
+
    private:
+    int mCurrentTime;
     class Game* mGame;
     std::list<Order> mCurrentOrders;
 
@@ -42,6 +46,10 @@ class OrderManager {
     std::priority_queue<Order> mPlannedOrders;
 
     UIScreen* mOrderQueueScreen;
+
+    // Used to return the dirty plates
+    float PLATE_DIRTY_DELAY = 10.0f;
+    std::priority_queue<float> mPlateDirtyQueue;
 
     // Helper to reduce redrawing
     bool mUIChanged;

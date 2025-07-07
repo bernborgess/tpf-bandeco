@@ -92,6 +92,8 @@ class Game {
     void SetGamePlayState(GamePlayState state) { mGamePlayState = state; }
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
 
+    Level mLevelManager;
+
    private:
     void ProcessInput();
     void UpdateGame();
@@ -109,7 +111,6 @@ class Game {
 
     // Load the level from a CSV file as a 2D array
     friend class Level;
-    Level mLevelManager;
 
     // Spatial Hashing for collision detection
     class SpatialHashing *mSpatialHashing;

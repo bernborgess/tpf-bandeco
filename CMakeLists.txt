@@ -15,20 +15,6 @@ add_executable(${PROJECT_NAME}
         Source/Main.cpp
         Source/Math.cpp
         Source/Actors/Actor.cpp
-        Source/Blocks/Block.cpp
-        Source/Blocks/Block.h
-        Source/Blocks/Deliver.cpp
-        Source/Blocks/Deliver.h
-        Source/Blocks/FoodBox.cpp
-        Source/Blocks/FoodBox.h
-        Source/Blocks/Stove.cpp
-        Source/Blocks/Stove.h
-        Source/Blocks/Table.cpp
-        Source/Blocks/Table.h
-        Source/Blocks/TableCut.cpp
-        Source/Blocks/TableCut.h
-        Source/Blocks/Trash.cpp
-        Source/Blocks/Trash.h
         Source/Actors/Item.cpp
         Source/Actors/Item.h
         Source/Actors/Pan.cpp
@@ -41,6 +27,26 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Pot.h
         Source/Actors/ProgressBar.cpp
         Source/Actors/ProgressBar.h
+        Source/Blocks/Block.cpp
+        Source/Blocks/Block.h
+        Source/Blocks/Cabinet.cpp
+        Source/Blocks/Cabinet.h
+        Source/Blocks/Deliver.cpp
+        Source/Blocks/Deliver.h
+        Source/Blocks/Drainer.cpp
+        Source/Blocks/Drainer.h
+        Source/Blocks/FoodBox.cpp
+        Source/Blocks/FoodBox.h
+        Source/Blocks/Sink.cpp
+        Source/Blocks/Sink.h
+        Source/Blocks/Stove.cpp
+        Source/Blocks/Stove.h
+        Source/Blocks/Table.cpp
+        Source/Blocks/Table.h
+        Source/Blocks/TableCut.cpp
+        Source/Blocks/TableCut.h
+        Source/Blocks/Trash.cpp
+        Source/Blocks/Trash.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp

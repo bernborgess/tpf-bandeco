@@ -21,6 +21,7 @@ Item* Item::NewItem(Game* game, ItemType itemType) {
         {ItemType::Bread, "../Assets/Prototype/Bread.png"},
         {ItemType::Meat, "../Assets/Prototype/Meat.png"},
         {ItemType::MeatCut, "../Assets/Prototype/MeatCut.png"},
+        {ItemType::PlateDirty, "../Assets/Sprites/Plates/Dirty.png"},
     };
 
     auto it = texturePathMap.find(itemType);

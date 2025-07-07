@@ -6,6 +6,7 @@
 
 enum class ItemType {
     Plate = 1,
+    PlateDirty,
     Tomato,
     TomatoCut,
     TomatoSoup,
