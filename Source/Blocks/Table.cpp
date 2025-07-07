@@ -36,16 +36,12 @@ Table* Table::NewTable(Game* game, LevelTile tile,
     Table* table = new Table(game, it->second, gridPos);
 
     // When we need a plate on top
-    // switch (tile) {
-    //     case LevelTile::TileTablePlate: {
-    //         Plate* plate = Plate::NewPlate(game);
-    //         table->SetItemOnTop(plate);
-    //     }
-    // }
-
-    Plate* plate = Plate::NewPlate(game);
-    plate->PutItem(ItemType::TomatoSoup);
-    table->SetItemOnTop(plate);
+    switch (tile) {
+        case LevelTile::TileTablePlate: {
+            Plate* plate = Plate::NewPlate(game);
+            table->SetItemOnTop(plate);
+        }
+    }
 
     return table;
 }

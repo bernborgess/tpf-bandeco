@@ -52,10 +52,8 @@ bool Game::Initialize() {
         return false;
     }
 
-    mWindow = SDL_CreateWindow(
-        "Pesadelo no Bandeco!", 500, 0, mWindowWidth, mWindowHeight, 0
-        // SDL_WINDOW_FULLSCREEN
-    );
+    mWindow = SDL_CreateWindow("Pesadelo no Bandeco!", 500, 0, mWindowWidth,
+                               mWindowHeight, SDL_WINDOW_FULLSCREEN);
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
