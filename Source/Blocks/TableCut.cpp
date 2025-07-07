@@ -14,7 +14,10 @@ const std::string TableCut::TABLE_CUT_RIGHT_PATH =
 
 TableCut::TableCut(Game* game, const std::string& texturePath,
                    std::pair<int, int> gridPos)
-    : Table(game, texturePath, gridPos) {}
+    : Table(game, texturePath, gridPos) {
+    mProgressBar = new ProgressBar(game);
+    mProgressBar->SetPosition(GetPosition() + Vector2(20, 50));
+}
 
 TableCut* TableCut::NewTableCut(Game* game, LevelTile tile,
                                 std::pair<int, int> gridPos) {
@@ -34,6 +37,7 @@ Item* TableCut::PickItemOnTop() {
 
     Item* item = mItemOnTop;
     mItemOnTop = nullptr;
+    mProgressBar->SetShow(false);
     return item;
 }
 
@@ -55,6 +59,9 @@ Item* TableCut::SetItemOnTop(Item* item) {
     mItemOnTop = item;
     mItemOnTop->SetPosition(GetPosition() + TOMATO_OFFSET);
     cutLevel = 0;
+    mProgressBar->SetShow(true);
+    SDL_Log("New item on cut. show the progress.");
+    mProgressBar->SetProgress(0);
     return nullptr;
 }
 
@@ -63,6 +70,7 @@ void TableCut::OnItemCut() {
     if (cutLevel == CUT_LEVEL_MAX) return;
 
     cutLevel++;  // Add a cut
+    mProgressBar->SetProgress(cutLevel / (double)CUT_LEVEL_MAX);
 
     // TODO: Add cut animations
     if (cutLevel == CUT_LEVEL_MAX) {
@@ -73,18 +81,21 @@ void TableCut::OnItemCut() {
             mItemOnTop->SetState(ActorState::Destroy);
             mItemOnTop = cutTomato;
             cutTomato->SetPosition(GetPosition() + TOMATO_OFFSET);
+            mProgressBar->SetShow(false);
         }
         if (mItemOnTop->GetItemType() == ItemType::Lettuce) {
             Item* cutLettuce = Item::NewItem(mGame, ItemType::LettuceCut);
             mItemOnTop->SetState(ActorState::Destroy);
             mItemOnTop = cutLettuce;
             cutLettuce->SetPosition(GetPosition() + TOMATO_OFFSET);
+            mProgressBar->SetShow(false);
         }
         if (mItemOnTop->GetItemType() == ItemType::Meat) {
             Item* cutMeat = Item::NewItem(mGame, ItemType::MeatCut);
             mItemOnTop->SetState(ActorState::Destroy);
             mItemOnTop = cutMeat;
             cutMeat->SetPosition(GetPosition() + TOMATO_OFFSET);
+            mProgressBar->SetShow(false);
         }
     }
 }

@@ -18,6 +18,7 @@ Pot::Pot(Game* game, const std::string& texturePath)
            /* drawOrder = */ 200),
       mItemCounter(0) {
     mItemInside = {};
+    mProgressBar = new ProgressBar(game);
 }
 
 // Public Constructor that handles choosing the textures
@@ -32,6 +33,7 @@ bool Pot::AddItem(ItemType itemType) {
                 mCookTime = 0.0f;
                 mIsCooked = mIsBurnt = false;
                 mDrawComponent->UpdateTexture(POT_TOMATO_1_PATH);
+                mProgressBar->SetShow(true);
                 return true;
             }
             // In case someone transfers soup
@@ -42,6 +44,7 @@ bool Pot::AddItem(ItemType itemType) {
                 mIsCooked = true;
                 mIsBurnt = false;
                 mDrawComponent->UpdateTexture(POT_TOMATO_SOUP_PATH);
+                mProgressBar->SetShow(true);
                 return true;
             }
             // In case someone transfers burnt food
@@ -76,6 +79,7 @@ bool Pot::AddItem(ItemType itemType) {
                 mDrawComponent->UpdateTexture(POT_TOMATO_2_PATH);
             if (mItemCounter == 3)
                 mDrawComponent->UpdateTexture(POT_TOMATO_3_PATH);
+            mProgressBar->SetShow(true);
             return true;
         }
     }
@@ -86,15 +90,12 @@ bool Pot::AddItem(ItemType itemType) {
 Item* Pot::PutItem(Item* item) {
     if (!item) return item;
 
-    SDL_Log("POT PUT ITEM");
-
     bool accepted = AddItem(item->GetItemType());
 
     if (accepted) {
         item->SetState(ActorState::Destroy);
         return nullptr;
     } else if (item->GetItemType() == ItemType::Plate) {
-        SDL_Log("Adding plate to pot? Just pass the ingredients");
         Plate* plate = (Plate*)item;
         auto items = plate->PickItems();
         for (auto& itemType : items) {
@@ -118,6 +119,7 @@ std::optional<ItemType> Pot::PickItem() {
         case ItemType::TomatoSoup: {
             mItemInside = {};
             mDrawComponent->UpdateTexture(POT_EMPTY_PATH);
+            mProgressBar->SetShow(false);
             return ItemType::TomatoSoup;
         }
     }
@@ -127,6 +129,7 @@ std::optional<ItemType> Pot::PickItem() {
 
 void Pot::Clear() {
     mItemInside = {};
+    mProgressBar->SetShow(false);
     mDrawComponent->UpdateTexture(POT_EMPTY_PATH);
 }
 
@@ -154,6 +157,7 @@ void Pot::ReturnItem(ItemType item) {
 
 void Pot::OnUpdate(float deltaTime) {
     if (!mItemInside) return;
+    mProgressBar->SetPosition(GetPosition() + Vector2(16, 72));
 
     // Check if cooking is done!
     if (mCookTime >= mItemCounter * COOK_TIME_MAX && !mIsCooked) {
@@ -181,6 +185,7 @@ void Pot::OnUpdate(float deltaTime) {
                 mIsBurnt = true;
                 mDrawComponent->UpdateTexture(POT_BURNT_PATH);
                 SDL_Log("SOUP JUST BURNT!");
+                mProgressBar->SetShow(false);
                 break;
             }
         }
@@ -190,5 +195,16 @@ void Pot::OnUpdate(float deltaTime) {
 void Pot::OnCook(float deltaTime) {
     if (mItemInside) {
         mCookTime += deltaTime;
+        if (mCookTime > mItemCounter * COOK_TIME_MAX) {
+            // It's the burn time...
+            float allCook = mItemCounter * COOK_TIME_MAX;
+            mProgressBar->SetProgress(
+                (mCookTime - allCook) /
+                    (mItemCounter * BURN_TIME_MAX - allCook),
+                true);
+        } else {
+            mProgressBar->SetProgress(mCookTime /
+                                      (mItemCounter * COOK_TIME_MAX));
+        }
     }
 }

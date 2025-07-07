@@ -39,6 +39,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/Player.h
         Source/Actors/Pot.cpp
         Source/Actors/Pot.h
+        Source/Actors/ProgressBar.cpp
+        Source/Actors/ProgressBar.h
         Source/AudioSystem.cpp
         Source/AudioSystem.h
         Source/Components/ColliderComponents/AABBColliderComponent.cpp
@@ -52,6 +54,8 @@ add_executable(${PROJECT_NAME}
         Source/Components/DrawComponents/DrawComponent.h
         Source/Components/DrawComponents/DrawPolygonComponent.cpp
         Source/Components/DrawComponents/DrawPolygonComponent.h
+        Source/Components/DrawComponents/DrawRectangleComponent.cpp
+        Source/Components/DrawComponents/DrawRectangleComponent.h
         Source/Components/DrawComponents/DrawSpriteComponent.cpp
         Source/Components/DrawComponents/DrawSpriteComponent.h
         Source/Components/RigidBodyComponent.cpp

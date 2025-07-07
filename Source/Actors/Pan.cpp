@@ -13,6 +13,7 @@ Pan::Pan(Game* game, const std::string& texturePath)
     : Pot(game, texturePath), mItemCounter(0) {
     mItemInside = {};
     mItemType = ItemType::Pan;
+    mProgressBar = new ProgressBar(game);
 }
 
 // Public Constructor that handles choosing the textures
@@ -29,6 +30,7 @@ bool Pan::AddItem(ItemType itemType) {
             mCookTime = 0.0f;
             mIsCooked = mIsBurnt = false;
             mDrawComponent->UpdateTexture(PAN_MEAT_CUT_PATH);
+            mProgressBar->SetShow(true);
             return true;
         }
         case ItemType::MeatCook: {
@@ -38,6 +40,7 @@ bool Pan::AddItem(ItemType itemType) {
             mIsCooked = true;
             mIsBurnt = false;
             mDrawComponent->UpdateTexture(PAN_MEAT_COOK_PATH);
+            mProgressBar->SetShow(true);
             return true;
         }
         case ItemType::MeatBurn: {
@@ -55,8 +58,6 @@ bool Pan::AddItem(ItemType itemType) {
 
 Item* Pan::PutItem(Item* item) {
     if (!item) return item;
-
-    SDL_Log("PAN PUT ITEM");
 
     bool accepted = AddItem(item->GetItemType());
 
@@ -87,6 +88,7 @@ std::optional<ItemType> Pan::PickItem() {
         case ItemType::MeatCook: {
             mItemInside = {};
             mDrawComponent->UpdateTexture(PAN_EMPTY_PATH);
+            mProgressBar->SetShow(false);
             return ItemType::MeatCook;
         }
     }
@@ -96,6 +98,7 @@ std::optional<ItemType> Pan::PickItem() {
 
 void Pan::Clear() {
     mItemInside = {};
+    mProgressBar->SetShow(false);
     mDrawComponent->UpdateTexture(PAN_EMPTY_PATH);
 }
 
@@ -119,6 +122,7 @@ void Pan::ReturnItem(ItemType item) {
 
 void Pan::OnUpdate(float deltaTime) {
     if (!mItemInside) return;
+    mProgressBar->SetPosition(GetPosition() + Vector2(16, 72));
 
     // Check if cooking is done!
     if (mCookTime >= mItemCounter * COOK_TIME_MAX && !mIsCooked) {
@@ -141,6 +145,7 @@ void Pan::OnUpdate(float deltaTime) {
                 mItemInside = ItemType::MeatBurn;
                 mIsBurnt = true;
                 mDrawComponent->UpdateTexture(PAN_BURNT_PATH);
+                mProgressBar->SetShow(false);
                 break;
             }
         }
@@ -150,5 +155,12 @@ void Pan::OnUpdate(float deltaTime) {
 void Pan::OnCook(float deltaTime) {
     if (mItemInside) {
         mCookTime += deltaTime;
+        if (mCookTime > COOK_TIME_MAX) {
+            mProgressBar->SetProgress(
+                (mCookTime - COOK_TIME_MAX) / (BURN_TIME_MAX - COOK_TIME_MAX),
+                true);
+        } else {
+            mProgressBar->SetProgress(mCookTime / COOK_TIME_MAX);
+        }
     }
 }

@@ -43,7 +43,8 @@ Game::Game(int windowWidth, int windowHeight)
       mBackgroundTexture(nullptr),
       mBackgroundSize(Vector2::Zero),
       mBackgroundPosition(Vector2::Zero),
-      mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT) {}
+      mLevelManager(this, LEVEL_WIDTH, LEVEL_HEIGHT),
+      mOrderManager(this) {}
 
 bool Game::Initialize() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -135,6 +136,9 @@ void Game::ChangeScene() {
             SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
                                    mBackgroundColor.y, mBackgroundColor.z, 255);
 
+            mAudio->StopSound(mMusicHandle);
+            mMusicHandle = mAudio->PlaySound("main_menu.ogg", true);
+
             // Initialize main menu actors
             mLevelManager.LoadMainMenu();
             break;
@@ -157,6 +161,7 @@ void Game::ChangeScene() {
             mLevelOver = false;
 
             // Add level music
+            mAudio->StopSound(mMusicHandle);
             mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
 
             // Set background color
@@ -172,6 +177,7 @@ void Game::ChangeScene() {
             mOrderManager.Clear();
             std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
                                                   90,  70,  50,  30,  10};
+
             for (int startTime : soupStartTimes) {
                 mOrderManager.AddOrder(
                     {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
@@ -184,24 +190,42 @@ void Game::ChangeScene() {
         }
         case GameScene::Level2: {
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 400;
+            mGameTimeLimit = 180;
             mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Bandeco");
             mLevelPoints = 0;
             mLevelOver = false;
 
-            // TODO: Add level music
-            // mMusicHandle = mAudio->PlaySound("MusicUnderground.ogg", true);
+            // Add level music
+            mAudio->StopSound(mMusicHandle);
+            mMusicHandle = mAudio->PlaySound("bruton.ogg", true);
 
             // Set background color
             mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
 
             mOrderManager.Clear();
-            std::array<int, 10> soupStartTimes = {180, 160, 150, 120, 100,
-                                                  90,  70,  50,  30,  10};
-            for (int startTime : soupStartTimes) {
+
+            // Burger
+            for (int burgerTime : {180, 170, 160, 150, 140, 85, 65}) {
                 mOrderManager.AddOrder(
-                    {.startTime = startTime, .recipe = {ItemType::TomatoSoup}});
+                    {.startTime = burgerTime,
+                     .recipe = std::set<ItemType>{ItemType::Bread,
+                                                  ItemType::MeatCook}});
+            }
+            // Burger Lettuce
+            for (int burgerTime : {175, 155, 115, 55}) {
+                mOrderManager.AddOrder({.startTime = burgerTime,
+                                        .recipe = std::set<ItemType>{
+                                            ItemType::Bread, ItemType::MeatCook,
+                                            ItemType::LettuceCut}});
+            }
+            // Burger Lettuce Tomato
+            for (int burgerTime : {145, 125, 100, 75, 25}) {
+                mOrderManager.AddOrder(
+                    {.startTime = burgerTime,
+                     .recipe = std::set<ItemType>{
+                         ItemType::Bread, ItemType::MeatCook,
+                         ItemType::LettuceCut, ItemType::TomatoCut}});
             }
 
             // Initialize actors
@@ -344,7 +368,7 @@ void Game::TogglePause() {
                                             delete mPlayerD;
                                             mPlayerD = nullptr;
                                         }
-                                        SetGameScene(GameScene::Level1);
+                                        ResetGameScene();
                                     });
 
         } else if (mGamePlayState == GamePlayState::Paused) {
