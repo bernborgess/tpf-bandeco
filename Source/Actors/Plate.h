@@ -26,9 +26,26 @@ class Plate : public Item {
     Plate(Game* game, const std::string& texturePath);
     std::set<ItemType> mItems;
 
+    void UpdateTexture();
+
     static const std::string PLATE_EMPTY_PATH;
     static const std::string PLATE_TOMATO_SOUP_PATH;
     static const std::string PLATE_TOMATO_CUT_PATH;
-    static const std::string PLATE_BREAD_PATH;
-    static const std::string PLATE_MEAT_COOK_PATH;
+
+    // This sandwich is a combinatorial nightmare of (Bread Lettuce Meat Tomato)
+    static const std::string PLATE_T_PATH;
+    static const std::string PLATE_M_PATH;
+    static const std::string PLATE_MT_PATH;
+    static const std::string PLATE_L_PATH;
+    static const std::string PLATE_LT_PATH;
+    static const std::string PLATE_LM_PATH;
+    static const std::string PLATE_LMT_PATH;
+    static const std::string PLATE_B_PATH;
+    static const std::string PLATE_BT_PATH;
+    static const std::string PLATE_BM_PATH;
+    static const std::string PLATE_BMT_PATH;
+    static const std::string PLATE_BL_PATH;
+    static const std::string PLATE_BLT_PATH;
+    static const std::string PLATE_BLM_PATH;
+    static const std::string PLATE_BLMT_PATH;
 };
