@@ -5,7 +5,10 @@
 #include <algorithm>
 
 OrderManager::OrderManager(Game* game)
-    : mGame(game), mOrderQueueScreen(nullptr), mUIChanged(false) {}
+    : mGame(game),
+      mOrderQueueScreen(nullptr),
+      mUIChanged(false),
+      mCabinet(nullptr) {}
 
 void OrderManager::Clear() {
     mCurrentOrders.clear();
@@ -18,6 +21,19 @@ void OrderManager::Clear() {
 void OrderManager::AddOrder(Order order) { mPlannedOrders.push(order); }
 
 void OrderManager::TimeTick(int time) {
+    mCurrentTime = time;
+
+    if (!mPlateDirtyQueue.empty()) {
+        float firstDirtyPlateTime = mPlateDirtyQueue.top();
+        if (firstDirtyPlateTime >= time) {
+            mPlateDirtyQueue.pop();
+            if (mCabinet) {
+                SDL_Log("New dirty plate for the cabinet");
+                mCabinet->mDirtyPlateCount++;
+            }
+        }
+    }
+
     if (mPlannedOrders.empty()) return;
     Order firstOrder = mPlannedOrders.top();
     if (firstOrder.startTime >= time) {
@@ -89,6 +105,7 @@ int OrderManager::DeliverOrder(std::set<ItemType> recipe) {
     }
 
     // A needed order
+    mPlateDirtyQueue.push(mCurrentTime - PLATE_DIRTY_DELAY);
 
     // Remove it from the list
     mCurrentOrders.erase(it);

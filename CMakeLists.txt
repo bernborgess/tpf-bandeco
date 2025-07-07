@@ -29,6 +29,8 @@ add_executable(${PROJECT_NAME}
         Source/Actors/ProgressBar.h
         Source/Blocks/Block.cpp
         Source/Blocks/Block.h
+        Source/Blocks/Cabinet.cpp
+        Source/Blocks/Cabinet.h
         Source/Blocks/Deliver.cpp
         Source/Blocks/Deliver.h
         Source/Blocks/Drainer.cpp

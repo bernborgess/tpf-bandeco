@@ -6,6 +6,7 @@
 
 // Blocks
 #include "Blocks/Block.h"
+#include "Blocks/Cabinet.h"
 #include "Blocks/Deliver.h"
 #include "Blocks/Drainer.h"
 #include "Blocks/FoodBox.h"
@@ -151,8 +152,7 @@ void Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
     }
 }
 
-void Level::BuildTile(LevelTile &tile, int x, int y) {
-    Sink *theSink = nullptr;
+void Level::BuildTile(LevelTile &tile, int x, int y, Sink *&theSink) {
     switch (tile) {
         case LevelTile::TilePlayerBStart: {
             if (mGame->mPlayerB) return;
@@ -231,6 +231,7 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
         }
         case LevelTile::TileSink: {
             theSink = Sink::NewSink(mGame, tile, {x, y});
+            return;
         }
         case LevelTile::TileDishDrainer: {
             Drainer *drainer = new Drainer(mGame, {x, y});
@@ -239,6 +240,13 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
                 theSink->mDrainer = drainer;
             }
             mLevelBlocks.push_back(drainer);
+            return;
+        }
+        case LevelTile::TileCabinet: {
+            Cabinet *cabinet = new Cabinet(mGame, {x, y});
+            mLevelBlocks.push_back(cabinet);
+            mGame->mOrderManager.mCabinet = cabinet;
+            return;
         }
         default: {
             NewDecorativeBlock(tile, {x, y});
@@ -247,10 +255,11 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
 }
 
 void Level::BuildLevel(int width, int height) {
+    Sink *theSink = nullptr;
     for (int y = 0; y < LEVEL_HEIGHT; ++y) {
         for (int x = 0; x < LEVEL_WIDTH; ++x) {
             LevelTile &tile = mLevelData[y][x];
-            BuildTile(tile, x, y);
+            BuildTile(tile, x, y, theSink);
         }
     }
 }

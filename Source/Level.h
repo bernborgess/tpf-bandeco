@@ -34,7 +34,8 @@ enum class LevelTile {
     TileCeilCorner = 28,
     TileCeilRotate = 29,
     TileDishDrainer = 31,
-    TileStovePan = 43
+    TileStovePan = 43,
+    TileCabinet = 44
 };
 
 class Level {
@@ -60,7 +61,7 @@ class Level {
    private:
     LevelTile** ReadLevelData(const std::string& fileName, int width,
                               int height);
-    void BuildTile(LevelTile& tile, int x, int y);
+    void BuildTile(LevelTile& tile, int x, int y, class Sink*& theSink);
     void BuildLevel(int width, int height);
 
     // Helper to avoid hard coding paths in multiple places
