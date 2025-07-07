@@ -15,7 +15,8 @@ Sink::Sink(Game* game, const std::string& texturePath,
     : Table(game, texturePath, gridPos),
       washLevel(0),
       dirtyPlateCount(0),
-      cleanPlateCount(0) {
+      cleanPlateCount(0),
+      mDrainer(nullptr) {
     mProgressBar = new ProgressBar(game);
     mProgressBar->SetPosition(GetPosition() + Vector2(20, 50));
 }
@@ -51,7 +52,9 @@ void Sink::OnItemWash() {
     mProgressBar->SetProgress(washLevel / (double)WASH_LEVEL_MAX);
 
     if (washLevel == WASH_LEVEL_MAX) {
-        // TODO: Send clean plate to the dryer
+        // Send clean plate to the drainer
+        if (mDrainer == nullptr) return;
         dirtyPlateCount--;
+        mDrainer->mCleanPlateCount++;
     }
 }

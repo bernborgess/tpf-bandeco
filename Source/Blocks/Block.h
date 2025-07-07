@@ -28,7 +28,7 @@ class Block : public Actor {
     virtual Item* PickItemOnTop();
     virtual Item* SetItemOnTop(Item* item);
 
-   private:
+   protected:
     const int BUMP_FORCE = 200;
 
     Vector2 mOriginalPosition;

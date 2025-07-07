@@ -3,6 +3,7 @@
 #include <string>
 
 #include "../Actors/ProgressBar.h"
+#include "Drainer.h"
 #include "Table.h"
 
 class Sink : public Table {
@@ -16,9 +17,13 @@ class Sink : public Table {
 
     void OnItemWash();
 
+    Drainer* mDrainer;
+
    private:
     Sink(Game* game, const std::string& texturePath,
          std::pair<int, int> gridPos);
+
+    // Pointer to where the plates are sent
 
     static const int WASH_LEVEL_MAX = 5;
     int washLevel;

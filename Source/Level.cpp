@@ -7,6 +7,7 @@
 // Blocks
 #include "Blocks/Block.h"
 #include "Blocks/Deliver.h"
+#include "Blocks/Drainer.h"
 #include "Blocks/FoodBox.h"
 #include "Blocks/Sink.h"
 #include "Blocks/Stove.h"
@@ -151,6 +152,7 @@ void Level::NewDecorativeBlock(LevelTile tile, std::pair<int, int> gridPos) {
 }
 
 void Level::BuildTile(LevelTile &tile, int x, int y) {
+    Sink *theSink = nullptr;
     switch (tile) {
         case LevelTile::TilePlayerBStart: {
             if (mGame->mPlayerB) return;
@@ -228,7 +230,15 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             return;
         }
         case LevelTile::TileSink: {
-            Sink::NewSink(mGame, tile, {x, y});
+            theSink = Sink::NewSink(mGame, tile, {x, y});
+        }
+        case LevelTile::TileDishDrainer: {
+            Drainer *drainer = new Drainer(mGame, {x, y});
+            // Bind to the sink
+            if (theSink) {
+                theSink->mDrainer = drainer;
+            }
+            mLevelBlocks.push_back(drainer);
         }
         default: {
             NewDecorativeBlock(tile, {x, y});
