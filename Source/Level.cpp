@@ -109,16 +109,20 @@ void Level::LoadLevelResult() {
             "Você precisa de pelo menos 100 pontos para progredir.",
             Vector2(400, 500), Vector2(900, 100));
         // TODO: Sons de derrota
+        resultsScreen->AddButton(
+            "Continuar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+
     } else {
         resultsScreen->AddText("Parabéns! Você venceu o primeiro desafio!",
                                Vector2(400, 500), Vector2(900, 100));
         // TODO: Sons de vitoria
+        resultsScreen->AddButton(
+            "Continuar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::Level2); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
     }
-
-    resultsScreen->AddButton(
-        "Continuar", Vector2(600, 660), Vector2(400, 100),
-        [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
-        Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
 }
 
 void Level::LoadLevel(const std::string &levelName, const int levelWidth,

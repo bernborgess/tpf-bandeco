@@ -200,8 +200,9 @@ void Game::ChangeScene() {
             mAudio->StopSound(mMusicHandle);
             mMusicHandle = mAudio->PlaySound("bruton.ogg", true);
 
-            // Set background color
-            mBackgroundColor.Set(0.0f, 0.0f, 0.0f);
+            // Set background image
+            SetBackgroundImage("../Assets/Prototype/BackgroundLevel2.png",
+                               Vector2(0, 0), Vector2(1600, 900));
 
             mOrderManager.Clear();
 
