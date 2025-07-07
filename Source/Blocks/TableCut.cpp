@@ -7,8 +7,7 @@
 
 const Vector2 TableCut::TOMATO_OFFSET = Vector2(0, 0);
 
-const std::string TableCut::TABLE_CUT_FRONT_PATH =
-    "../Assets/Prototype/TableCut.png";
+const std::string TableCut::TABLE_CUT_PATH = "../Assets/Prototype/TableCut.png";
 const std::string TableCut::TABLE_CUT_RIGHT_PATH =
     "../Assets/Prototype/TableCut.png";
 
@@ -24,7 +23,7 @@ TableCut* TableCut::NewTableCut(Game* game, LevelTile tile,
     switch (tile) {
         case LevelTile::TileTableCut:
         case LevelTile::TileTableCutRight:
-            return new TableCut(game, TABLE_CUT_FRONT_PATH, gridPos);
+            return new TableCut(game, TABLE_CUT_PATH, gridPos);
     }
     return nullptr;
 }

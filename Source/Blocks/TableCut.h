@@ -26,7 +26,7 @@ class TableCut : public Table {
 
     static const Vector2 TOMATO_OFFSET;
 
-    static const std::string TABLE_CUT_FRONT_PATH;
+    static const std::string TABLE_CUT_PATH;
     static const std::string TABLE_CUT_RIGHT_PATH;
 
     ProgressBar* mProgressBar;

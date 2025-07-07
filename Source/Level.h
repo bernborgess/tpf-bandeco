@@ -55,6 +55,8 @@ class Level {
 
     std::pair<LevelTile, Block*> GetLevelTileAt(int x, int y);
 
+    std::vector<Block*> mLevelBlocks;
+
    private:
     LevelTile** ReadLevelData(const std::string& fileName, int width,
                               int height);
@@ -66,7 +68,6 @@ class Level {
 
     class Game* mGame;
     LevelTile** mLevelData;
-    std::vector<Block*> mLevelBlocks;
     int LEVEL_WIDTH;
     int LEVEL_HEIGHT;
     const int TILE_SIZE = 64;

@@ -51,7 +51,7 @@ class Player : public Actor {
     std::pair<LevelTile, Block*> GetFocusBlock();
     void HandlePickUp();
     void HandlePutDown();
-    void HandleChop();
+    void HandleWork();
 
     class RigidBodyComponent* mRigidBodyComponent;
     class DrawAnimatedComponent* mDrawComponent;

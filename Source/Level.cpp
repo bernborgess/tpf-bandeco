@@ -8,6 +8,7 @@
 #include "Blocks/Block.h"
 #include "Blocks/Deliver.h"
 #include "Blocks/FoodBox.h"
+#include "Blocks/Sink.h"
 #include "Blocks/Stove.h"
 #include "Blocks/Table.h"
 #include "Blocks/TableCut.h"
@@ -45,7 +46,7 @@ void Level::LoadMainMenu() {
 
     auto button1 = mainMenu->AddButton(
         "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
-        [this]() { mGame->SetGameScene(Game::GameScene::Level2); }, Color::Blue,
+        [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
         72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
     auto button2 = mainMenu->AddButton(
@@ -225,6 +226,9 @@ void Level::BuildTile(LevelTile &tile, int x, int y) {
             Deliver *deliver = Deliver::NewDeliver(mGame, tile, {x, y});
             mLevelBlocks.push_back(deliver);
             return;
+        }
+        case LevelTile::TileSink: {
+            Sink::NewSink(mGame, tile, {x, y});
         }
         default: {
             NewDecorativeBlock(tile, {x, y});
