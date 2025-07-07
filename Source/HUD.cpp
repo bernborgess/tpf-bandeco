@@ -11,6 +11,8 @@ HUD::HUD(class Game *game, const std::string &fontName)
     // Level Time
     AddImage("../Assets/Prototype/Time.png", Vector2(1170, 690),
              Vector2(200, 200));
+    mTimeTextAux =
+        AddText("", Vector2(1196, 756), Vector2(150, 80), Color::White);
     mTimeText = AddText("", Vector2(1200, 760), Vector2(150, 80), Color::Blue);
 
     // Level Name
@@ -19,8 +21,10 @@ HUD::HUD(class Game *game, const std::string &fontName)
     //  Points
     AddImage("../Assets/Prototype/Coin.png", Vector2(60, 710),
              Vector2(200, 200));
+    mPointsCounterAux =
+        AddText("  0", Vector2(108, 765), Vector2(80, 80), Color::Blue);
     mPointsCounter =
-        AddText("  0", Vector2(100, 769), Vector2(80, 80), Color::White);
+        AddText("  0", Vector2(112, 769), Vector2(80, 80), Color::White);
 }
 
 HUD::~HUD() {}
@@ -33,6 +37,7 @@ void HUD::SetTime(int time) {
     ss << std::setw(2) << std::setfill('0') << second;
     std::string time_string = ss.str();
     mTimeText->SetText(time_string);
+    mTimeTextAux->SetText(time_string);
 }
 
 void HUD::SetLevelName(const std::string &levelName) {
@@ -44,4 +49,5 @@ void HUD::SetPoints(int points) {
     ss << std::setw(3) << std::setfill(' ') << points;
     std::string points_string = ss.str();
     mPointsCounter->SetText(points_string);
+    mPointsCounterAux->SetText(points_string);
 }
