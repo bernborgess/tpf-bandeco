@@ -46,14 +46,19 @@ void Level::LoadMainMenu() {
     mainMenu->AddText("Pesadelo no Bandeco!", Vector2(630, 250),
                       Vector2(600, 100), Color::Yellow);
 
-    auto button1 = mainMenu->AddButton(
-        "Começar", Vector2(600, 480), Vector2(60 * 6, 90),
+    mainMenu->AddButton(
+        "Começar", Vector2(600, 380), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
         72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
-    auto button2 = mainMenu->AddButton(
-        "Como Jogar?", Vector2(600, 600), Vector2(60 * 6, 90),
+    mainMenu->AddButton(
+        "Como Jogar?", Vector2(600, 500), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::HowToPlay); },
+        Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+
+    mainMenu->AddButton(
+        "Créditos", Vector2(600, 620), Vector2(60 * 6, 90),
+        [this]() { mGame->SetGameScene(Game::GameScene::Credits); },
         Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 }
 
@@ -70,6 +75,42 @@ void Level::LoadHowToPlay() {
                               Vector2(400, 250), 1.5 * Vector2(518, 239));
 
     howToPlayScreen->AddButton(
+        "Voltar", Vector2(640, 700), Vector2(60 * 6, 90),
+        [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
+        Color::Blue, 72, 1024, Vector2(0, 0), Vector2(200, 80), Color::White);
+}
+
+void Level::LoadCredits() {
+    auto creditsScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
+
+    creditsScreen->AddImage("../Assets/Prototype/MainMenuBackground.png",
+                            Vector2::Zero, Vector2(1792, 1024));
+
+    creditsScreen->AddText("Créditos", Vector2(526, 56), Vector2(600, 100),
+                           Color::Blue);
+    creditsScreen->AddText("Créditos", Vector2(530, 60), Vector2(600, 100));
+
+    creditsScreen->AddText("Game Artist: Daniele Cássia", Vector2(522, 222),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Game Artist: Daniele Cássia", Vector2(526, 226),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddText("Programmer: Bernardo Borges", Vector2(522, 322),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Programmer: Bernardo Borges", Vector2(526, 326),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddText("Music: Lucas José Vieira", Vector2(522, 422),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Music: Lucas José Vieira", Vector2(526, 426),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddText("Music: Ernesto Borges", Vector2(522, 522),
+                           Vector2(600, 80), Color::Blue);
+    creditsScreen->AddText("Music: Ernesto Borges", Vector2(526, 526),
+                           Vector2(600, 80), Color::White);
+
+    creditsScreen->AddButton(
         "Voltar", Vector2(640, 700), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
         Color::Blue, 72, 1024, Vector2(0, 0), Vector2(200, 80), Color::White);
@@ -104,23 +145,39 @@ void Level::LoadLevelResult() {
     if (points < 100) {
         resultsScreen->AddText(
             "Você precisa de pelo menos 100 pontos para progredir.",
-            Vector2(405, 500), Vector2(900, 100), Color::Black);
+            Vector2(405, 498), Vector2(900, 100), Color::Black);
         resultsScreen->AddText(
             "Você precisa de pelo menos 100 pontos para progredir.",
             Vector2(400, 500), Vector2(900, 100));
-        // TODO: Sons de derrota
+
+        // Sons de derrota
+        mGame->GetAudio()->StopSound(mGame->mMusicHandle);
+        mGame->mMusicHandle =
+            mGame->GetAudio()->PlaySound("evil_morty.mp3", false);
+
         resultsScreen->AddButton(
             "Continuar", Vector2(600, 660), Vector2(400, 100),
             [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
             Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
 
-    } else {
+    } else if (mGame->mMaxLevel == 1) {
         resultsScreen->AddText("Parabéns! Você venceu o primeiro desafio!",
                                Vector2(400, 500), Vector2(900, 100));
-        // TODO: Sons de vitoria
+        // Sons de vitoria
+        mGame->mAudio->PlaySound("clapping.mp3");
+
         resultsScreen->AddButton(
             "Continuar", Vector2(600, 660), Vector2(400, 100),
             [this]() { mGame->SetGameScene(Game::GameScene::Level2); },
+            Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
+    } else if (mGame->mMaxLevel == 2) {
+        resultsScreen->AddText("Parabéns! Você venceu o jogo!",
+                               Vector2(400, 500), Vector2(900, 100));
+        // Sons de vitoria
+        mGame->mAudio->PlaySound("clapping.mp3");
+        resultsScreen->AddButton(
+            "Finalizar", Vector2(600, 660), Vector2(400, 100),
+            [this]() { mGame->SetGameScene(Game::GameScene::MainMenu); },
             Color::Blue, 72, 1024, Vector2::Zero, Vector2(300, 100));
     }
 }

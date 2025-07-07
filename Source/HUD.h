@@ -31,6 +31,7 @@ class HUD : public UIScreen {
     UIText* mPointsCounter;
     UIText* mPointsCounterAux;
     UIText* mLevelName;
+    UIText* mLevelNameAux;
     UIText* mTimeText;
     UIText* mTimeTextAux;
 };

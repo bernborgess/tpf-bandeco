@@ -46,6 +46,8 @@ class Level {
 
     void LoadHowToPlay();
 
+    void LoadCredits();
+
     // Shows how the player performed
     void LoadLevelResult();
 

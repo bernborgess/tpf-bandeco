@@ -18,7 +18,14 @@ class Game {
     static const int TILE_SIZE = 64;
     static const int TRANSITION_TIME = 1;
 
-    enum class GameScene { MainMenu, HowToPlay, Level1, Level2, LevelResult };
+    enum class GameScene {
+        MainMenu,
+        HowToPlay,
+        Credits,
+        Level1,
+        Level2,
+        LevelResult
+    };
 
     enum class SceneManagerState { None, Entering, Active, Exiting };
 
@@ -93,6 +100,7 @@ class Game {
     GamePlayState GetGamePlayState() const { return mGamePlayState; }
 
     Level mLevelManager;
+    int mMaxLevel;
 
    private:
     void ProcessInput();
