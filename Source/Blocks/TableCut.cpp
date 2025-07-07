@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <vector>
 
+#include "../Game.h"
+
 const Vector2 TableCut::TOMATO_OFFSET = Vector2(0, 0);
 
 const std::string TableCut::TABLE_CUT_PATH = "../Assets/Prototype/TableCut.png";
@@ -68,14 +70,13 @@ void TableCut::OnItemCut() {
     if (mItemOnTop == nullptr) return;
     if (cutLevel == CUT_LEVEL_MAX) return;
 
+    mGame->GetAudio()->PlaySound("knife.mp3");
     cutLevel++;  // Add a cut
     mProgressBar->SetProgress(cutLevel / (double)CUT_LEVEL_MAX);
 
-    // TODO: Add cut animations
     if (cutLevel == CUT_LEVEL_MAX) {
         // Now transforms into finished item
         if (mItemOnTop->GetItemType() == ItemType::Tomato) {
-            // TODO: let the cut tomato be bigger than 32x32
             Item* cutTomato = Item::NewItem(mGame, ItemType::TomatoCut);
             mItemOnTop->SetState(ActorState::Destroy);
             mItemOnTop = cutTomato;

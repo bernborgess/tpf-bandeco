@@ -162,10 +162,10 @@ void Game::ChangeScene() {
         case GameScene::Level1: {
             mMaxLevel = std::max(mMaxLevel, 1);
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 10;  // debug: level time
+            mGameTimeLimit = 180;  // debug: level time
             mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Cantina do ICEx");
-            mLevelPoints = 10;  // debug: raise point to win screen
+            mLevelPoints = 0;  // debug: raise point to win screen
             mLevelOver = false;
 
             // Add level music
@@ -199,10 +199,10 @@ void Game::ChangeScene() {
         case GameScene::Level2: {
             mMaxLevel = std::max(mMaxLevel, 2);
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
-            mGameTimeLimit = 10;
+            mGameTimeLimit = 180;
             mHUD->SetTime(mGameTimeLimit);
             mHUD->SetLevelName("Bandeco");
-            mLevelPoints = 100;
+            mLevelPoints = 0;
             mLevelOver = false;
 
             // Add level music
@@ -216,21 +216,21 @@ void Game::ChangeScene() {
             mOrderManager.Clear();
 
             // Burger
-            for (int burgerTime : {180, 170, 160, 150, 140, 85, 65}) {
+            for (int burgerTime : {180, 140, 85, 65}) {
                 mOrderManager.AddOrder(
                     {.startTime = burgerTime,
                      .recipe = std::set<ItemType>{ItemType::Bread,
                                                   ItemType::MeatCook}});
             }
             // Burger Lettuce
-            for (int burgerTime : {175, 155, 115, 55}) {
+            for (int burgerTime : {155, 115, 55}) {
                 mOrderManager.AddOrder({.startTime = burgerTime,
                                         .recipe = std::set<ItemType>{
                                             ItemType::Bread, ItemType::MeatCook,
                                             ItemType::LettuceCut}});
             }
             // Burger Lettuce Tomato
-            for (int burgerTime : {145, 125, 100, 75, 25}) {
+            for (int burgerTime : {145, 125, 100, 25}) {
                 mOrderManager.AddOrder(
                     {.startTime = burgerTime,
                      .recipe = std::set<ItemType>{
