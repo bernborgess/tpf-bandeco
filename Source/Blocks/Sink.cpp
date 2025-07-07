@@ -37,23 +37,29 @@ Sink* Sink::NewSink(Game* game, LevelTile tile, std::pair<int, int> gridPos) {
 // You have to pick items from the Drainer!
 Item* Sink::PickItemOnTop() { return nullptr; }
 
+void Sink::UpdateTexture() {
+    switch (mDirtyPlateCount) {
+        case 0:
+            mProgressBar->SetShow(false);
+            return mDrawComponent->UpdateTexture(SINK_PATH);
+        case 1:
+            mProgressBar->SetShow(true);
+            mProgressBar->SetProgress(washLevel / (double)WASH_LEVEL_MAX);
+            return mDrawComponent->UpdateTexture(SINK_PLATE_PATH);
+        default:
+            mProgressBar->SetShow(true);
+            mProgressBar->SetProgress(washLevel / (double)WASH_LEVEL_MAX);
+            return mDrawComponent->UpdateTexture(SINK_PLATES_PATH);
+    }
+}
+
 Item* Sink::SetItemOnTop(Item* item) {
     if (item->GetItemType() != ItemType::PlateDirty) return item;
     mDirtyPlateCount++;
     if (mDirtyPlateCount == 1) washLevel = 0;
     item->SetState(ActorState::Destroy);
+    UpdateTexture();
 
-    switch (mDirtyPlateCount) {
-        case 0:
-            mDrawComponent->UpdateTexture(SINK_PATH);
-            break;
-        case 1:
-            mDrawComponent->UpdateTexture(SINK_PLATE_PATH);
-            break;
-        default:
-            mDrawComponent->UpdateTexture(SINK_PLATES_PATH);
-            break;
-    }
     return nullptr;
 }
 
@@ -63,13 +69,11 @@ void Sink::OnItemWash() {
 
     washLevel++;
 
-    mProgressBar->SetShow(true);
-    mProgressBar->SetProgress(washLevel / (double)WASH_LEVEL_MAX);
-
     if (washLevel == WASH_LEVEL_MAX) {
-        // Send clean plate to the drainer
         if (mDrainer == nullptr) return;
         mDirtyPlateCount--;
+        washLevel = 0;
         mDrainer->mCleanPlateCount++;
     }
+    UpdateTexture();
 }

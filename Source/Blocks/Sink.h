@@ -30,6 +30,8 @@ class Sink : public Table {
     int mDirtyPlateCount;
     int cleanPlateCount;
 
+    void UpdateTexture();
+
     static const std::string SINK_PATH;
     static const std::string SINK_PLATE_PATH;
     static const std::string SINK_PLATES_PATH;
