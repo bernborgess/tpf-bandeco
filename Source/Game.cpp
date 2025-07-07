@@ -52,8 +52,10 @@ bool Game::Initialize() {
         return false;
     }
 
-    mWindow = SDL_CreateWindow("Pesadelo no Bandeco!", 500, 0, mWindowWidth,
-                               mWindowHeight, SDL_WINDOW_FULLSCREEN);
+    mWindow = SDL_CreateWindow("Pesadelo no Bandeco!", SDL_WINDOWPOS_CENTERED,
+                               SDL_WINDOWPOS_CENTERED, 0, 0,
+                               SDL_WINDOW_FULLSCREEN_DESKTOP);
+
     if (!mWindow) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return false;
@@ -65,6 +67,8 @@ bool Game::Initialize() {
         SDL_Log("Failed to create renderer: %s", SDL_GetError());
         return false;
     }
+
+    SDL_RenderSetLogicalSize(mRenderer, mWindowWidth, mWindowHeight);
 
     if (IMG_Init(IMG_INIT_PNG) == 0) {
         SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
