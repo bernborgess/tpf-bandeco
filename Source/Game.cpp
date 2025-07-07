@@ -150,6 +150,15 @@ void Game::ChangeScene() {
             mLevelManager.LoadHowToPlay();
             break;
         }
+        case GameScene::Credits: {
+            // Set background color
+            mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+            SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
+                                   mBackgroundColor.y, mBackgroundColor.z, 255);
+
+            mLevelManager.LoadCredits();
+            break;
+        }
         case GameScene::Level1: {
             mMaxLevel = std::max(mMaxLevel, 1);
             mHUD = new HUD(this, "../Assets/Fonts/Chewy.ttf");
