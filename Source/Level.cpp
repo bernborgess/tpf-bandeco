@@ -34,39 +34,46 @@ void Level::LoadMainMenu() {
     const Vector2 titlePos =
         Vector2(windowWidth / 2.0f - titleSize.x / 2.0f, 50.0f);
 
-    mainMenu->AddImage("../Assets/Prototype/MainMenuBackground.png",
-                       Vector2::Zero, Vector2(1792, 1024));
+    mainMenu->AddImage("../Assets/Sprites/Logo.png", Vector2::Zero,
+                       Vector2(1920, 1080));
 
-    mainMenu->AddImage("../Assets/Sprites/OvercookedLogo.png", Vector2(200, 40),
-                       Vector2(1189, 270));
+    // mainMenu->AddImage("../Assets/Sprites/OvercookedLogo.png", Vector2(200,
+    // 40),
+    //                    Vector2(1189, 270));
 
-    mainMenu->AddText("Pesadelo no Bandeco!", Vector2(625, 245),
-                      Vector2(600, 100), Color::Black);
+    // mainMenu->AddText("Pesadelo no Bandeco!", Vector2(625, 245),
+    //                   Vector2(600, 100), Color::Black);
 
-    mainMenu->AddText("Pesadelo no Bandeco!", Vector2(630, 250),
-                      Vector2(600, 100), Color::Yellow);
-
-    mainMenu->AddButton(
-        "Começar", Vector2(600, 380), Vector2(60 * 6, 90),
-        [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
-        72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+    // mainMenu->AddText("Pesadelo no Bandeco!", Vector2(630, 250),
+    //                   Vector2(600, 100), Color::Yellow);
 
     mainMenu->AddButton(
-        "Como Jogar?", Vector2(600, 500), Vector2(60 * 6, 90),
+        "JOGAR", Vector2(735, 654), Vector2(468, 74),
+        [this]() { mGame->SetGameScene(Game::GameScene::Level2); }, Color::Red,
+        72, 1024, Vector2::Zero, Vector2(180, 60), Color::White);
+
+    mainMenu->AddButton(
+        "CONTROLES", Vector2(737, 805), Vector2(468, 74),
         [this]() { mGame->SetGameScene(Game::GameScene::HowToPlay); },
-        Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+        Color::Red, 72, 1024, Vector2::Zero, Vector2(220, 60), Color::White);
+
+    // mainMenu->AddText("CONTROLES", Vector2(737, 805), Vector2(220, 60),
+    //                   Color::Red);
+
+    // mainMenu->AddText("Pesadelo no Bandeco!", Vector2(630, 250),
+    //                   Vector2(600, 100), Color::Yellow);
 
     mainMenu->AddButton(
-        "Créditos", Vector2(600, 620), Vector2(60 * 6, 90),
-        [this]() { mGame->SetGameScene(Game::GameScene::Credits); },
-        Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
+        "CRÉDITOS", Vector2(729, 955), Vector2(468, 74),
+        [this]() { mGame->SetGameScene(Game::GameScene::Credits); }, Color::Red,
+        72, 1024, Vector2::Zero, Vector2(200, 60), Color::White);
 }
 
 void Level::LoadHowToPlay() {
     auto howToPlayScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
 
     howToPlayScreen->AddImage("../Assets/Prototype/MainMenuBackground.png",
-                              Vector2::Zero, Vector2(1792, 1024));
+                              Vector2::Zero, Vector2(1920, 1080));
 
     howToPlayScreen->AddImage("../Assets/Sprites/ControlsTitle.png",
                               Vector2(-10, -30), 1.0 * Vector2(1173, 171));
@@ -84,7 +91,7 @@ void Level::LoadCredits() {
     auto creditsScreen = new UIScreen(mGame, "../Assets/Fonts/Chewy.ttf");
 
     creditsScreen->AddImage("../Assets/Prototype/MainMenuBackground.png",
-                            Vector2::Zero, Vector2(1792, 1024));
+                            Vector2::Zero, Vector2(1920, 1080));
 
     creditsScreen->AddText("Créditos", Vector2(526, 56), Vector2(600, 100),
                            Color::Blue);
@@ -122,7 +129,7 @@ void Level::LoadLevelResult() {
     // TODO
 
     resultsScreen->AddImage("../Assets/Prototype/MainMenuBackground.png",
-                            Vector2::Zero, Vector2(1792, 1024));
+                            Vector2::Zero, Vector2(1920, 1080));
 
     resultsScreen->AddImage("../Assets/Prototype/WinLogo.png", Vector2(300, 10),
                             0.5 * Vector2(1920, 321));

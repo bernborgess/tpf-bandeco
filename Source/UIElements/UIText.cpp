@@ -14,10 +14,13 @@ UIText::UIText(const std::string &text, class UIFont *font, int pointSize,
       mPointSize(pointSize),
       mWrapLength(wrapLength),
       mTextTexture(nullptr) {
+    // SetColor(color);
     SetText(text);
 }
 
 UIText::~UIText() {}
+
+// void UIText::SetColor(const Vector3 &color) { mColor = color; }
 
 void UIText::SetText(const std::string &text) {
     if (mTextTexture) {
@@ -25,6 +28,8 @@ void UIText::SetText(const std::string &text) {
         mTextTexture = nullptr;
     }
 
+    auto &[r, g, b] = mColor;
+    printf("color: %f, %f, %f", r, b, b);
     mTextTexture = mFont->RenderText(text, mColor, mPointSize, mWrapLength);
     mText = text;
 }

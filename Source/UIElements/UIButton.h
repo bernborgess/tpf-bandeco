@@ -39,6 +39,8 @@ class UIButton : public UIElement {
 
     // Button name
     UIText mText;
+    Vector3 mTextColor;
+    std::string mName;
 
     // Check if the button is highlighted
     bool mHighlighted;

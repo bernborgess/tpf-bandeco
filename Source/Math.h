@@ -792,7 +792,7 @@ class Quaternion {
 namespace Color {
 static const Vector3 Black(0, 0, 0);
 static const Vector3 White(255, 255, 255);
-static const Vector3 Red(165, 49, 33);
+static const Vector3 Red(189, 0, 0);
 static const Vector3 Green(0, 255, 0);
 static const Vector3 Orange(0xFF, 0x45, 0x00);
 static const Vector3 Blue(48, 95, 120);

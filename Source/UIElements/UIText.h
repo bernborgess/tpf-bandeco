@@ -21,6 +21,7 @@ class UIText : public UIElement {
     ~UIText();
 
     void SetText(const std::string& name);
+    // void SetColor(const Vector3& color);
     void Draw(SDL_Renderer* renderer, const Vector2& screenPos) override;
 
    protected:

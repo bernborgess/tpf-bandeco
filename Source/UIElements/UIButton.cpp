@@ -12,6 +12,8 @@ UIButton::UIButton(const std::string &text, class UIFont *font,
     : UIElement(pos, size, color),
       mOnClick(onClick),
       mHighlighted(false),
+      mTextColor(textColor),
+      mName(text),
       mText(text, font, pointSize, wrapLength, textPos, textSize, textColor) {}
 
 UIButton::~UIButton() {}
@@ -28,9 +30,17 @@ void UIButton::Draw(SDL_Renderer *renderer, const Vector2 &screenPos) {
         auto &[r, g, b] = mColor;
         SDL_SetRenderDrawColor(renderer, r, g, b, 255);
         SDL_RenderFillRect(renderer, &titleQuad);
+        mText.SetColor(mTextColor);
+        mText.SetText(mName);
+        mText.Draw(renderer, titlePosition + 0.5f * (mSize - mText.GetSize()));
     }
 
-    mText.Draw(renderer, titlePosition + 0.5f * (mSize - mText.GetSize()));
+    else {
+        auto &[r, g, b] = mColor;
+        mText.SetColor(mColor);
+        mText.SetText(mName);
+        mText.Draw(renderer, titlePosition + 0.5f * (mSize - mText.GetSize()));
+    }
 }
 
 void UIButton::OnClick() {

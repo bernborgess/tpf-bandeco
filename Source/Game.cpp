@@ -177,7 +177,7 @@ void Game::ChangeScene() {
             mMusicHandle = mAudio->PlaySound("a_cozinha.ogg", false);
 
             // Set background color
-            mBackgroundColor.Set(250.0f, 175.0f, 72.0f);
+            mBackgroundColor.Set(0x33, 0x8a, 0x22);
             SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
                                    mBackgroundColor.y, mBackgroundColor.z, 255);
 
@@ -214,6 +214,7 @@ void Game::ChangeScene() {
             mMusicHandle = mAudio->PlaySound("bruton.ogg", true);
 
             // Set background image
+            mBackgroundColor.Set(0x0e, 0x67, 0x15);
             SetBackgroundImage("../Assets/Prototype/BackgroundLevel2.png",
                                Vector2(0, 0), Vector2(1600, 900));
 
@@ -249,7 +250,8 @@ void Game::ChangeScene() {
         }
         case GameScene::LevelResult: {
             // Set background color
-            mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+            // mBackgroundColor.Set(107.0f, 140.0f, 255.0f);
+            mBackgroundColor.Set(0x0e, 0x67, 0x15);
             SDL_SetRenderDrawColor(mRenderer, mBackgroundColor.x,
                                    mBackgroundColor.y, mBackgroundColor.z, 255);
 
