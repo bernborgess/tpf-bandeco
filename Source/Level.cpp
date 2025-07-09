@@ -47,17 +47,17 @@ void Level::LoadMainMenu() {
                       Vector2(600, 100), Color::Yellow);
 
     mainMenu->AddButton(
-        "Começar", Vector2(600, 380), Vector2(60 * 6, 90),
+        "Começar", Vector2(600, 420), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::Level1); }, Color::Blue,
         72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
     mainMenu->AddButton(
-        "Como Jogar?", Vector2(600, 500), Vector2(60 * 6, 90),
+        "Como Jogar?", Vector2(600, 540), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::HowToPlay); },
         Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 
     mainMenu->AddButton(
-        "Créditos", Vector2(600, 620), Vector2(60 * 6, 90),
+        "Créditos", Vector2(600, 660), Vector2(60 * 6, 90),
         [this]() { mGame->SetGameScene(Game::GameScene::Credits); },
         Color::Blue, 72, 1024, Vector2::Zero, Vector2(200, 80), Color::White);
 }
