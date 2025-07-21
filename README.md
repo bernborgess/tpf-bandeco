@@ -47,6 +47,24 @@ jogadores deve ser capazes de entregar uma quantidade satisfatória de pratos.
 Caso isso não ocorra os jogadores deverão tentar novamente. Caso consigam, podem
 prosseguir para novos restaurantes.
 
+## Instalação
+### Debian
+- Em um terminal bash, execute os comandos a seguir
+```bash
+# Install git and dev tools if not available
+sudo apt install build-essential git make pkg-config cmake ninja-build gnome-desktop-testing libasound2-dev libpulse-dev libaudio-dev libjack-dev libsndio-dev libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+# Clone this repository
+git clone https://github.com/bernborgess/tpf-bandeco
+cd tpf-bandeco
+# Configure the build
+mkdir build
+cd build
+cmake ..
+make -j$(nproc)
+# Run the game!
+./tpf-bandeco 
+```
+
 ## Funcionalidades a serem testadas
 <!-- TODO: Lista de funcionalidades que os jogadores devem observar com atenção durante o Playtesting -->
 1. Aprender os controles e objetivo do jogo, pela tela `Como Jogar?`
