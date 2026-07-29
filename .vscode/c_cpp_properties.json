@@ -3,9 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**",
-                "/home/bernborgess/.local/SDL2/include",
-                "/home/bernborgess/.local/SDL2/include/SDL2"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "cStandard": "c17",
